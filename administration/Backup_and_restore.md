@@ -60,9 +60,11 @@ DorisDB 支持将当前数据以文件的形式，通过 broker 备份到远端�
 ## 相关命令
 
 和备份恢复功能相关的命令如下。以下命令，都可以通过mysql-client连接DorisDB后，使用
+
 ```sql
 help [CREATE REPOSITORY | BACKUP | SHOW BACKUP | SHOW SNAPSHOT | RESTORE | CANCEL BACKUP | CANCEL RESTORE | DROP REPOSITORY]
 ```
+
 的方式查看详细帮助。
 
 CREATE REPOSITORY

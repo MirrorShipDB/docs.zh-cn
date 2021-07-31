@@ -4,7 +4,7 @@
 
 对于一个查询，我们可以在fe/log/fe.audit.log 中看到所有查询和慢查询信息，每个查询对应一个QueryID，我们可以在页面或者日志中查找到查询对应的 QueryPlan和Profile，QueryPlan是FE通过解析SQL生成的执行计划，而Profile是BE执行后的结果，包含了每一个步骤的耗时和数据处理量等数据，可以通过DorisManager的图形界面看到可视化的Profile执行树。
 
-##Plan分析
+## Plan分析
 
 SQL语句在DorisDB中的生命周期可以分为查询解析(Query Parsing)、规划(Query Plan)、执行(Query Execution)三个阶段。对于DorisDB而言，查询解析一般不会成为瓶颈，因为分析型需求的QPS普遍不高。
 
