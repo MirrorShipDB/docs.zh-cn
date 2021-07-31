@@ -34,8 +34,6 @@ Stream Load 通过 HTTP 协议提交和传输数据。这里通过 curl 命令�
 
 Header中支持的属性见下文的导入任务参数说明，格式为: -H "key1:value1"。如果同时有多个任务参数，需要用多个 -H 来指示，类似于 \-H "key1:value1" -H "key2:value2"……
 
- 
-
 **示例：**
 
 `curl --location-trusted -u root -T date -H "label:123" http://abc.com:8030/api/test/date/_stream_load`

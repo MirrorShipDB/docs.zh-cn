@@ -162,7 +162,7 @@ parquet类型也可以通过文件后缀名 **.parquet** 或者 **.parq** 判断
 
 data_desc中的SET语句负责设置列**函数变换**。这里的列函数变换支持所有查询的等值表达式变换。如果原始数据的列和表中的列不一一对应，就需要用到这个属性。
 
-*   where predicate
+* where predicate
 
 data_desc中的WHERE语句负责过滤已经完成transform的数据。被过滤的数据不会进入容忍率的统计中。如果多个data-desc中声明了关于同一张表的多个条件，则会以AND语义合并这些条件。
 
