@@ -1,14 +1,14 @@
-### 设计背景
+# 设计背景
 
 flink的用户想要将数据sink到DorisDB当中，但是flink官方只提供了flink-connector-jdbc, 不足以满足导入性能要求，为此我们新增了一个flink-connector-dorisdb，内部实现是通过缓存并批量由stream load导入。
-<br>
-### 使用方式
+
+## 使用方式
+
 将`com.dorisdb.table.connector.flink.DorisDynamicTableSinkFactory`加入到：`src/main/resources/META-INF/services/org.apache.flink.table.factories.Factory`。
 
-<br>
-
 将以下两部分内容加入`pom.xml`:
-```
+
+```xml
 <repositories>
     <repository>
         <id>dorisdb-maven-releases</id>
@@ -20,7 +20,8 @@ flink的用户想要将数据sink到DorisDB当中，但是flink官方只提供�
     </repository>
 </repositories>
 ```
-```
+
+```xml
 <dependency>
     <groupId>com.dorisdb.connector</groupId>
     <artifactId>flink-connector-doris</artifactId>
@@ -28,10 +29,10 @@ flink的用户想要将数据sink到DorisDB当中，但是flink官方只提供�
     <version>1.0.27_1.13-SNAPSHOT</version>  <!-- for flink-1.13 -->
 </dependency>
 ```
-<br>
 
 使用方式如下：
-```
+
+```scala
 // -------- sink with raw json string stream --------
 fromElements(new String[]{
     "{\"score\": \"99\", \"name\": \"stephen\"}",
@@ -92,8 +93,10 @@ fromElements(
     )
 );
 ```
+
 或者：
-```
+
+```scala
 // create a table with `structure` and `properties`
 // Needed: Add `com.dorisdb.connector.flink.table.DorisDynamicTableSinkFactory` to: `src/main/resources/META-INF/services/org.apache.flink.table.factories.Factory`
 tEnv.executeSql(
@@ -115,8 +118,6 @@ tEnv.executeSql(
 );
 ```
 
-<br>
-
 其中Sink选项如下：
 
 | Option | Required | Default | Type | Description |
@@ -136,8 +137,6 @@ tEnv.executeSql(
 | sink.connect.timeout-ms | NO | 1000 | String | Timeout in millisecond for connecting to the `load-url`, range: **[100, 60000]**. |
 | sink.properties.* | NO | NONE | String | the stream load properties like **'sink.properties.columns' = 'k1, k2, k3'**. |
 
-<br>
-
 ### 注意事项
 
 - 支持exactly-once的数据sink保证，需要外部系统的 two phase commit 机制。由于 DorisDB 无此机制，我们需要依赖flink的checkpoint-interval在每次checkpoint时阻塞flush所有缓存数据，以此达到精准一次。但如果DorisDB挂掉了，会导致用户的flink sink stream 算子长时间阻塞，并引起flink的监控报警或强制kill。
@@ -149,4 +148,3 @@ tEnv.executeSql(
 ### 完整示例
 
 - 完整代码工程，参考 [https://github.com/DorisDB/demo](https://github.com/DorisDB/demo)
-

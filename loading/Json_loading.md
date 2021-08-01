@@ -1,13 +1,11 @@
-对于一些半结构化的比如Json类型的数据，我们可以用stream load 或者 routine load的方式进行导入
+# 介绍
 
-<br>  
+对于一些半结构化的比如Json类型的数据，我们可以用stream load 或者 routine load的方式进行导入。
 
-### 使用场景
+## 使用场景
 
-*   Stream Load： 对于文本文件存储的Json数据，我们可以使用 stream load进行导入。
-*   Routine Load：对于Kafka中的json格式数据，可以使用Routine load的方式导入。
-
-<br>  
+* Stream Load： 对于文本文件存储的Json数据，我们可以使用 stream load进行导入。
+* Routine Load：对于Kafka中的json格式数据，可以使用Routine load的方式导入。
 
 ### Stream Load导入
 
@@ -19,11 +17,9 @@
     ...
 ~~~
 
-  
-
 示例：
 
-~~~
+~~~shell
 curl -v --location-trusted -u root: \
     -H "format: json" -H "jsonpaths: [\"$.id\", \"$.city\"]" \
     -T example.json \
@@ -32,24 +28,20 @@ curl -v --location-trusted -u root: \
 
 通过 format: json 参数可以执行导入的数据格式 jsonpaths 用来执行对应的数据导入路径
 
-  <br>
-
 相关参数：
 
-*   jsonpaths : 选择每一列的json路径
-*   json\_root : 选择json开始解析的列
-*   strip\_outer\_array ： 裁剪最外面的 array 字段
-*   strict\_mode：导入过程中的列类型转换进行严格过滤
-
-  
+* jsonpaths : 选择每一列的json路径
+* json\_root : 选择json开始解析的列
+* strip\_outer\_array ： 裁剪最外面的 array 字段
+* strict\_mode：导入过程中的列类型转换进行严格过滤
 
 对于Json数据和DorisDB数据schema不完全一致的情况，我们可以通过修改Jsonpath等方式来进行导入
 
 样例数据：
 
-```json
+~~~json
 {"k1" : 1, "k2": 2}
-```
+~~~
 
 导入示例：
 
@@ -61,39 +53,31 @@ curl -v --location-trusted -u root: \
     http://127.0.0.1:8030/api/db1/tbl1/_stream_load
 ~~~
 
-  
-
 这里导入过程中进行了ETL操作，并且通过Jsonpath来进行column和原始数据的对应
 
 导入后结果
 
-```
 +------+------+
 | k1   | k2   |
 +------+------+
 |  100 |    2 |
 +------+------+
-```
-
-  <br>
 
 对于缺失的列 如果列的定义是nullable，那么会补上NULL，也可以通过ifnull补充默认值
 
 样例数据：
 
-```json
+~~~json
 [
    {"k1": 1, "k2": "a"},
    {"k1": 2},
    {"k1": 3, "k2": "c"},
 ]
-```
-
-  
+~~~
 
 导入示例-1：
 
-~~~
+~~~shell
 curl -v --location-trusted -u root: \
     -H "format: json" -H "strip_outer_array: true" \
     -T example.json \
@@ -102,7 +86,6 @@ curl -v --location-trusted -u root: \
 
 导入后结果：
 
-```
 +------+------+
 | k1   | k2   |
 +------+------+
@@ -112,12 +95,10 @@ curl -v --location-trusted -u root: \
 +------+------+
 |    3 | c    |
 +------+------+
-```
   
-
 导入示例-2：
 
-~~~
+~~~shell
 curl -v --location-trusted -u root: \
     -H "format: json" -H "strip_outer_array: true" \
     -H "jsonpaths: [\"$.k1\", \"$.k2\"]" \
@@ -126,12 +107,8 @@ curl -v --location-trusted -u root: \
     http://127.0.0.1:8030/api/db1/tbl1/_stream_load
 ~~~
 
-
-  
-
 导入后结果：
 
-```
 +------+------+
 | k1   | k2   |
 +------+------+
@@ -141,25 +118,20 @@ curl -v --location-trusted -u root: \
 +------+------+
 |    3 | c    |
 +------+------+
-```
-
-  <br>
 
 ### Routine Load导入
 
 对于 Kafka 数据源，和Stream Load的原理类似，每个 Massage 中的内容被视作一个完整的 Json 数据。
+
 1. 如果一个 Massage 中是以 Array 格式的表示的多行数据，则会导入多行，而 Kafka 的 offset 只会增加 1。
 2. 如果一个 Array 格式的 Json 表示多行数据，但是因为 Json 格式错误导致解析 Json 失败，则错误行只会增加 1（因为解析失败，实际上 DorisDB 无法判断其中包含多少行数据，只能按一行错误数据记录）。
   
-
 ### 使用Canal从mysql中增量同步binlog导入DorisDB
   
-
- [Canal](https://github.com/alibaba/canal) 是阿里巴巴开源的一个Mysql binlog同步工具，通过他我们可以把Mysql的数据同步到Kafka，在Kafka中数据是用Json的格式生成的，我们这里演示一下如何使用Routine load同步kafka中的数据来实现和Mysql进行增量数据同步的工作：
-
-  
+[Canal](https://github.com/alibaba/canal) 是阿里巴巴开源的一个Mysql binlog同步工具，通过他我们可以把Mysql的数据同步到Kafka，在Kafka中数据是用Json的格式生成的，我们这里演示一下如何使用Routine load同步kafka中的数据来实现和Mysql进行增量数据同步的工作：
 
 * 在MySQL中我们有一张数据表 其建表语句如下：
+
 ~~~sql
 CREATE TABLE `query_record` (
   `query_id` varchar(64) NOT NULL,
@@ -180,8 +152,8 @@ CREATE TABLE `query_record` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 ~~~
 
-  
 * 准备：首先确认mysql开启了binlog 并且格式为ROW模式
+
 ~~~bash
 [mysqld]
 log-bin=mysql-bin # 开启 binlog
@@ -200,18 +172,18 @@ FLUSH PRIVILEGES;
 
 * 然后我们下载安装canal
 
-```bash
+~~~bash
 wget https://github.com/alibaba/canal/releases/download/canal-1.0.17/canal.deployer-1.0.17.tar.gz
 
 mkdir /tmp/canal
 tar zxvf canal.deployer-$version.tar.gz -C /tmp/canal
-```
+~~~
 
 * 修改配置（mysql 相关）
 
 `$ vi conf/example/instance.properties`
 
-```bash
+~~~bash
 ## mysql serverId
 canal.instance.mysql.slaveId = 1234
 #position info，需要改成自己的数据库信息
@@ -233,12 +205,13 @@ canal.instance.filter.regex = .\*\\\\..\*
 # 选择需要同步的表名和kafka目标的分区名称
 canal.mq.dynamicTopic=databasename.query_record
 canal.mq.partitionHash= databasename.query_record:query_id
-```
+~~~
+
 * 修改配置（kafka 相关）
 
 `$ vi /usr/local/canal/conf/canal.properties`
 
-```bash
+~~~bash
 # 可选项: tcp(默认), kafka, RocketMQ
 canal.serverMode = kafka
 # ...
@@ -261,17 +234,15 @@ canal.mq.compressionType = none
 canal.mq.acks = all
 # kafka消息投递是否使用事务
 canal.mq.transaction = false
-```
+~~~
 
 * 启动
 
 `bin/startup.sh`
 
-  <br>
-
 在 `logs/example/example.log` 可以看到相应的同步日志信息，在kafka中也能看到消息，其消息格式如下
 
-```json
+~~~json
 {
        "data": [{
                "query_id": "3c7ebee321e94773-b4d79cc3f08ca2ac",
@@ -357,9 +328,7 @@ canal.mq.transaction = false
        "ts": 1603111212015,
        "type": "INSERT"
 }
-```
-
-  <br>
+~~~
 
 这里我们只需要导入data中的数据， 所以需要加上 json_root 和 strip_outer_array = true
 
@@ -377,8 +346,6 @@ FROM KAFKA (
     "kafka_broker_list"= "172.26.92.141:9092",     
     "kafka_topic" = "databasename.query_record" 
 );
-~~~
-
 
 这样就可以完成数据从mysql到DorisDB的近实时同步。
 

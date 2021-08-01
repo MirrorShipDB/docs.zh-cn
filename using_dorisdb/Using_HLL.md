@@ -1,14 +1,11 @@
-
-### 背景介绍
+<!-- markdownlint-disable MD033 -->
+# 背景介绍
 
 在现实场景中，随着数据量的增大， 对数据进行去重分析的压力会越来越大。当数据的规模大到一定程度的时候，进行精确去重的成本会比较高。此时用户通常会采用近似算法来降低计算压力。本节将要介绍的 HyperLogLog（简称 HLL）是一种近似去重算法，它的特点是具有非常优异的空间复杂度O(mloglogn),  时间复杂度为O(n), 并且计算结果的误差可控制在1%—10%左右，误差与数据集大小以及所采用的哈希函数有关。
 
-### 什么是HyperLogLog
+## 什么是HyperLogLog
 
 HyperLogLog是一种近似的去重算法，能够使用极少的存储空间计算一个数据集的不重复元素的个数。**HLL类型**是基于HyperLogLog算法的工程实现。用于保存HyperLogLog计算过程的中间结果，它只能作为数据表的指标列类型。
-
-  <br>
-
 
 由于HLL 算法的原理涉及到比较多的数学知识，在这里我们仅通过一个实际例子来说明。假设我们设计随机试验A:  做抛币的独立重复试验, 直到首次出现正面; 记录首次出现正面的抛币次数为随机变量X,  则:
 
@@ -31,12 +28,9 @@ HyperLogLog是一种近似的去重算法，能够使用极少的存储空间计
 
 HLL为了使结果更加精确, 用修正因子和估算结果相乘, 得出最终结果.
 
-  <br>
-
-
 为了方面读者的理解, 我们参考文章[https://gist.github.com/avibryant/8275649,](https://gist.github.com/avibryant/8275649) 用DorisDB的SQL语句实现HLL去重算法:
 
-~~~
+~~~sql
 SELECT floor((0.721 * 1024 * 1024) / (sum(pow(2, m * -1)) + 1024 - count(*))) AS estimate
 FROM(select(murmur_hash3_32(c2) & 1023) AS bucket,
      max((31 - CAST(log2(murmur_hash3_32(c2) & 2147483647) AS INT))) AS m
@@ -71,7 +65,7 @@ FROM(select(murmur_hash3_32(c2) & 1023) AS bucket,
 
 首先，创建一张含有**HLL**列的表，其中uv列为聚合列，列类型为HLL，聚合函数为HLL\_UNION
 
-~~~
+~~~sql
 CREATE TABLE test(
         dt DATE,
         id INT,
@@ -84,7 +78,7 @@ DISTRIBUTED BY HASH(ID) BUCKETS 32;
 
 导入数据，Stream Load模式:
 
-~~~
+~~~bash
 curl --location-trusted -u root: -H "label:label_1600997542287" -H "column_separator:,"  -H " columns:dt,id,user_id, uv=hll_hash(user_id)" -T /root/test.csv http://doris_be0:8040/api/db0/test/_stream_load
 {
     "TxnId": 2504748,
@@ -107,7 +101,7 @@ curl --location-trusted -u root: -H "label:label_1600997542287" -H "column_separ
 
 Broker Load模式:
 
-~~~
+~~~sql
 LOAD LABEL test_db.label
  (
     DATA INFILE("hdfs://hdfs_host:hdfs_port/user/palo/data/input/file")
@@ -139,17 +133,8 @@ LOAD LABEL test_db.label
 
 Bitmap和HLL应该如何选择？如果数据集的基数在百万、千万量级，并拥有几十台机器，那么直接使用 count distinct 即可。如果基数在亿级以上，并且需要精确去重，那么只能用Bitmap类型；如果可以接受近似去重，那么还可以使用HLL类型。
 
-  <br>
-
-
 Bitmap只支持TINYINT, SMALLINT, INT, BIGINT, (注意不支持LARGEINT), 对其他类型数据集去重, 则需要构建词典, 将原类型映射到整数类型.  词典构建比较复杂, 需要权衡数据量, 更新频率, 查询效率, 存储等一系列问题. HLL则没有必要构建词典, 只需要对应的数据类型支持哈希函数即可, 甚至在没有内部支持HLL的分析系统中, 依然可以系统提供的hash, 用SQL实现HLL去重.
 
-  <br>
-
-
 对于普通列，用户还可以使用NDV函数进行近似去重计算。NDV函数返回值是COUNT(DISTINCT col) 结果的近似值聚合函数，底层实现将数据存储类型转为HyperLogLog类型进行计算。NDV函数在计算的时候比较消耗资源，不太适合并发高的场景。
-
-  <br>
-
 
 如果你希望进行用户行为分析，可以考虑 IntersectCount 或者自定义 UDAF。
