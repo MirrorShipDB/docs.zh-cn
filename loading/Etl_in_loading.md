@@ -40,7 +40,7 @@ DISTRIBUTED BY HASH(user_id) BUCKETS 3;
 687,male,2020-05-23,2
 ~~~
 
-### 本地文件导入
+### 本地文件导入1
 
 通过下面的命令能够将本地数据导入到对应表中：
 
@@ -54,7 +54,7 @@ CSV 格式的文件中的列，本来是没有命名的，通过 **columns**，�
 
 针对这个例子，字段"user_id, event_date, event_type"都能够在表中找到对应的字段，所以对应的内容都会被导入到 DorisDB 表中。而"user_gender"这个字段在表中并不存在，所以导入时会直接忽略掉这个字段。
 
-### HDFS导入
+### HDFS导入1
 
 通过下面的命令能够将HDFS的数据导入到对应的表中：
 
@@ -71,7 +71,7 @@ WITH BROKER hdfs;
 
 通过"(user_id, user_gender, event_date, event_type)"部分指定文件中的字段名字。DorisDB导入过程中的行为与本地文件导入行为一致。需要的字段会被导入到DorisDB中，不需要的字段会被忽略掉。
 
-## Kafka导入
+### Kafka导入1
 
 通过下面的命令能够将Kafka中的数据导入到对应表中：
 
@@ -204,7 +204,7 @@ DISTRIBUTED BY HASH(date) BUCKETS 1;
 
 在导入时，通过下面的命令实现数据转化。
 
-## 本地文件导入3
+### 本地文件导入3
 
 通过下面的命令，能够在导入本地文件的同时，生成对应的衍生列。方法是指定HTTP请求中的`Header "columns:date, year=year(date), month=month(date), day=day(date)"`，让DorisDB在导入过程中根据文件内容计算生成对应的列。
 
@@ -264,7 +264,7 @@ FROM KAFKA (
 
 ## 从文件路径中获取字段内容
 
-## 样例数据
+### 样例数据4
 
 假设我们要向下面的表中导入数据：
 
