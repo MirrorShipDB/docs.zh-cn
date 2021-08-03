@@ -22,19 +22,19 @@ ProxySQL 是一个灵活强大的 MySQL 代理层, 可以实现读写分离，�
 
 Doris 的 FE 进程负责接收用户连接和查询请求，其本身是可以横向扩展且高可用的，但是需要用户在多个 FE 上架设一层 proxy，来实现自动的连接负载均衡。
 
-### 1. 安装相关依赖：
+### 1. 安装相关依赖
 
 ~~~shell
 yum install -y gnutls perl-DBD-MySQL perl-DBI perl-devel
 ~~~
 
-### 2. 下载安装包：
+### 2. 下载安装包
 
 ~~~shell
 wget https://github.com/sysown/proxysql/releases/download/v2.0.14/proxysql-2.0.14-1-centos7.x86\_64.rpm
 ~~~
 
-### 3. 解压到当前目录：
+### 3. 解压到当前目录
 
 ~~~shell
 rpm2cpio proxysql-2.0.14-1-centos7.x86_64.rpm | cpio -ivdm
