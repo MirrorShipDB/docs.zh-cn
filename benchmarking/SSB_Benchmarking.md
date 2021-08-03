@@ -160,11 +160,11 @@ bin/gen-ssb.sh 100 data_dir
 
 建表中有三个注意事项，这几个选择会比较大的影响到测试结果：
 
-1. Bucket的数量选择和分桶键的选择
+* 1. Bucket的数量选择和分桶键的选择
 
 Bucket的数量是对性能影响比较大的因素之一，首先我们希望选择合理的分桶键（DISTRIBUTED BY HASH(key))，来保证数据在各个bucket中尽可能均衡，如果碰到数据倾斜严重的数据可以使用多列作为分桶键，或者采用MD5 hash以后作为分桶键，具体可以参考[分桶键选择](3.3数据分布.md)，这里我们都统一使用唯一的key列。
 
-2. 建表的数据类型
+* 2. 建表的数据类型
 
 数据类型的选择对性能测试的结果是有一定影响的，比如Decimal/String的运算一般比int/bigint要慢，所以在实际场景中我们应该尽可能准确的使用数据类型，从而达到最好的效果，比如可以使用Int/Bigint的字段就尽量避免使用String，如果是日期类型也多使用Date/Datetime以及相对应的时间日期函数，而不是用string和相关字符串操作函数来处理，针对SSB的数据集合，为了体现各个数据类型的效果，我们在多表Join的测试中都采用了Int/Bigint来处理，在lineorder\_flat这个打平的宽表中，我们采用了Decimal/date等类型方便。
 
@@ -173,7 +173,7 @@ Bucket的数量是对性能影响比较大的因素之一，首先我们希望�
 * [Kylin的建表方式](https://github.com/Kyligence/ssb-kylin/blob/master/hive/1_create_basic.sql)
 * [Clickhouse的建表方式](https://clickhouse.tech/docs/en/getting-started/example-datasets/star-schema/)
 
-3. 字段是否可以为空
+* 3. 字段是否可以为空
 
 DorisDB的建表这里都采取的NOT NULL关键字，因为在SSB生成的标准数据集合中并没有空字段，但是对于实际的业务
 
