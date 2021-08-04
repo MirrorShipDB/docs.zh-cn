@@ -47,24 +47,24 @@ Broker Load需要借助Broker进程访问远端存储，因此使用Broker Load�
 **语法：**
 
 ~~~SQL
-  LOAD LABEL db_name.label_name 
-  (data_desc, ...)
-  WITH BROKER broker_name broker_properties
-  [PROPERTIES (key1=value1, ... )]
+LOAD LABEL db_name.label_name 
+    (data_desc, ...)
+WITH BROKER broker_name broker_properties
+    [PROPERTIES (key1=value1, ... )]
 
-  data_desc:
-      DATA INFILE ('file_path', ...)
-      [NEGATIVE]
-      INTO TABLE tbl_name
-      [PARTITION (p1, p2)]
-      [COLUMNS TERMINATED BY column_separator ]
-      [FORMAT AS file_type]
-      [(col1, ...)]
-      [SET (k1=f1(xx), k2=f2(xx))]
-      [WHERE predicate]
+data_desc:
+    DATA INFILE ('file_path', ...)
+    [NEGATIVE]
+    INTO TABLE tbl_name
+    [PARTITION (p1, p2)]
+    [COLUMNS TERMINATED BY column_separator ]
+    [FORMAT AS file_type]
+    [(col1, ...)]
+    [SET (k1=f1(xx), k2=f2(xx))]
+    [WHERE predicate]
 
-  broker_properties: 
-      (key2=value2, ...)
+broker_properties: 
+    (key2=value2, ...)
 ~~~
 
 **Apache HDFS导入示例：**
@@ -104,15 +104,15 @@ PROPERTIES
 ~~~SQL
 LOAD LABEL example_db.label12
 (
-DATA INFILE("oss://my_bucket/input/file.csv")
-INTO TABLE `my_table`
-(k1, k2, k3)
+    DATA INFILE("oss://my_bucket/input/file.csv")
+    INTO TABLE `my_table`
+    (k1, k2, k3)
 )
 WITH BROKER my_broker
 (
-"fs.oss.accessKeyId" = "xxxxxxxxxxxxxxxxxxxxxxxxxx",
-"fs.oss.accessKeySecret" = "yyyyyyyyyyyyyyyyyyyy",
-"fs.oss.endpoint" = "oss-cn-zhangjiakou-internal.aliyuncs.com"
+    "fs.oss.accessKeyId" = "xxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "fs.oss.accessKeySecret" = "yyyyyyyyyyyyyyyyyyyy",
+    "fs.oss.endpoint" = "oss-cn-zhangjiakou-internal.aliyuncs.com"
 )
 ~~~
 
@@ -228,20 +228,20 @@ Broker Load导入是异步的，用户可以在SHOW LOAD命令中指定Label来�
 ~~~sql
 mysql> show load where label = 'label1'\G
 *************************** 1. row ***************************
-         JobId: 76391
-         Label: label1
-         State: FINISHED
-      Progress: ETL:N/A; LOAD:100%
-          Type: BROKER
-       EtlInfo: unselected.rows=4; dpp.abnorm.ALL=15; dpp.norm.ALL=28133376
-      TaskInfo: cluster:N/A; timeout(s):10800; max_filter_ratio:5.0E-5
-      ErrorMsg: N/A
+    JobId: 76391
+    Label: label1
+    State: FINISHED
+    Progress: ETL:N/A; LOAD:100%
+    Type: BROKER
+    EtlInfo: unselected.rows=4; dpp.abnorm.ALL=15; dpp.norm.ALL=28133376
+    TaskInfo: cluster:N/A; timeout(s):10800; max_filter_ratio:5.0E-5
+    ErrorMsg: N/A
     CreateTime: 2019-07-27 11:46:42
-  EtlStartTime: 2019-07-27 11:46:44
- EtlFinishTime: 2019-07-27 11:46:44
- LoadStartTime: 2019-07-27 11:46:44
-LoadFinishTime: 2019-07-27 11:50:16
-           URL: http://192.168.1.1:8040/api/_load_error_log?file=__shard_4/error_log_insert_stmt_4bb00753932c491a-a6da6e2725415317_4bb00753932c491a_a6da6e2725415317
+    EtlStartTime: 2019-07-27 11:46:44
+    EtlFinishTime: 2019-07-27 11:46:44
+    LoadStartTime: 2019-07-27 11:46:44
+    LoadFinishTime: 2019-07-27 11:50:16
+    URL: http://192.168.1.1:8040/api/_load_error_log?file=__shard_4/error_log_insert_stmt_4bb00753932c491a-a6da6e2725415317_4bb00753932c491a_a6da6e2725415317
     JobDetails: {"Unfinished backends":{"9c3441027ff948a0-8287923329a2b6a7":[10002]},"ScannedRows":2390016,"TaskNumber":1,"All backends":{"9c3441027ff948a0-8287923329a2b6a7":[10002]},"FileNumber":1,"FileSize":1073741824}
 ~~~
 
