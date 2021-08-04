@@ -16,10 +16,13 @@ FE 有可能因为某些原因出现无法启动 bdbje、FE 之间无法同步�
     2. 通常情况下，Master FE 的元数据是最新的。
     3. 确保元数据最新，可以查看meta_dir/image目录下，image.xxxx文件的后缀，数字越大，则表示元数据越新。
     4. mate_dir路径可在fe.conf中找到
+    
         ![8-1](../assets/8-1.png)
     5. meta_dir文件夹结构如下：
+    
         ![8-2](../assets/8-2.png)
     6. 比较image目录下image.xxxx 文件的后缀，确认元数据最新的节点
+    
         ![8-3](../assets/8-3.png)
     7. 之后，我们要使用这个拥有最新元数据的 FE 节点，进行恢复，建议尽量选择 FOLLOWER 节点恢复，如果使用 OBSERVER 节点的元数据进行恢复会比较麻烦，cat ROLE(image文件夹下的ROLE文件)可以看到该节点角色。
 
