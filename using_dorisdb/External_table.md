@@ -76,7 +76,7 @@ BROKER PROPERTIES (
 * column\_separator：列分隔符
 * line\_delimiter：行分隔符
 
-DorisDB不能直接访问HDFS文件，需要通过Broker进行访问。所以，建表时除了需要指定HDFS文件的相关信息之外，还需要指定Broker的相关信息。关于Broker的相关介绍，可以参见[Broker导入](4.2BrokerLoad.md)。
+DorisDB不能直接访问HDFS文件，需要通过Broker进行访问。所以，建表时除了需要指定HDFS文件的相关信息之外，还需要指定Broker的相关信息。关于Broker的相关介绍，可以参见[Broker导入](../loading/BrokerLoad.md)。
 
 <br>
 
@@ -296,7 +296,7 @@ PROPERTIES (
   | --- | --- | ---|
   |   INT/INTEGER  | INT    |
   |   BIGINT  | BIGINT    |
-  |   TIMESTAMP  | DATETIME    |Timestamp转成Datetime，会损失精度和时区信息，根据sessionVariable中的时区转成无时区Datatime|
+  |   TIMESTAMP  | DATETIME    |Timestamp转成Datetime，会损失精度和时区信息，<br>根据sessionVariable中的时区转成无时区Datatime|
   |  STRING  | VARCHAR   |
   |  VARCHAR  | VARCHAR   |
   |  CHAR  | CHAR   |

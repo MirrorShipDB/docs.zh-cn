@@ -3,8 +3,8 @@
 + [DorisDB介绍](/introduction/DorisDB_intro.md)
 + 快速开始
   + [DorisDB基本概念](/quick_start/Basic.md)
-  + [DorisDB的系统架构](/quick_start/Architecture.md)
-  + [DorisDB的手动部署](/quick_start/Installation.md)
+  + [DorisDB系统架构](/quick_start/Architecture.md)
+  + [DorisDB手动部署](/quick_start/Installation.md)
   + [数据流和控制流](/quick_start/Data_control_flow.md)
   + [数据导入和查询](/quick_start/Loading_and_query.md)
   + [测试常见问题](/quick_start/FAQ.md)

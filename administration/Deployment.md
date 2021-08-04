@@ -75,10 +75,10 @@ $ bin/install.sh
 |FE|rpc_port|9020|BE&nbsp;&nbsp; --> FE<br> FE <--> FE|FE 上的 thrift server 端口|
 |FE|query_port|9030| FE <--> 用户|FE 上的 mysql server 端口|
 |FE|edit_log_port|9010|FE <--> FE|FE 上的 bdbje 之间通信用的端口|
-|Broker|broker_ipc_port|8000|FE&nbsp;&nbsp; --> Broker BE&nbsp;&nbsp; --> Broker|Broker 上的 thrift server，用于接收请求|
+|Broker|broker_ipc_port|8000|FE&nbsp;&nbsp; --> Broker <br>BE&nbsp;&nbsp; --> Broker|Broker 上的 thrift server，用于接收请求|
 
 <br>
 
 ## 手动部署
 
-手动部署参考 [2.3 DorisDB手动部署](2.快速开始.md)
+手动部署参考 [DorisDB手动部署](../quick_start/Installation.md)。
