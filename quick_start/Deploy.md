@@ -8,6 +8,7 @@
 
 比如您获得的产品包为dorisdb-1.0.0.tar.gz, 解压(tar -xzvf dorisdb-1.0.0.tar.gz)后内容如下:
 
+```Plain Text
 DorisDB-XX-1.0.0
 
 ├── be  # BE目录
@@ -51,6 +52,7 @@ DorisDB-XX-1.0.0
 │   └── webroot
 
 └── udf
+```
 
 ## 环境准备
 
@@ -84,18 +86,24 @@ JAVA_OPTS = "-Xmx4096m -XX:+UseMembar -XX:SurvivorRatio=8 -XX:MaxTenuringThresho
 
 第二步: 创建元数据目录:
 
+```bash
 mkdir -p doris-meta
+```
+
 <br>
 
 第三步: 启动FE进程:
 
+```bash
 bin/start\_fe.sh --daemon
+```
 <br>
 
 第四步: 确认启动FE启动成功.
 
 * 查看日志log/fe.log确认.
 
+```Plain Text
 2020-03-16 20:32:14,686 INFO 1 \[FeServer.start():46\] thrift server started.
 
 2020-03-16 20:32:14,696 INFO 1 \[NMysqlServer.start():71\] Open mysql server success on 9030
@@ -105,6 +113,7 @@ bin/start\_fe.sh --daemon
 2020-03-16 20:32:14,825 INFO 76 \[HttpServer$HttpServerThread.run():210\] HttpServer started with port 8030
 
 ...
+```
 
 * 如果FE启动失败，可能是由于端口号被占用，修改配置文件conf/fe.conf中的端口号http_port。
 * 使用jps命令查看java进程确认"DorisDbFe"存在.
@@ -121,13 +130,16 @@ Centos：sudo yum install mysql-client
 
 第二步: 使用mysql客户端连接：
 
+```sql
 mysql -h 127.0.0.1 -P9030 -uroot
+```
 
 注意：这里默认root用户密码为空，端口为fe/conf/fe.conf中的query\_port配置项，默认为9030
 <br>
 
 第三步: 查看FE状态：
 
+```Plain Text
 mysql> SHOW PROC '/frontends'\\G
 
 ***1\. row***
@@ -165,6 +177,8 @@ IsHelper: true
 ErrMsg:
 
 1 row in set (0.03 sec)
+```
+
 <br>
 
 Role为FOLLOWER说明这是一个能参与选主的FE；IsMaster为true，说明该FE当前为主节点。
@@ -193,11 +207,15 @@ FE节点之间的时钟相差不能超过5s, 使用NTP协议校准时间.
 
 第二步: 使用MySQL客户端连接已有的FE,  添加新实例的信息，信息包括角色、ip、port：
 
+```sql
 mysql> ALTER SYSTEM ADD FOLLOWER "host:port";
+```
 
 或
 
+```sql
 mysql> ALTER SYSTEM ADD OBSERVER "host:port";
+```
 
 host为机器的IP，如果机器存在多个IP，需要选取priority\_networks里的IP，例如priority\_networks=192.168.1.0/24 可以设置使用192.168.1.x 这个子网进行通信。port为edit\_log\_port，默认为9010。
 
@@ -233,6 +251,7 @@ host为helper节点的IP，如果有多个IP，需要选取priority\_networks里
 
 第四步: 查看集群状态, 确认部署成功：
 
+```Plain Text
 mysql> SHOW PROC '/frontends'\\G
 
 ***1\. row***
@@ -296,6 +315,7 @@ Alive: true
 ......
 
 3 rows in set (0.05 sec)
+```
 
 节点的Alive显示为true则说明添加节点成功。以上例子中，
 
@@ -320,11 +340,14 @@ cd DorisDB-XX-1.0.0/be
 ```shell
 mkdir -p storage
 ```
+
 <br>
 
 第二步: 通过mysql客户端添加BE节点：
 
+```sql
 mysql> ALTER SYSTEM ADD BACKEND "host:port";
+```
 
 这里IP地址为和priority\_networks设置匹配的IP，portheartbeat\_service\_port，默认为9050
 <br>
@@ -342,10 +365,12 @@ mysql> ALTER SYSTEM ADD BACKEND "host:port";
 ```shell
 bin/start\_be.sh --daemon
 ```
+
 <br>
 
 第四步: 查看BE状态, 确认BE就绪:
 
+```Plain Text
 mysql> SHOW PROC '/backends'\\G
 
 ***1\. row***
@@ -393,6 +418,7 @@ ErrMsg:
 Version:
 
 1 row in set (0.01 sec)
+```
 <br>
 
 如果isAlive为true，则说明BE正常接入集群。如果BE没有正常接入集群，请查看log目录下的be.WARNING日志文件确定原因。
@@ -400,12 +426,17 @@ Version:
 
 如果日志中出现类似以下的信息，说明priority\_networks的配置存在问题。
 
+```Plain Text
 W0708 17:16:27.308156 11473 heartbeat\_server.cpp:82\] backend ip saved in master does not equal to backend local ip127.0.0.1 vs. 172.16.179.26
+```
 <br>
 
 此时需要，先用以下命令drop掉原来加进去的be，然后重新以正确的IP添加BE。
 
+```sql
 mysql> ALTER SYSTEM DROP BACKEND "172.16.139.24:9050";
+```
+
 <br>
 
 由于是初次启动，如果在操作过程中遇到任何意外问题，都可以删除并重新创建storage目录，再从头开始操作。
@@ -477,7 +508,7 @@ set global parallel_fragment_exec_instance_num =  8;
 
 ## 使用MySQL客户端访问DorisDB
 
-### **1 Root用户登录**
+### Root用户登录
 
 使用MySQL客户端连接某一个FE实例的query\_port(9030), DorisDB内置root用户，密码默认为空：
 
@@ -489,27 +520,33 @@ mysql -h fe\_host -P9030 -u root
 
 清理环境：
 
+```sql
 mysql > drop database if exists example\_db;
 
 mysql > drop user test;
+```
 
-### **2 创建新用户**
+### 创建新用户
 
 通过下面的命令创建一个普通用户：
 
+```sql
 mysql > create user 'test' identified by '123456';
+```
 
-### **3 创建数据库**
+### 创建数据库
 
 DorisDB中root账户才有权建立数据库，使用root用户登录，建立example\_db数据库:
 
+```sql
 mysql > create database example\_db;
+```
 
   <br>
 
-
 数据库创建完成之后，可以通过show databases查看数据库信息：
 
+```Plain Text
 mysql > show databases;
 
 +--------------------+
@@ -525,24 +562,29 @@ mysql > show databases;
 +--------------------+
 
 2 rows in set (0.00 sec)
+```
 
 information\_schema是为了兼容mysql协议而存在，实际中信息可能不是很准确，所以关于具体数据库的信息建议通过直接查询相应数据库而获得。
 
-### **4 账户授权**
+### 账户授权
 
 example\_db创建完成之后，可以通过root账户example\_db读写权限授权给test账户，授权之后采用test账户登录就可以操作example\_db数据库了：
 
+```sql
 mysql > grant all on example\_db to test;
+```
 
 <br>
 
 退出root账户，使用test登录DorisDB集群：
 
+```sql
 mysql > exit
 
 mysql -h 127.0.0.1 -P9030 -utest -p123456
+```
 
-### **5 建表**
+### 建表
 
 DorisDB支持支持单分区和复合分区两种建表方式。
 
@@ -635,6 +677,7 @@ PROPERTIES("replication_num" = "1");
 
 表建完之后，可以查看example\_db中表的信息:
 
+```Plain Text
 mysql> show tables;
 
 +----------------------+
@@ -696,3 +739,4 @@ mysql> desc table2;
 +-----------+-------------+------+-------+---------+-------+
 
 5 rows in set (0.00 sec)
+```
