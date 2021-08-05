@@ -8,7 +8,7 @@
 
 DorisDB集群由FE和BE构成, 可以使用MySQL客户端访问DorisDB集群。
 
-### **FE**
+### FE
 
 FE接收MySQL客户端的连接, 解析并执行SQL语句。
 
@@ -19,7 +19,7 @@ FE接收MySQL客户端的连接, 解析并执行SQL语句。
 * FE监督BE, 管理BE的上下线, 根据BE的存活和健康状态, 维持tablet副本的数量。
 * FE协调数据导入, 保证数据导入的一致性。
 
-### **BE**
+### BE
 
 * BE管理tablet副本, tablet是table经过分区分桶形成的子表, 采用列式存储。
 * BE受FE指导, 创建或删除子表。
@@ -28,7 +28,7 @@ FE接收MySQL客户端的连接, 解析并执行SQL语句。
 * BE后台执行compact任务, 减少查询时的读放大。
 * 数据导入时, 由FE指定BE coordinator, 将数据以fanout的形式写入到tablet多副本所在的BE上。
 
-### **其他组件**
+### 其他组件
 
 * 管理平台, 在后面会专门的章节介绍。
 * Hdfs Broker:  用于从Hdfs中导入数据到DorisDB集群，见[数据导入](../loading/Loading.md)章节。

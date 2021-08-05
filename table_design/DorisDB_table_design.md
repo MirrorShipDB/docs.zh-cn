@@ -2,7 +2,7 @@
 
 ## 列式存储
 
-![](../assets/3.1.1-1.png)
+![column](../assets/3.1.1-1.png)
 
 DorisDB的表和关系型数据相同, 由行和列构成. 每行数据对应用户一条记录, 每列数据有相同数据类型. 所有数据行的列数相同, 可以动态增删列.  DorisDB中, 一张表的列可以分为维度列(也成为key列)和指标列(value列), 维度列用于分组和排序, 指标列可通过聚合函数SUM, COUNT, MIN, MAX, REPLACE, HLL\_UNION, BITMAP\_UNION等累加起来. 因此, DorisDB的表也可以认为是多维的key到多维指标的映射.
 
@@ -20,7 +20,7 @@ DorisDB的表和关系型数据相同, 由行和列构成. 每行数据对应用
 
 当范围查找时, 如何快速地找到起始的目标行呢? 答案是shortkey index. 如下图所示: shortkey索引为稀疏索引,
 
-![](../assets/screenshot_1620803557579.png)
+![index](../assets/screenshot_1620803557579.png)
 表中数据组织有主要由三部分构成:
 
 1. shortkey index表:  表中数据每1024行, 构成一个逻辑block. 每个逻辑block在shortkey index表中存储一项索引, 内容为表的维度列的前缀, 并且不超过36字节.  shortkey index为稀疏索引, 用数据行的维度列的前缀查找索引表, 可以确定该行数据所在逻辑块的起始行号.

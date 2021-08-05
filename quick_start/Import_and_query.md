@@ -34,7 +34,7 @@ Routine Load（例行导入）提供了一种自动从指定数据源进行数�
 
 DorisDB数据导入整体生态图如下。
 
-![](../assets/screenshot_1615530614737.png)
+![dorisdb_ecology](../assets/screenshot_1615530614737.png)
 <br>
 
 具体导入方式详情请参考[数据导入](../loading/Loading.md)。这里为了尽快导入测试数据，我们只介绍利用HTTP协议的Stream load方式导入。
@@ -42,7 +42,7 @@ DorisDB数据导入整体生态图如下。
 * **示例1**：以 "table1\_20170707"为Label，使用本地文件table1\_data导入table1表。
 * 在本地创建数据文件able1\_data，以逗号作为数据之间的分隔符，具体内容如下：
 
-```bash
+```Plain Text
 1,1,jim,2
 2,1,grace,2
 3,2,tom,2
@@ -62,7 +62,7 @@ curl --location-trusted -u test:123456 -T table1_data -H "label: table1_20170707
 
 在本地创建数据文件table2\_data，以逗号作为数据之间的分隔，具体内容如下：
 
-```bash
+```Plain Text
 2017-07-03,1,1,jim,2
 2017-07-05,2,1,grace,2
 2017-07-12,3,2,tom,2
@@ -83,87 +83,95 @@ curl --location-trusted -u test:123456 -T table2_data -H "label:table2_20170707"
 
 示例:
 
-`mysql> select * from table1;`
+```Plain Text
+mysql> select * from table1;
 
-`+--------+----------+----------+------+`
++--------+----------+----------+------+
 
-`| siteid | citycode | username | pv |`
+| siteid | citycode | username | pv |
 
-`+--------+----------+----------+------+`
++--------+----------+----------+------+
 
-`|      5 |        3 | helen  |    3 |`
+|      5 |        3 | helen  |    3 |
 
-`|      2 |        1 | grace  |    2 |`
+|      2 |        1 | grace  |    2 |
 
-`|      1 |        1 | jim    |    2 |`
+|      1 |        1 | jim    |    2 |
 
-`|      4 |        3 | bush   |    3 |`
+|      4 |        3 | bush   |    3 |
 
-`|      3 |        2 | tom    |    2 |`
+|      3 |        2 | tom    |    2 |
 
-`+--------+----------+----------+------+`
++--------+----------+----------+------+
+```
 
 1. order by查询
 
 示例:
 
-`mysql> select * from table1 order by citycode;`
+```Plain Text
+mysql> select * from table1 order by citycode;
 
-`+--------+----------+----------+------+`
++--------+----------+----------+------+
 
-`| siteid | citycode | username | pv |`
+| siteid | citycode | username | pv |
 
-`+--------+----------+----------+------+`
++--------+----------+----------+------+
 
-`|      2 |        1 | grace  |    2 |`
+|      2 |        1 | grace  |    2 |
 
-`|      1 |        1 | jim    |    2 |`
+|      1 |        1 | jim    |    2 |
 
-`|      3 |        2 | tom    |    2 |`
+|      3 |        2 | tom    |    2 |
 
-`|      4 |        3 | bush   |    3 |`
+|      4 |        3 | bush   |    3 |
 
-`|      5 |        3 | helen  |    3 |`
+|      5 |        3 | helen  |    3 |
 
-`+--------+----------+----------+------+`
++--------+----------+----------+------+
 
-`5 rows in set (0.07 sec)`
+5 rows in set (0.07 sec)
+```
 
 1. 带有join的查询
 
 示例:
 
-`mysql> select sum(table1.pv) from table1 join table2 where table1.siteid = table2.siteid;`
+```Plain Text
+mysql> select sum(table1.pv) from table1 join table2 where table1.siteid = table2.siteid;
 
-`+--------------------+`
++--------------------+
 
-`| sum(`table1`.`pv`) |`
+| sum(`table1`.`pv`) |
 
-`+--------------------+`
++--------------------+
 
-`| 12 |`
+| 12 |
 
-`+--------------------+`
++--------------------+
 
-`1 row in set (0.20 sec)`
+1 row in set (0.20 sec)
+```
 
 1. 带有子查询的查询
 
 示例:
 
-`mysql> select sum(pv) from table2 where siteid in (select siteid from table1 where siteid > 2);`
+```Plain Text
+mysql> select sum(pv) from table2 where siteid in (select siteid from table1 where siteid > 2);
 
-`+-----------+`
++-----------+
 
-`| sum(`pv`) |`
+| sum(`pv`) |
 
-`+-----------+`
++-----------+
 
-`| 8 |`
+| 8 |
 
-`+-----------+`
++-----------+
 
-`1 row in set (0.13 sec)`
+1 row in set (0.13 sec)
+```
 
 <br>
 
@@ -189,33 +197,39 @@ curl --location-trusted -u test:123456 -T table2_data -H "label:table2_20170707"
 
 原表table1的Schema如下:
 
-`+----------+-------------+------+-------+---------+-------+`
+```Plain Text
++----------+-------------+------+-------+---------+-------+
 
-`| Field    | Type| Null | Key | Default | Extra |`
+| Field    | Type| Null | Key | Default | Extra |
 
-`+----------+-------------+------+-------+---------+-------+`
++----------+-------------+------+-------+---------+-------+
 
-`| siteid   | int(11) | Yes  | true  | 10      |       |`
+| siteid   | int(11) | Yes  | true  | 10      |       |
 
-`| citycode | smallint(6) | Yes  | true  | N/A     |       |`
+| citycode | smallint(6) | Yes  | true  | N/A     |       |
 
-`| username | varchar(32) | Yes  | true  |         |       |`
+| username | varchar(32) | Yes  | true  |         |       |
 
-`| pv       | bigint(20)  | Yes  | false | 0       | SUM |`
+| pv       | bigint(20)  | Yes  | false | 0       | SUM |
 
-`+----------+-------------+------+-------+---------+-------+`
++----------+-------------+------+-------+---------+-------+
+```
 
   <br>
 
 我们新增一列uv，类型为BIGINT，聚合类型为SUM，默认值为0:
 
-`mysql > ALTER TABLE table1 ADD COLUMN uv BIGINT SUM DEFAULT '0' after pv;`
+```sql
+ALTER TABLE table1 ADD COLUMN uv BIGINT SUM DEFAULT '0' after pv;
+```
 
   <br>
 
 提交成功后，可以通过以下命令查看:
 
-`mysql > SHOW ALTER TABLE COLUMN\G`
+```sql
+SHOW ALTER TABLE COLUMN\G
+```
 
 当作业状态为FINISHED，则表示作业完成。新的Schema 已生效。
 
@@ -223,33 +237,37 @@ curl --location-trusted -u test:123456 -T table2_data -H "label:table2_20170707"
 
 ALTER TABLE完成之后, 可以通过desc table查看最新的schema：
 
-`mysql> desc table1;`
+```Plain Text
+mysql> desc table1;
 
-`+----------+-------------+------+-------+---------+-------+`
++----------+-------------+------+-------+---------+-------+
 
-`| Field    | Type| Null | Key | Default | Extra |`
+| Field    | Type| Null | Key | Default | Extra |
 
-`+----------+-------------+------+-------+---------+-------+`
++----------+-------------+------+-------+---------+-------+
 
-`| siteid   | int(11) | Yes  | true  | 10      |       |`
+| siteid   | int(11) | Yes  | true  | 10      |       |
 
-`| citycode | smallint(6) | Yes  | true  | N/A     |       |`
+| citycode | smallint(6) | Yes  | true  | N/A     |       |
 
-`| username | varchar(32) | Yes  | true  |         |       |`
+| username | varchar(32) | Yes  | true  |         |       |
 
-`| pv       | bigint(20)  | Yes  | false | 0       | SUM |`
+| pv       | bigint(20)  | Yes  | false | 0       | SUM |
 
-`| uv       | bigint(20)  | Yes  | false | 0       | SUM |`
+| uv       | bigint(20)  | Yes  | false | 0       | SUM |
 
-`+----------+-------------+------+-------+---------+-------+`
++----------+-------------+------+-------+---------+-------+
 
-`5 rows in set (0.00 sec)`
+5 rows in set (0.00 sec)
+```
 
   <br>
 
 可以使用以下命令取消当前正在执行的作业:
 
-`mysql > CANCEL ALTER TABLE COLUMN FROM table1\G`
+```sql
+CANCEL ALTER TABLE COLUMN FROM table1\G
+```
 
   <br>
 
@@ -261,35 +279,41 @@ Rollup是DorisDB使用的一种新型预计算加速技术，可以理解为基�
 
 原表table1的Schema如下:
 
-`+----------+-------------+------+-------+---------+-------+`
+```Plain Text
++----------+-------------+------+-------+---------+-------+
 
-`| Field    | Type| Null | Key | Default | Extra |`
+| Field    | Type| Null | Key | Default | Extra |
 
-`+----------+-------------+------+-------+---------+-------+`
++----------+-------------+------+-------+---------+-------+
 
-`| siteid   | int(11) | Yes  | true  | 10      |       |`
+| siteid   | int(11) | Yes  | true  | 10      |       |
 
-`| citycode | smallint(6) | Yes  | true  | N/A     |       |`
+| citycode | smallint(6) | Yes  | true  | N/A     |       |
 
-`| username | varchar(32) | Yes  | true  |         |       |`
+| username | varchar(32) | Yes  | true  |         |       |
 
-`| pv       | bigint(20)  | Yes  | false | 0       | SUM |`
+| pv       | bigint(20)  | Yes  | false | 0       | SUM |
 
-`| uv       | bigint(20)  | Yes  | false | 0       | SUM |`
+| uv       | bigint(20)  | Yes  | false | 0       | SUM |
 
-`+----------+-------------+------+-------+---------+-------+`
++----------+-------------+------+-------+---------+-------+
+```
 
   <br>
 
 对于table1明细数据是siteid, citycode, username三者构成一个key，从而对pv字段进行聚合；如果业务方经常有看城市pv总量的需求，可以建立一个只有citycode, pv的rollup：
 
-`mysql > ALTER TABLE table1 ADD ROLLUP rollup_city(citycode, pv);`
+```sql
+ALTER TABLE table1 ADD ROLLUP rollup_city(citycode, pv);
+```
 
   <br>
 
 提交成功后，可以通过以下命令查看:
 
-`mysql > SHOW ALTER TABLE ROLLUP\G`
+```sql
+SHOW ALTER TABLE ROLLUP\G
+```
 
 当作业状态为 FINISHED，则表示作业完成。
 
@@ -297,36 +321,40 @@ Rollup是DorisDB使用的一种新型预计算加速技术，可以理解为基�
 
 Rollup建立完成之后可以使用desc table1 all查看表的rollup信息：
 
-`mysql> desc table1 all;`
+```Plain Text
+mysql> desc table1 all;
 
-`+-------------+----------+-------------+------+-------+--------+-------+`
++-------------+----------+-------------+------+-------+--------+-------+
 
-`| IndexName   | Field| Type        | Null | Key   | Default | Extra |`
+| IndexName   | Field| Type        | Null | Key   | Default | Extra |
 
-`+-------------+----------+-------------+------+-------+---------+-------+`
++-------------+----------+-------------+------+-------+---------+-------+
 
-`| table1      | siteid | int(11)     | Yes| true | 10      |       |`
+| table1      | siteid | int(11)     | Yes| true | 10      |       |
 
-`|             | citycode | smallint(6) | Yes| true | N/A |       |`
+|             | citycode | smallint(6) | Yes| true | N/A |       |
 
-`|             | username | varchar(32) | Yes| true |         |       |`
+|             | username | varchar(32) | Yes| true |         |       |
 
-`|             | pv | bigint(20)  | Yes| false | 0       | SUM   |`
+|             | pv | bigint(20)  | Yes| false | 0       | SUM   |
 
-`|             | uv | bigint(20)  | Yes| false | 0       | SUM   |`
+|             | uv | bigint(20)  | Yes| false | 0       | SUM   |
 
-`|             |          |             |      |       |         |       |`
+|             |          |             |      |       |         |       |
 
-`| rollup_city | citycode | smallint(6) | Yes| true | N/A |       |`
+| rollup_city | citycode | smallint(6) | Yes| true | N/A |       |
 
-`|             | pv | bigint(20)  | Yes| false | 0       | SUM   |`
+|             | pv | bigint(20)  | Yes| false | 0       | SUM   |
 
-`+-------------+----------+-------------+------+-------+---------+-------+`
++-------------+----------+-------------+------+-------+---------+-------+
 
-`8 rows in set (0.01 sec)`
+8 rows in set (0.01 sec)
+```
 
   <br>
 
 可以使用以下命令取消当前正在执行的作业:
 
-`mysql > CANCEL ALTER TABLE ROLLUP FROM table1;`
+```sql
+CANCEL ALTER TABLE ROLLUP FROM table1;
+```
