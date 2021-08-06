@@ -97,6 +97,7 @@ mkdir -p doris-meta
 ```bash
 bin/start\_fe.sh --daemon
 ```
+
 <br>
 
 第四步: 确认启动FE启动成功.
@@ -419,6 +420,7 @@ Version:
 
 1 row in set (0.01 sec)
 ```
+
 <br>
 
 如果isAlive为true，则说明BE正常接入集群。如果BE没有正常接入集群，请查看log目录下的be.WARNING日志文件确定原因。
@@ -429,6 +431,7 @@ Version:
 ```Plain Text
 W0708 17:16:27.308156 11473 heartbeat\_server.cpp:82\] backend ip saved in master does not equal to backend local ip127.0.0.1 vs. 172.16.179.26
 ```
+
 <br>
 
 此时需要，先用以下命令drop掉原来加进去的be，然后重新以正确的IP添加BE。
