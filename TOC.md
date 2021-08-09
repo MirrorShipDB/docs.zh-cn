@@ -54,6 +54,9 @@
     + [聚合函数](/reference/Aggregation_functions.md)
     + [窗口函数](/reference/Window_functions.md)
     + [Bitmap函数](/reference/Bitmap_functions.md)
+  + [系统变量](/reference/System_variable.md)
+  + [错误码](/reference/Error_code.md)
+  + [系统限制](/reference/System_limit.md)
 + 管理手册
   + [集群部署](/administration/Deployment.md)
   + [集群管理](/administration/Cluster_administration.md)
