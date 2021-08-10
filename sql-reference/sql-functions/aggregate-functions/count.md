@@ -16,7 +16,6 @@
 MySQL > select count(*) 
 from log_statis 
 group by datetime;
-
 +----------+
 | count(*) |
 +----------+

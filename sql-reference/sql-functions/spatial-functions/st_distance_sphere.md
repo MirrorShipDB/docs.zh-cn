@@ -1,4 +1,4 @@
-# `ST_Distance_Sphere`
+# ST_Distance_Sphere
 
 ## description
 

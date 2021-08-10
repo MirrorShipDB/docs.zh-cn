@@ -1,4 +1,4 @@
-# `ST_AsText`,`ST_AsWKT`
+# ST_AsText,ST_AsWKT
 
 ## description
 

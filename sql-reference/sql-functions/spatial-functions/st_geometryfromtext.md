@@ -1,4 +1,4 @@
-# `ST_GeometryFromText`,`ST_GeomFromText`
+# ST_GeometryFromText,ST_GeomFromText
 
 ## description
 

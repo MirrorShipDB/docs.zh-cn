@@ -115,10 +115,10 @@ from pv_bitmap;
 
 ```SQL
 MySQL > select intersect_count(user_id, page, 'meituan') as meituan_uv,
-intersect_count(user_id, page, 'waimai') as waimai_uv,
-intersect_count(user_id, page, 'meituan', 'waimai') as retention //在 'meituan' 和 'waimai' 两个页面都出现的用户数
-from pv_bitmap
-where page in ('meituan', 'waimai');
+        intersect_count(user_id, page, 'waimai') as waimai_uv,
+        intersect_count(user_id, page, 'meituan', 'waimai') as retention //在 'meituan' 和 'waimai' 两个页面都出现的用户数
+        from pv_bitmap
+        where page in ('meituan', 'waimai');
 ```
 
 ## keyword

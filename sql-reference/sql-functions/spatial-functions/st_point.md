@@ -1,4 +1,4 @@
-# `ST_Point`
+# ST_Point
 
 ## description
 

@@ -1,4 +1,4 @@
-# `ST_LineFromText`,`ST_LineStringFromText`
+# ST_LineFromText,ST_LineStringFromText
 
 ## description
 
