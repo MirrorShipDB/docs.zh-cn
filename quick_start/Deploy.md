@@ -15,9 +15,9 @@ DorisDB-XX-1.0.0
 
 │   ├── bin
 
-│   │   ├── start\_be.sh # BE启动命令
+│   │   ├── start_be.sh # BE启动命令
 
-│   │   └── stop\_be.sh  # BE关闭命令
+│   │   └── stop_be.sh  # BE关闭命令
 
 │   ├── conf
 
@@ -25,9 +25,9 @@ DorisDB-XX-1.0.0
 
 │   ├── lib
 
-│   │   ├── dorisdb\_be  # BE可执行文件
+│   │   ├── dorisdb_be  # BE可执行文件
 
-│   │   └── meta\_tool
+│   │   └── meta_tool
 
 │   └── www
 
@@ -35,9 +35,9 @@ DorisDB-XX-1.0.0
 
 │   ├── bin
 
-│   │   ├── start\_fe.sh # FE启动命令
+│   │   ├── start_fe.sh # FE启动命令
 
-│   │   └── stop\_fe.sh  # FE关闭命令
+│   │   └── stop_fe.sh  # FE关闭命令
 
 │   ├── conf
 
@@ -47,7 +47,7 @@ DorisDB-XX-1.0.0
 
 │   │   ├── dorisdb-fe.jar  # FE jar包
 
-│   │   └── \*.jar           # FE 依赖的jar包
+│   │   └── *.jar           # FE 依赖的jar包
 
 │   └── webroot
 
@@ -95,7 +95,7 @@ mkdir -p doris-meta
 第三步: 启动FE进程:
 
 ```bash
-bin/start\_fe.sh --daemon
+bin/start_fe.sh --daemon
 ```
 
 <br>
@@ -105,13 +105,13 @@ bin/start\_fe.sh --daemon
 * 查看日志log/fe.log确认.
 
 ```Plain Text
-2020-03-16 20:32:14,686 INFO 1 \[FeServer.start():46\] thrift server started.
+2020-03-16 20:32:14,686 INFO 1 [FeServer.start():46] thrift server started.
 
-2020-03-16 20:32:14,696 INFO 1 \[NMysqlServer.start():71\] Open mysql server success on 9030
+2020-03-16 20:32:14,696 INFO 1 [NMysqlServer.start():71] Open mysql server success on 9030
 
-2020-03-16 20:32:14,696 INFO 1 \[QeService.start():60\] QE service start.
+2020-03-16 20:32:14,696 INFO 1 [QeService.start():60] QE service start.
 
-2020-03-16 20:32:14,825 INFO 76 \[HttpServer$HttpServerThread.run():210\] HttpServer started with port 8030
+2020-03-16 20:32:14,825 INFO 76 [HttpServer$HttpServerThread.run():210] HttpServer started with port 8030
 
 ...
 ```
@@ -145,7 +145,7 @@ mysql> SHOW PROC '/frontends'\\G
 
 ***1\. row***
 
-Name: 172.16.139.24\_9010\_1594200991015
+Name: 172.16.139.24_9010_1594200991015
 
 IP: 172.16.139.24
 
@@ -237,7 +237,7 @@ alter system drop observer "fe_host:edit_log_port";
 第三步: FE节点之间需要两两互联才能完成复制协议选主, 投票，日志提交和复制等功能。 FE节点首次启动时，需要指定现有集群中的一个节点作为helper节点, 从该节点获得集群的所有FE节点的配置信息，才能建立通信连接，因此首次启动需要指定--helper参数：
 
 ```shell
-./bin/start\_fe.sh --helper host:port --daemon
+./bin/start_fe.sh --helper host:port --daemon
 ```
 
 host为helper节点的IP，如果有多个IP，需要选取priority\_networks里的IP。port为edit\_log\_port，默认为9010。
@@ -245,7 +245,7 @@ host为helper节点的IP，如果有多个IP，需要选取priority\_networks里
 当FE再次启动时，无须指定--helper参数， 因为FE已经将其他FE的配置信息存储于本地目录, 因此可直接启动：
 
 ```shell
-./bin/start\_fe.sh --daemon
+./bin/start_fe.sh --daemon
 ```
 
 <br>
@@ -257,7 +257,7 @@ mysql> SHOW PROC '/frontends'\\G
 
 ***1\. row***
 
-Name: 172.26.108.172\_9010\_1584965098874
+Name: 172.26.108.172_9010_1584965098874
 
 IP: 172.26.108.172
 
@@ -277,7 +277,7 @@ Alive: true
 
 ***2\. row***
 
-Name: 172.26.108.174\_9010\_1584965098874
+Name: 172.26.108.174_9010_1584965098874
 
 IP: 172.26.108.174
 
@@ -297,7 +297,7 @@ Alive: true
 
 ***3\. row***
 
-Name: 172.26.108.175\_9010\_1584965098874
+Name: 172.26.108.175_9010_1584965098874
 
 IP: 172.26.108.175
 
@@ -364,7 +364,7 @@ mysql> ALTER SYSTEM ADD BACKEND "host:port";
 第三步: 启动BE：
 
 ```shell
-bin/start\_be.sh --daemon
+bin/start_be.sh --daemon
 ```
 
 <br>
@@ -503,7 +503,7 @@ cumulative_compaction_check_interval_seconds = 2
 
 * **并行度**
 
-在客户端执行命令，修改DorisDB的并行度(类似clickhouse set max\_threads= 8)。并行度可以设置为当前机器CPU核数的一半。
+在客户端执行命令，修改DorisDB的并行度(类似clickhouse set max_threads= 8)。并行度可以设置为当前机器CPU核数的一半。
 
 ```sql
 set global parallel_fragment_exec_instance_num =  8;
@@ -513,10 +513,10 @@ set global parallel_fragment_exec_instance_num =  8;
 
 ### Root用户登录
 
-使用MySQL客户端连接某一个FE实例的query\_port(9030), DorisDB内置root用户，密码默认为空：
+使用MySQL客户端连接某一个FE实例的query_port(9030), DorisDB内置root用户，密码默认为空：
 
 ```shell
-mysql -h fe\_host -P9030 -u root
+mysql -h fe_host -P9030 -u root
 ```
 
 <br>
@@ -524,7 +524,7 @@ mysql -h fe\_host -P9030 -u root
 清理环境：
 
 ```sql
-mysql > drop database if exists example\_db;
+mysql > drop database if exists example_db;
 
 mysql > drop user test;
 ```
@@ -542,7 +542,7 @@ mysql > create user 'test' identified by '123456';
 DorisDB中root账户才有权建立数据库，使用root用户登录，建立example\_db数据库:
 
 ```sql
-mysql > create database example\_db;
+mysql > create database example_db;
 ```
 
   <br>
@@ -555,20 +555,20 @@ mysql > show databases;
 +--------------------+
 | Database           |
 +--------------------+
-| example\_db        |
-| information\_schema|
+| example_db        |
+| information_schema|
 +--------------------+
 2 rows in set (0.00 sec)
 ```
 
-information\_schema是为了兼容mysql协议而存在，实际中信息可能不是很准确，所以关于具体数据库的信息建议通过直接查询相应数据库而获得。
+information_schema是为了兼容mysql协议而存在，实际中信息可能不是很准确，所以关于具体数据库的信息建议通过直接查询相应数据库而获得。
 
 ### 账户授权
 
-example\_db创建完成之后，可以通过root账户example\_db读写权限授权给test账户，授权之后采用test账户登录就可以操作example\_db数据库了：
+example_db创建完成之后，可以通过root账户example_db读写权限授权给test账户，授权之后采用test账户登录就可以操作example\_db数据库了：
 
 ```sql
-mysql > grant all on example\_db to test;
+mysql > grant all on example_db to test;
 ```
 
 <br>
@@ -604,11 +604,11 @@ DorisDB支持支持单分区和复合分区两种建表方式。
 
 下面分别演示两种分区的建表语句：
 
-1. 首先切换数据库：mysql > use example\_db;
+1. 首先切换数据库：mysql > use example_db;
 2. 建立单分区表建立一个名字为table1的逻辑表。使用全hash分桶，分桶列为siteid，桶数为10。这个表的schema如下：
 
 * siteid：类型是INT（4字节）, 默认值为10
-* cidy\_code：类型是SMALLINT（2字节）
+* cidy_code：类型是SMALLINT（2字节）
 * username：类型是VARCHAR, 最大长度为32, 默认值为空字符串
 * pv：类型是BIGINT（8字节）, 默认值是0; 这是一个指标列, DorisDB内部会对指标列做聚合操作, 这个列的聚合方法是求和（SUM）。这里采用了聚合模型，除此之外DorisDB还支持明细模型和更新模型，具体参考[数据模型介绍](../table_design/Data_model.md)。
 
@@ -632,13 +632,13 @@ PROPERTIES("replication_num" = "1");
 
 建立一个名字为table2的逻辑表。这个表的 schema 如下：
 
-* event\_day：类型是DATE，无默认值
+* event_day：类型是DATE，无默认值
 * siteid：类型是INT（4字节）, 默认值为10
-* cidy\_code：类型是SMALLINT（2字节）
+* cidy_code：类型是SMALLINT（2字节）
 * username：类型是VARCHAR, 最大长度为32, 默认值为空字符串
 * pv：类型是BIGINT（8字节）, 默认值是0; 这是一个指标列, DorisDB 内部会对指标列做聚合操作, 这个列的聚合方法是求和（SUM）
 
-我们使用event\_day列作为分区列，建立3个分区: p1, p2, p3
+我们使用event_day列作为分区列，建立3个分区: p1, p2, p3
 
 * p1：范围为 \[最小值, 2017-06-30)
 * p2：范围为 \[2017-06-30, 2017-07-31)
@@ -678,7 +678,7 @@ PROPERTIES("replication_num" = "1");
 mysql> show tables;
 
 +-------------------------+
-| Tables\_in\_example\_db |
+| Tables_in_example_db    |
 +-------------------------+
 | table1                  |
 | table2                  |
@@ -706,7 +706,7 @@ mysql> desc table2;
 +-----------+-------------+------+-------+---------+-------+
 | Field     | Type        | Null | Key   | Default | Extra |
 +-----------+-------------+------+-------+---------+-------+
-| event\_day| date        | Yes  | true  | N/A     |       |
+| event_day | date        | Yes  | true  | N/A     |       |
 | siteid    | int(11)     | Yes  | true  | 10      |       |
 | citycode  | smallint(6) | Yes  | true  | N/A     |       |
 | username  | varchar(32) | Yes  | true  |         |       |
