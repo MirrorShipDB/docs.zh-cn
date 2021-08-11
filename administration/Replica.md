@@ -77,13 +77,13 @@ TabletChecker 作为常驻的后台进程，会定期检查所有分片的状态
 针对不同的状态，我们采用不同的修复方式：
 
 1. REPLICA_MISSING/REPLICA_RELOCATING
-2. 选择一个低负载的，可用的 BE 节点作为目的端。选择一个健康副本作为源端。clone 任务会从源端拷贝一个完整的副本到目的端。对于副本补齐，我们会直接选择一个可用的 BE 节点，而不考虑存储介质。
-3. VERSION_INCOMPLETE
-4. 选择一个相对完整的副本作为目的端。选择一个健康副本作为源端。clone 任务会从源端尝试拷贝缺失的版本到目的端的副本。
-5. REPLICA_MISSING_IN_CLUSTER
-6. 这种状态处理方式和 REPLICA_MISSING 相同。
-7. REDUNDANT
-8. 通常经过副本修复后，分片会有冗余的副本。我们选择一个冗余副本将其删除。冗余副本的选择遵从以下优先级：
+   选择一个低负载的，可用的 BE 节点作为目的端。选择一个健康副本作为源端。clone 任务会从源端拷贝一个完整的副本到目的端。对于副本补齐，我们会直接选择一个可用的 BE 节点，而不考虑存储介质。
+2. VERSION_INCOMPLETE
+   选择一个相对完整的副本作为目的端。选择一个健康副本作为源端。clone 任务会从源端尝试拷贝缺失的版本到目的端的副本。
+3. REPLICA_MISSING_IN_CLUSTER
+   这种状态处理方式和 REPLICA_MISSING 相同。
+4. REDUNDANT
+  通常经过副本修复后，分片会有冗余的副本。我们选择一个冗余副本将其删除。冗余副本的选择遵从以下优先级：
 
    * 副本所在 BE 已经下线
    * 副本已损坏
@@ -93,12 +93,12 @@ TabletChecker 作为常驻的后台进程，会定期检查所有分片的状态
    * 副本所在 cluster 不正确
    * 副本所在 BE 节点负载高
 
-9. FORCE_REDUNDANT
-10. 不同于 REDUNDANT，因为此时虽然 Tablet 有副本缺失，但是因为已经没有额外的可用节点用于创建新的副本了。所以此时必须先删除一个副本，以腾出一个可用节点用于创建新的副本。 删除副本的顺序同 REDUNDANT。
-11. COLOCATE_MISMATCH
-12. 从 Colocation Group 中指定的副本分布 BE 节点中选择一个作为目的节点进行副本补齐。
-13. COLOCATE_REDUNDANT
-14. 删除一个非 Colocation Group 中指定的副本分布 BE 节点上的副本。
+5. FORCE_REDUNDANT
+   不同于 REDUNDANT，因为此时虽然 Tablet 有副本缺失，但是因为已经没有额外的可用节点用于创建新的副本了。所以此时必须先删除一个副本，以腾出一个可用节点用于创建新的副本。 删除副本的顺序同 REDUNDANT。
+6. COLOCATE_MISMATCH
+   从 Colocation Group 中指定的副本分布 BE 节点中选择一个作为目的节点进行副本补齐。
+7. COLOCATE_REDUNDANT
+   删除一个非 Colocation Group 中指定的副本分布 BE 节点上的副本。
 
 DorisDB 在选择副本节点时，不会将同一个 Tablet 的副本部署在同一个 host 的不同 BE 上。保证了即使同一个 host 上的所有 BE 都挂掉，也不会造成全部副本丢失。
 
@@ -137,7 +137,7 @@ TabletScheduler 里等待被调度的分片会根据状态不同，赋予不同�
 
 ADMIN REPAIR TABLE tbl [PARTITION (p1, p2, ...)];
 
-此命令告诉 TC，在扫描 Tablet 时，对需要优先修复的表或分区中的有问题的 Tablet，给予 VERY\_HIGH 的优先级。
+此命令告诉 TC，在扫描 Tablet 时，对需要优先修复的表或分区中的有问题的 Tablet，给予 VERY_HIGH 的优先级。
 
 > 注：此命令只是一个 hint，并不能保证一定能修复成功，且优先级也会随 TS 的调度而发生变化。并且当 Master FE 切换或重启后，这些信息都会丢失。
 
@@ -203,7 +203,7 @@ TabletScheduler 在每轮调度时，都会通过 LoadBalancer 来选择一定�
     +----------+-----------------------------+----------+--------------+----------+-----------+------------+--------------------+-----------------------+
     ~~~
 
-    其中 `UnhealthyTabletNum` 列显示了对应的 Database 中，有多少 Tablet 处于非健康状态。`InconsistentTabletNum` 列显示了对应的 Database 中，有多少 Tablet 处于副本不一致的状态。最后一行 `Total` 行对整个集群进行了统计。正常情况下 `UnhealthyTabletNum` 和 `InconsistentTabletNum` 应为0。如果不为零，可以进一步查看具体有哪些 Tablet。如上图中，UM\_TEST 数据库有 1 个 Tablet 状态不健康，则可以使用以下命令查看具体是哪一个 Tablet。
+    其中 `UnhealthyTabletNum` 列显示了对应的 Database 中，有多少 Tablet 处于非健康状态。`InconsistentTabletNum` 列显示了对应的 Database 中，有多少 Tablet 处于副本不一致的状态。最后一行 `Total` 行对整个集群进行了统计。正常情况下 `UnhealthyTabletNum` 和 `InconsistentTabletNum` 应为0。如果不为零，可以进一步查看具体有哪些 Tablet。如上图中，UM_TEST 数据库有 1 个 Tablet 状态不健康，则可以使用以下命令查看具体是哪一个 Tablet。
 
     `SHOW PROC '/statistic/5909381';`  
     其中 `5909381` 为对应的 DbId。
@@ -250,7 +250,7 @@ TabletScheduler 在每轮调度时，都会通过 LoadBalancer 来选择一定�
 
     上图展示了包括副本大小、行数、版本数量、所在数据路径等一些额外的信息。
 
-    > 注：这里显示的 `State` 列的内容不代表副本的健康状态，而是副本处于某种任务下的状态，比如 CLONE、SCHEMA\_CHANGE、ROLLUP 等。
+    > 注：这里显示的 `State` 列的内容不代表副本的健康状态，而是副本处于某种任务下的状态，比如 CLONE、SCHEMA_CHANGE、ROLLUP 等。
 
     此外，用户也可以通过以下命令，查看指定表或分区的副本分布情况，来检查副本分布是否均匀。  
     `ADMIN SHOW REPLICA DISTRIBUTION FROM tbl1;`
@@ -315,7 +315,7 @@ TabletScheduler 在每轮调度时，都会通过 LoadBalancer 来选择一定�
 
    * TabletId：等待调度的 Tablet 的 ID。一个调度任务只针对一个 Tablet
    * Type：任务类型，可以是 REPAIR（修复） 或 BALANCE（均衡）
-   * Status：该 Tablet 当前的状态，如 REPLICA\_MISSING（副本缺失）
+   * Status：该 Tablet 当前的状态，如 REPLICA_MISSING（副本缺失）
    * State：该调度任务的状态，可能为 PENDING/RUNNING/FINISHED/CANCELLED/TIMEOUT/UNEXPECTED
    * OrigPrio：初始的优先级
    * DynmPrio：当前动态调整后的优先级
