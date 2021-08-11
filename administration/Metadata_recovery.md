@@ -12,16 +12,16 @@ FE 有可能因为某些原因出现无法启动 bdbje、FE 之间无法同步�
 
 1. 停止所有 FE 进程，同时停止一切业务访问。保证在元数据恢复期间，不会因为外部访问导致其他不可预期的问题。
 2. 寻找元数据最新的FE节点
-    1. 先备份所有FE的meta_dir目录
-    2. 通常情况下，Master FE 的元数据是最新的。
-    3. 确保元数据最新，可以查看meta_dir/image目录下，image.xxxx文件的后缀，数字越大，则表示元数据越新。
-    4. mate_dir路径可在fe.conf中找到
-        ![8-1](../assets/8-1.png)
-    5. meta_dir文件夹结构如下：
-        ![8-2](../assets/8-2.png)
-    6. 比较image目录下image.xxxx 文件的后缀，确认元数据最新的节点
-        ![8-3](../assets/8-3.png)
-    7. 之后，我们要使用这个拥有最新元数据的 FE 节点，进行恢复，建议尽量选择 FOLLOWER 节点恢复，如果使用 OBSERVER 节点的元数据进行恢复会比较麻烦，cat ROLE(image文件夹下的ROLE文件)可以看到该节点角色。
+   1. 先备份所有FE的meta_dir目录
+   2. 通常情况下，Master FE 的元数据是最新的。
+   3. 确保元数据最新，可以查看meta_dir/image目录下，image.xxxx文件的后缀，数字越大，则表示元数据越新。
+   4. mate_dir路径可在fe.conf中找到
+    ![8-1](../assets/8-1.png)
+   5. meta_dir文件夹结构如下：
+    ![8-2](../assets/8-2.png)
+   6. 比较image目录下image.xxxx 文件的后缀，确认元数据最新的节点
+    ![8-3](../assets/8-3.png)
+   7. 之后，我们要使用这个拥有最新元数据的 FE 节点，进行恢复，建议尽量选择 FOLLOWER 节点恢复，如果使用 OBSERVER 节点的元数据进行恢复会比较麻烦，cat ROLE(image文件夹下的ROLE文件)可以看到该节点角色。
 
 3. 以下操作在2选出来的元数据最新的FE节点执行：
     1. 如果该节点是一个 OBSERVER，先将 meta\_dir/image/ROLE 文件中的 `role=OBSERVER` 改为 `role=FOLLOWER`。（从 OBSERVER 节点恢复会比较麻烦，先按这里的步骤操作，后面会有单独说明）如果该节点是一个 FOLLOWER，跳过3.1步骤。
