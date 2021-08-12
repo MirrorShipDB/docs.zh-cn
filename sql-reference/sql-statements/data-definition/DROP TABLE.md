@@ -33,4 +33,3 @@ DROP TABLE [IF EXISTS] [db_name.]table_name [FORCE];
 ## keyword
 
 DROP,TABLE
-x
