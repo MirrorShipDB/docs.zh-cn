@@ -29,23 +29,23 @@ MISSING:        replica 不存在
 
 1. 查看表全部的副本状态
 
-```sql
-ADMIN SHOW REPLICA STATUS FROM db1.tbl1;
-```
+    ```sql
+    ADMIN SHOW REPLICA STATUS FROM db1.tbl1;
+    ```
 
-2.查看表某个分区状态为 VERSION_ERROR 的副本
+2. 查看表某个分区状态为 VERSION_ERROR 的副本
 
-```sql
-ADMIN SHOW REPLICA STATUS FROM tbl1 PARTITION (p1, p2)
-WHERE STATUS = "VERSION_ERROR";
-```
+    ```sql
+    ADMIN SHOW REPLICA STATUS FROM tbl1 PARTITION (p1, p2)
+    WHERE STATUS = "VERSION_ERROR";
+    ```
 
-3.查看表所有状态不健康的副本
+3. 查看表所有状态不健康的副本
 
-```sql
-ADMIN SHOW REPLICA STATUS FROM tbl1
-WHERE STATUS != "OK";
-```
+    ```sql
+    ADMIN SHOW REPLICA STATUS FROM tbl1
+    WHERE STATUS != "OK";
+    ```
 
 ## keyword
 

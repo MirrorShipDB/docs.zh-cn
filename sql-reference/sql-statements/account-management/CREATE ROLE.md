@@ -16,9 +16,9 @@
 
  1. 创建一个角色
 
- ```sql
-    CREATE ROLE role1;
-```
+  ```sql
+      CREATE ROLE role1;
+  ```
 
 ## keyword
 

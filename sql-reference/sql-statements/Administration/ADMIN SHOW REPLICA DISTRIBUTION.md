@@ -18,15 +18,15 @@ ADMIN SHOW REPLICA DISTRIBUTION FROM [db_name.]tbl_name [PARTITION (p1, ...)];
 
 1. 查看表的副本分布
 
-```sql
-ADMIN SHOW REPLICA DISTRIBUTION FROM tbl1;
-```
+    ```sql
+    ADMIN SHOW REPLICA DISTRIBUTION FROM tbl1;
+    ```
 
-2.查看表的分区的副本分布
+2. 查看表的分区的副本分布
 
-```sql
-ADMIN SHOW REPLICA DISTRIBUTION FROM db1.tbl1 PARTITION(p1, p2);
-```
+    ```sql
+    ADMIN SHOW REPLICA DISTRIBUTION FROM db1.tbl1 PARTITION(p1, p2);
+    ```
 
 ## keyword
 

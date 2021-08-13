@@ -27,20 +27,20 @@ ADMIN SHOW FRONTEND CONFIG [LIKE "pattern"];
 
 1. 查看当前FE节点的配置
 
-```sql
-ADMIN SHOW FRONTEND CONFIG;
-```
+    ```sql
+    ADMIN SHOW FRONTEND CONFIG;
+    ```
 
-2.使用like谓词搜索当前Fe节点的配置
+2. 使用like谓词搜索当前Fe节点的配置
 
 ```plain text
-mysql> ADMIN SHOW FRONTEND CONFIG LIKE '%check_java_version%';
-+--------------------+-------+---------+-----------+------------+---------+
-| Key                | Value | Type    | IsMutable | MasterOnly | Comment |
-+--------------------+-------+---------+-----------+------------+---------+
-| check_java_version | true  | boolean | false     | false      |         |
-+--------------------+-------+---------+-----------+------------+---------+
-1 row in set (0.00 sec)
+    mysql> ADMIN SHOW FRONTEND CONFIG LIKE '%check_java_version%';
+    +--------------------+-------+---------+-----------+------------+---------+
+    | Key                | Value | Type    | IsMutable | MasterOnly | Comment |
+    +--------------------+-------+---------+-----------+------------+---------+
+    | check_java_version | true  | boolean | false     | false      |         |
+    +--------------------+-------+---------+-----------+------------+---------+
+    1 row in set (0.00 sec)
 ```
 
 ## keyword

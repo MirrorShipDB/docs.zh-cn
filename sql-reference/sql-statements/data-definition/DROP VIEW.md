@@ -3,6 +3,7 @@
 ## description
 
 该语句用于删除一个逻辑视图 VIEW
+
 语法：
 
 ```sql

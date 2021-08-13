@@ -7,7 +7,7 @@
 语法：
 
 ```sql
-    SHOW [ALL] GRANTS [FOR user_identity];
+SHOW [ALL] GRANTS [FOR user_identity];
 ```
 
 说明：
@@ -20,23 +20,23 @@
 
 ## example
 
-1.查看所有用户权限信息
+1. 查看所有用户权限信息
 
-```sql
-SHOW ALL GRANTS;
-```
+    ```sql
+    SHOW ALL GRANTS; 
+    ```
 
-2.查看指定 user 的权限
+2. 查看指定 user 的权限
 
-```sql
-SHOW GRANTS FOR jack@'%';
-```
+    ```sql
+    SHOW GRANTS FOR jack@'%';
+    ```
 
-3.查看当前用户的权限
+3. 查看当前用户的权限
 
-```sql
-SHOW GRANTS;
-```
+    ```sql
+    SHOW GRANTS;
+    ```
 
 ## keyword
 

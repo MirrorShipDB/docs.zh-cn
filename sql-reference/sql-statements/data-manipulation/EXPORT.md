@@ -28,6 +28,7 @@ broker;
 
 4. opt_properties
 用于指定一些特殊参数。
+
 语法：
 
 ```sql
@@ -46,6 +47,7 @@ include_query_id: 导出文件名中是否包含 query id，默认为 true。
 
 5.broker
 用于指定导出使用的broker
+
 语法：
 
 ```sql

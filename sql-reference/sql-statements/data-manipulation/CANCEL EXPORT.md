@@ -3,6 +3,7 @@
 ## description
 
 该语句用于取消指定 query id 的导出作业。
+
 语法：
 
 ```sql

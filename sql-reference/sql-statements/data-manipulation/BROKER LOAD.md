@@ -34,6 +34,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
 2. data_desc
 
 用于描述一批导入数据。
+
 语法：
 
     ```sql
@@ -54,7 +55,6 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
 
 说明：
 
-    ```plain text
     file_path:
 
     文件路径，可以指定到一个文件，也可以用 * 通配符指定某个目录下的所有文件。通配符必须匹配到文件，而不能是目录。
@@ -100,7 +100,6 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     WHERE:
 
     对做完 transform 的数据进行过滤，符合 where 条件的数据才能被导入。WHERE 语句中只可引用表中列名。
-    ```
 
 3.broker_name
 
@@ -161,6 +160,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
 4.opt_properties
 
 用于指定一些特殊参数。
+
 语法：
 
     [PROPERTIES ("key"="value", ...)]
@@ -183,7 +183,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
 
 ## example
 
-1.从 HDFS 导入一批数据，指定超时时间和过滤比例。使用铭文 my_hdfs_broker 的 broker。简单认证。
+1. 从 HDFS 导入一批数据，指定超时时间和过滤比例。使用铭文 my_hdfs_broker 的 broker。简单认证。
 
     LOAD LABEL example_db.label1
     (
@@ -201,9 +201,9 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     "max_filter_ratio" = "0.1"
     );
 
-其中 hdfs_host 为 namenode 的 host，hdfs_port 为 fs.defaultFS 端口（默认9000）
+    其中 hdfs_host 为 namenode 的 host，hdfs_port 为 fs.defaultFS 端口（默认9000）
 
-2.从 AFS 一批数据，包含多个文件。导入不同的 table，指定分隔符，指定列对应关系。
+2. 从 AFS 一批数据，包含多个文件。导入不同的 table，指定分隔符，指定列对应关系。
 
     LOAD LABEL example_db.label2
     (
@@ -227,7 +227,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     "max_filter_ratio" = "0.1"
     );
 
-3.从 HDFS 导入一批数据，指定hive的默认分隔符\x01，并使用通配符*指定目录下的所有文件。
+3. 从 HDFS 导入一批数据，指定hive的默认分隔符\x01，并使用通配符*指定目录下的所有文件。
 使用简单认证，同时配置 namenode HA
 
     LOAD LABEL example_db.label3
@@ -247,7 +247,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     "dfs.client.failover.proxy.provider" = "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider"
     )
 
-4.从 HDFS 导入一批“负”数据。同时使用 kerberos 认证方式。提供 keytab 文件路径。
+4. 从 HDFS 导入一批“负”数据。同时使用 kerberos 认证方式。提供 keytab 文件路径。
 
     LOAD LABEL example_db.label4
     (
@@ -263,7 +263,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     "kerberos_keytab"="/home/palo/palo.keytab"
     )
 
-5.从 HDFS 导入一批数据，指定分区。同时使用 kerberos 认证方式。提供 base64 编码后的 keytab 文件内容。
+5. 从 HDFS 导入一批数据，指定分区。同时使用 kerberos 认证方式。提供 base64 编码后的 keytab 文件内容。
 
     LOAD LABEL example_db.label5
     (
@@ -280,7 +280,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     "kerberos_keytab_content"="BQIAAABEAAEACUJBSURVLkNPTQAEcGFsbw"
     )
 
-6.从 BOS 导入一批数据，指定分区, 并对导入文件的列做一些转化，如下：
+6. 从 BOS 导入一批数据，指定分区, 并对导入文件的列做一些转化，如下：
     表结构为：
     k1 varchar(20)
     k2 int
@@ -315,7 +315,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     "bos_secret_accesskey"="yyyyyyyyyyyyyyyyyyyy"
     )
 
-7.导入数据到含有HLL列的表，可以是表中的列或者数据里面的列
+7. 导入数据到含有HLL列的表，可以是表中的列或者数据里面的列
 
     如果表中有三列分别是（id,v1,v2,v3）。其中v1和v2列是hll列。导入的源文件有3列。则（column_list）中声明第一列为id，第二三列为一个临时命名的k1,k2。
     在SET中必须给表中的hll列特殊声明 hll_hash。表中的v1列等于原始数据中的hll_hash(k1)列, 表中的v3列在原始数据中并没有对应的值，使用empty_hll补充默认值。
@@ -348,7 +348,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     )
     WITH BROKER hdfs ("username"="hdfs_user", "password"="hdfs_password");
 
-8.导入Parquet文件中数据  指定FORMAT 为parquet， 默认是通过文件后缀判断
+8. 导入Parquet文件中数据  指定FORMAT 为parquet， 默认是通过文件后缀判断
 
     LOAD LABEL example_db.label9
     (
@@ -359,7 +359,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     )
     WITH BROKER hdfs ("username"="hdfs_user", "password"="hdfs_password");
 
-9.提取文件路径中的分区字段
+9. 提取文件路径中的分区字段
 
     如果需要，则会根据表中定义的字段类型解析文件路径中的分区字段（partitioned fields），类似Spark中Partition Discovery的功能
 
@@ -380,7 +380,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
 
     则提取文件路径的中的city和utc_date字段
 
-10.对待导入数据进行过滤，k1 值大于 k2 值的列才能被导入
+10. 对待导入数据进行过滤，k1 值大于 k2 值的列才能被导入
 
     LOAD LABEL example_db.label10
     (
@@ -389,7 +389,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     where k1 > k2
     )
 
-11.提取文件路径中的时间分区字段，并且时间包含 %3A (在 hdfs 路径中，不允许有 ':'，所有 ':' 会由 %3A 替换)
+11. 提取文件路径中的时间分区字段，并且时间包含 %3A (在 hdfs 路径中，不允许有 ':'，所有 ':' 会由 %3A 替换)
 
     假设有如下文件：
 
@@ -412,7 +412,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     )
     WITH BROKER "hdfs" ("username"="user", "password"="pass");
 
-12.从 Aliyun OSS 导入 csv 格式的数据
+12. 从 Aliyun OSS 导入 csv 格式的数据
 
     LOAD LABEL example_db.label12
     (
@@ -427,7 +427,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     "fs.oss.endpoint" = "oss-cn-zhangjiakou-internal.aliyuncs.com"
     )
 
-13.从腾讯云 COS 导入 csv 格式的数据
+13. 从腾讯云 COS 导入 csv 格式的数据
 
     LOAD LABEL example_db.label13
     (
@@ -442,7 +442,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     "fs.cosn.bucket.endpoint_suffix" = "cos.ap-beijing.myqcloud.com"
     )
 
-14.从 Amazon S3 导入 csv 格式的数据
+14. 从 Amazon S3 导入 csv 格式的数据
 
     LOAD LABEL example_db.label14
     (

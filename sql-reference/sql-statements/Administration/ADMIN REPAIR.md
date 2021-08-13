@@ -19,15 +19,15 @@ ADMIN REPAIR TABLE table_name[ PARTITION (p1,...)]
 
 1. 尝试修复指定表
 
-```sql
-ADMIN REPAIR TABLE tbl1;
-```
+    ```sql
+    ADMIN REPAIR TABLE tbl1;
+    ```
 
-2.尝试修复指定分区
+2. 尝试修复指定分区
 
-```sql
-ADMIN REPAIR TABLE tbl1 PARTITION (p1, p2);
-```
+    ```sql
+    ADMIN REPAIR TABLE tbl1 PARTITION (p1, p2);
+    ```
 
 ## keyword
 

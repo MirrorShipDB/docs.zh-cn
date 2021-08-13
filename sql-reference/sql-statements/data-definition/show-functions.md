@@ -16,7 +16,6 @@ SHOW [FULL] [BUILTIN] FUNCTIONS [IN|FROM db] [LIKE 'function_pattern']
 >`function_pattern`: 用来过滤函数名称的参数
 
 查看数据库下所有的自定义(系统提供)的函数。如果用户指定了数据库，那么查看对应数据库的，否则直接查询当前会话所在数据库
-
 需要对这个数据库拥有 `SHOW` 权限
 
 ## example

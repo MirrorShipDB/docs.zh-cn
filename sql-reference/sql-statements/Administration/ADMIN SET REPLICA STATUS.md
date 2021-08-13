@@ -23,21 +23,23 @@ PROPERTIES ("key" = "value", ...);
 
 注意：
 
+```plain text
 设置为 Bad 状态的副本可能立刻被删除，请谨慎操作。
+```
 
 ## example
 
 1. 设置 tablet 10003 在 BE 10001 上的副本状态为 bad。
 
-```sql
-ADMIN SET REPLICA STATUS PROPERTIES("tablet_id" = "10003", "backend_id" = "10001", "status" = "bad");
-```
+    ```sql
+    ADMIN SET REPLICA STATUS PROPERTIES("tablet_id" = "10003", "backend_id" = "10001", "status" = "bad");
+    ```
 
-2.设置 tablet 10003 在 BE 10001 上的副本状态为 ok。
+2. 设置 tablet 10003 在 BE 10001 上的副本状态为 ok。
 
-```sql
-ADMIN SET REPLICA STATUS PROPERTIES("tablet_id" = "10003", "backend_id" = "10001", "status" = "ok");
-```
+    ```sql
+    ADMIN SET REPLICA STATUS PROPERTIES("tablet_id" = "10003", "backend_id" = "10001", "status" = "ok");
+    ```
 
 ## keyword
 

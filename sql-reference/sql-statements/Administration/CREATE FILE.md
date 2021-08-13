@@ -32,29 +32,29 @@ md5: 可选。文件的 md5。如果指定，会在下载文件后进行校验�
 
 ## example
 
-1.创建文件 ca.pem ，分类为 kafka
+1. 创建文件 ca.pem ，分类为 kafka
 
-```sql
-CREATE FILE "ca.pem"
-PROPERTIES
-(
-"url" = "https://test.bj.bcebos.com/kafka-key/ca.pem",
-"catalog" = "kafka"
-);
-```
+    ```sql
+    CREATE FILE "ca.pem"
+    PROPERTIES
+    (
+    "url" = "https://test.bj.bcebos.com/kafka-key/ca.pem",
+    "catalog" = "kafka"
+    );
+    ```
 
-2.创建文件 client.key，分类为 my_catalog
+2. 创建文件 client.key，分类为 my_catalog
 
-```sql
-CREATE FILE "client.key"
-IN my_database
-PROPERTIES
-(
-"url" = "https://test.bj.bcebos.com/kafka-key/client.key",
-"catalog" = "my_catalog",
-"md5" = "b5bb901bf10f99205b39a46ac3557dd9"
-);
-```
+    ```sql
+    CREATE FILE "client.key"
+    IN my_database
+    PROPERTIES
+    (
+    "url" = "https://test.bj.bcebos.com/kafka-key/client.key",
+    "catalog" = "my_catalog",
+    "md5" = "b5bb901bf10f99205b39a46ac3557dd9"
+    );
+    ```
 
 ## keyword
 

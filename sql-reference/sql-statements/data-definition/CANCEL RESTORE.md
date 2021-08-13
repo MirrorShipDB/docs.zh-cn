@@ -3,6 +3,7 @@
 ## description
 
 该语句用于取消一个正在进行的 RESTORE 任务。
+
 语法：
 
 ```sql
@@ -16,9 +17,9 @@ CANCEL RESTORE FROM db_name;
 
 1. 取消 example_db 下的 RESTORE 任务。
 
-```sql
-CANCEL RESTORE FROM example_db;
-```
+    ```sql
+    CANCEL RESTORE FROM example_db;
+    ```
 
 ## keyword
 

@@ -16,9 +16,9 @@
 
 1. 删除一个角色
 
-```sql
- DROP ROLE role1;
-```
+  ```sql
+  DROP ROLE role1;
+  ```
 
 ## keyword
 

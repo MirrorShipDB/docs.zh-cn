@@ -4,7 +4,7 @@
 
 该语句用于展示已安装的插件。
 
-语法
+语法:
 
 ```sql
 SHOW PLUGINS;
@@ -16,9 +16,9 @@ SHOW PLUGINS;
 
 1. 展示已安装的插件：
 
-```sql
-SHOW PLUGINS;
-```
+    ```sql
+    SHOW PLUGINS;
+    ```
 
 ## keyword
 

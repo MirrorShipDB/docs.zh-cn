@@ -14,9 +14,9 @@ ENTER cluster_name
 
 1. 进入逻辑集群test_cluster
 
-```sql
-ENTER test_cluster;
-```
+    ```sql
+    ENTER test_cluster;
+    ```
 
 ## keyword
 

@@ -4,7 +4,7 @@
 
 该语句用于删除物化视图。同步语法
 
-语法:
+语法：
 
 ```sql
 DROP MATERIALIZED VIEW [IF EXISTS] mv_name ON table_name

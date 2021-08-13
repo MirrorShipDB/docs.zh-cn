@@ -16,11 +16,11 @@ plugin_name 可以通过 `SHOW PLUGINS;` 命令查看。
 
 ## example
 
-1.卸载一个插件：
+1. 卸载一个插件：
 
-```SQL
-UNINSTALL PLUGIN auditdemo;
-```
+    ```SQL
+    UNINSTALL PLUGIN auditdemo;
+    ```
 
 ## keyword
 

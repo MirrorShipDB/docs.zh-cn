@@ -4,7 +4,7 @@
 
 该语句用于新建逻辑集群 (cluster), 需要管理员权限。如果不使用多租户，直接创建一个名称为default_cluster的cluster。否则创建一个自定义名称的cluster。
 
-语法:
+语法：
 
 ```sql
 CREATE CLUSTER [IF NOT EXISTS] cluster_name

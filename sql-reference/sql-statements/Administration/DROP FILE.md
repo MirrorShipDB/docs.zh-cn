@@ -25,9 +25,9 @@ catalog: 必须。文件所属分类。
 
 1. 删除文件 ca.pem
 
-```sql
-DROP FILE "ca.pem" properties("catalog" = "kafka");
-```
+    ```sql
+    DROP FILE "ca.pem" properties("catalog" = "kafka");
+    ```
 
 ## keyword
 

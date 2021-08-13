@@ -15,9 +15,9 @@ ADMIN SET FRONTEND CONFIG ("key" = "value");
 
 1. 设置 'disable_balance' 为 true
 
-```sql
-ADMIN SET FRONTEND CONFIG ("disable_balance" = "true");
-```
+    ```sql
+    ADMIN SET FRONTEND CONFIG ("disable_balance" = "true");
+    ```
 
 ## keyword
 

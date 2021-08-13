@@ -86,6 +86,7 @@ column_list：
 
 用于指定导入文件中的列和 table 中的列的对应关系。
 当需要跳过导入文件中的某一列时，将该列指定为 table 中不存在的列名即可。
+
 语法：
 
 ```sql
@@ -95,6 +96,7 @@ column_list：
 columns_from_path:
 
 用于指定需要从文件路径中解析的字段。
+
 语法：
 
 ```sql
@@ -136,6 +138,7 @@ hll_hash(column) 用于将表或数据里面的某一列转化成HLL列的数据
 3.opt_properties
 
 用于指定一些特殊参数。
+
 语法：
 
 ```sql

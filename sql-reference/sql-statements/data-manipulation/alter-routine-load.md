@@ -67,7 +67,7 @@ FROM data_source
     );
     ```
 
-2. 将 `desired_concurrent_number` 修改为 10，修改 partition 的offset，修改 group id。
+2. 将 `desired_concurrent_number` 修改为 10，修改 partition 的offset，修改 group id.
 
     ```sql
     ALTER ROUTINE LOAD FOR db1.label1

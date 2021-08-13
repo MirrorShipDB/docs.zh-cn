@@ -14,9 +14,9 @@ SHOW ROLES;
 
 1. 查看已创建的角色：
 
-```sql
-SHOW ROLES;
-```
+    ```sql
+    SHOW ROLES;
+    ```
 
 ## keyword
 

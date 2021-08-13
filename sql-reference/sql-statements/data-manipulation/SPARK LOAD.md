@@ -21,6 +21,7 @@ WITH RESOURCE resource_name
 1.load_label
 
 当前导入批次的标签。在一个 database 内唯一。
+
 语法：
 
 ```sql
@@ -30,6 +31,7 @@ WITH RESOURCE resource_name
 2.data_desc
 
 用于描述一批导入数据。
+
 语法：
 
 ```sql
@@ -93,6 +95,7 @@ column_list：
 
 用于指定导入文件中的列和 table 中的列的对应关系。
 当需要跳过导入文件中的某一列时，将该列指定为 table 中不存在的列名即可。
+
 语法：
 (col_name1, col_name2, ...)
 
@@ -122,6 +125,7 @@ WHERE:
 5.opt_properties
 
 用于指定一些特殊参数。
+
 语法：
 
 ```sql

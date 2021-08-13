@@ -22,15 +22,15 @@ instance_num 逻辑集群节点树
 
 1. 缩容，减少含有3个be的逻辑集群test_cluster的be数为2
 
-```sql
-ALTER CLUSTER test_cluster PROPERTIES ("instance_num"="2");
-```
+    ```sql
+    ALTER CLUSTER test_cluster PROPERTIES ("instance_num"="2");
+    ```
 
-2.扩容，增加含有3个be的逻辑集群test_cluster的be数为4
+2. 扩容，增加含有3个be的逻辑集群test_cluster的be数为4
 
-```sql
-ALTER CLUSTER test_cluster PROPERTIES ("instance_num"="4");
-```
+    ```sql
+    ALTER CLUSTER test_cluster PROPERTIES ("instance_num"="4");
+    ```
 
 ## keyword
 

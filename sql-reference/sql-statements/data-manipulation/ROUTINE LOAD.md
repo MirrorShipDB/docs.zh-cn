@@ -82,6 +82,7 @@ PARTITION(p1, p2, p3)
 4.job_properties
 
 用于指定例行导入作业的通用参数。
+
 语法：
 
 PROPERTIES (

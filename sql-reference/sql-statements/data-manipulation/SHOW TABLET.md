@@ -3,6 +3,7 @@
 ## description
 
 该语句用于显示 tablet 相关的信息（仅管理员使用）
+
 语法：
 
 ```sql

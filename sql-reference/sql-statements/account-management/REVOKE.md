@@ -20,16 +20,16 @@ user_identity：
 
 1. 撤销用户 jack 数据库 testDb 的权限
 
-```sql
+    ```sql
 
-    REVOKE SELECT_PRIV ON db1.* FROM 'jack'@'192.%';
-```
+        REVOKE SELECT_PRIV ON db1.* FROM 'jack'@'192.%';
+    ```
 
-1. 撤销用户 jack 资源 spark_resource 的使用权限
+2. 撤销用户 jack 资源 spark_resource 的使用权限
 
-```sql
-    REVOKE USAGE_PRIV ON RESOURCE 'spark_resource' FROM 'jack'@'192.%';
-```
+    ```sql
+        REVOKE USAGE_PRIV ON RESOURCE 'spark_resource' FROM 'jack'@'192.%';
+    ```
 
 ## keyword
 

@@ -3,6 +3,7 @@
 ## description
 
 该语句用于展示指定 table 的 schema 信息
+
 语法：
 
 ```sql

@@ -78,17 +78,17 @@ EMPTY_HLL()
 
 4. 查询，hll列不允许直接查询它的原始值，可以通过配套的函数进行查询
 
-```plain text
-a. 求总uv
-select HLL_UNION_AGG(uv_set) from test_uv;
+    ```plain text
+    a. 求总uv
+    select HLL_UNION_AGG(uv_set) from test_uv;
 
-b. 求每一天的uv
-select dt, HLL_CARDINALITY(uv_set) from test_uv;
+    b. 求每一天的uv
+    select dt, HLL_CARDINALITY(uv_set) from test_uv;
 
-c. 求test表中set1的聚合值
-select dt, HLL_CARDINALITY(uv) from (select dt, HLL_RAW_AGG(set1) as uv from test group by dt) tmp;
-select dt, HLL_UNION_AGG(set1) as uv from test group by dt;
-```
+    c. 求test表中set1的聚合值
+    select dt, HLL_CARDINALITY(uv) from (select dt, HLL_RAW_AGG(set1) as uv from test group by dt) tmp;
+    select dt, HLL_UNION_AGG(set1) as uv from test group by dt;
+    ```
 
 ## keyword
 

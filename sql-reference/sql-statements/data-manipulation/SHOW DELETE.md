@@ -3,6 +3,7 @@
 ## description
 
 该语句用于展示已执行成功的历史 delete 任务
+
 语法：
 
 ```sql
