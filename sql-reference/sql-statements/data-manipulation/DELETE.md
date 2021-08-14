@@ -3,6 +3,7 @@
 ## description
 
 该语句用于按条件删除指定 table（base index） partition 中的数据。
+
 该操作会同时删除和此 base index 相关的 rollup index 的数据。
 
 语法：

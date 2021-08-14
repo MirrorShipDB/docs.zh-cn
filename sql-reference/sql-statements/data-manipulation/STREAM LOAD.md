@@ -9,8 +9,6 @@ stream-load: load data to table in streaming
 SYNOPSIS
 curl --location-trusted -u user:passwd [-H ""...] -T data.file -XPUT http://fe_host:http_port/api/{db}/{table}/_stream_load
 
-```
-
 DESCRIPTION
 该语句用于向指定的 table 导入数据，与普通Load区别是，这种导入方式是同步导入。
 这种导入方式仍然能够保证一批导入任务的原子性，要么全部数据导入成功，要么全部失败。
@@ -18,7 +16,9 @@ DESCRIPTION
 这是一个同步操作，整个数据导入工作完成后返回给用户导入结果。
 当前支持HTTP chunked与非chunked上传两种方式，对于非chunked方式，必须要有Content-Length来标示上传内容长度，这样能够保证数据的完整性。
 另外，用户最好设置Expect Header字段内容100-continue，这样可以在某些出错场景下避免不必要的数据传输。
+```
 
+```plain text
 OPTIONS
 用户可以通过HTTP的Header部分来传入导入参数
 
@@ -54,7 +54,9 @@ timezone: 指定本次导入所使用的时区。默认为东八区。该参数�
 exec_mem_limit: 导入内存限制。默认为 2GB。单位为字节。
 
 format: 指定导入数据格式，默认是csv，支持json格式。
+```
 
+```PALIN TEXT
 jsonpaths: 导入json方式分为：简单模式和精准模式。
 简单模式：没有设置jsonpaths参数即为简单模式，这种模式下要求json数据是对象类型，例如：
 {"k1":1, "k2":2, "k3":"hello"}，其中k1，k2，k3是列名字。
@@ -86,11 +88,14 @@ NumberUnselectedRows: 此次导入，通过 where 条件被过滤掉的行数
 LoadBytes: 此次导入的源文件数据量大小
 LoadTimeMs: 此次导入所用的时间
 ErrorURL: 被过滤数据的具体内容，仅保留前1000条
+```
 
 ERRORS
 可以通过以下语句查看导入错误详细信息：
 
+```SQL
 SHOW LOAD WARNINGS ON 'url'
+```
 
 其中 url 为 ErrorURL 给出的 url。
 

@@ -12,9 +12,7 @@ DESC[RIBE] [db_name.]table_name [ALL];
 
 说明：
 
-```plain text
 如果指定 ALL，则显示该 table 的所有 index(rollup) 的 schema
-```
 
 ## example
 

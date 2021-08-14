@@ -15,22 +15,24 @@ INSERT INTO table_name
 
 ### Parameters
 
-> tablet_name: 导入数据的目的表。可以是 `db_name.table_name` 形式
->
-> partitions: 指定待导入的分区，必须是 `table_name` 中存在的分区，多个分区名称用逗号分隔
->
-> label: 为 Insert 任务指定一个 label
->
-> column_name: 指定的目的列，必须是 `table_name` 中存在的列
->
-> expression: 需要赋值给某个列的对应表达式
->
-> DEFAULT: 让对应列使用默认值
->
-> query: 一个普通查询，查询的结果会写入到目标中
->
-> hint: 用于指示 `INSERT` 执行行为的一些指示符。`streaming` 和 默认的非 `streaming` 方式均会使用同步方式完成 `INSERT` 语句执行
-> 非 `streaming` 方式在执行完成后会返回一个 label 方便用户通过 `SHOW LOAD` 查询导入的状态
+```plain text
+tablet_name: 导入数据的目的表。可以是 `db_name.table_name` 形式
+
+partitions: 指定待导入的分区，必须是 `table_name` 中存在的分区，多个分区名称用逗号分隔
+
+label: 为 Insert 任务指定一个 label
+
+column_name: 指定的目的列，必须是 `table_name` 中存在的列
+
+expression: 需要赋值给某个列的对应表达式
+
+DEFAULT: 让对应列使用默认值
+
+query: 一个普通查询，查询的结果会写入到目标中
+
+hint: 用于指示 `INSERT` 执行行为的一些指示符。`streaming` 和 默认的非 `streaming` 方式均会使用同步方式完成 `INSERT` 语句执行
+非 `streaming` 方式在执行完成后会返回一个 label 方便用户通过 `SHOW LOAD` 查询导入的状态
+```
 
 ### Note
 

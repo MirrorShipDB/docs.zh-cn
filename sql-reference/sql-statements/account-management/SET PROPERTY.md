@@ -14,7 +14,7 @@ SET PROPERTY [FOR 'user'] 'key' = 'value' [, 'key' = 'value']
 
 key:
 
-超级用户权限:s
+超级用户权限:
 
 ```plain text
 max_user_connections: 最大连接数。

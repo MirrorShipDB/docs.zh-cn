@@ -6,36 +6,39 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
 可以通过 show broker 命令查看已经部署的 broker。
 目前支持以下6种数据源：
 
-    1. Baidu HDFS：百度内部的 hdfs，仅限于百度内部使用。
-    2. Baidu AFS：百度内部的 afs，仅限于百度内部使用。
-    3. Baidu Object Storage(BOS)：百度对象存储。仅限百度内部用户、公有云用户或其他可以访问 BOS 的用户使用。
-    4. Apache HDFS：社区版本 hdfs。
-    5. Amazon S3：Amazon对象存储。
-    6. Aliyun OSS：阿里云对象存储。
+1. Baidu HDFS：百度内部的 hdfs，仅限于百度内部使用。
+2. Baidu AFS：百度内部的 afs，仅限于百度内部使用。
+3. Baidu Object Storage(BOS)：百度对象存储。仅限百度内部用户、公有云用户或其他可以访问 BOS 的用户使用。
+4. Apache HDFS：社区版本 hdfs。
+5. Amazon S3：Amazon对象存储。
+6. Aliyun OSS：阿里云对象存储。
 
 语法：
 
-    ```sql
-    LOAD LABEL load_label
-    (
-    data_desc1[, data_desc2, ...]
-    )
-    WITH BROKER broker_name
-    [broker_properties]
-    [opt_properties];
-    ```
+```sql
+LOAD LABEL load_label
+(
+data_desc1[, data_desc2, ...]
+)
+WITH BROKER broker_name
+[broker_properties]
+[opt_properties];
+```
 
 1. load_label
 
     当前导入批次的标签。在一个 database 内唯一。
     语法：
+
+    ```sql
     [database_name.]your_label
+    ```
 
 2. data_desc
 
-用于描述一批导入数据。
+    用于描述一批导入数据。
 
-语法：
+    语法：
 
     ```sql
     DATA INFILE
@@ -53,8 +56,9 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     [WHERE predicate]
     ```
 
-说明：
+    说明：
 
+    ```plain text
     file_path:
 
     文件路径，可以指定到一个文件，也可以用 * 通配符指定某个目录下的所有文件。通配符必须匹配到文件，而不能是目录。
@@ -100,14 +104,17 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     WHERE:
 
     对做完 transform 的数据进行过滤，符合 where 条件的数据才能被导入。WHERE 语句中只可引用表中列名。
+    ```
 
-3.broker_name
+3. broker_name
 
     所使用的 broker 名称，可以通过 show broker 命令查看。
 
-4.broker_properties
+4. broker_properties
 
     用于提供通过 broker 访问数据源的信息。不同的 broker，以及不同的访问方式，需要提供的信息不同。
+
+## example
 
 1. Baidu HDFS/AFS
 
@@ -157,11 +164,11 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     fs.oss.accessKeySecret：Aliyun OSS的secret key
     fs.oss.endpoint：Aliyun OSS的endpoint
 
-4.opt_properties
+6. opt_properties
 
-用于指定一些特殊参数。
+    用于指定一些特殊参数。
 
-语法：
+    语法：
 
     [PROPERTIES ("key"="value", ...)]
 
@@ -172,7 +179,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     strict mode：     是否对数据进行严格限制。默认为 false。
     timezone:         指定某些受时区影响的函数的时区，如 strftime/alignment_timestamp/from_unixtime 等等，具体请查阅 [时区] 文档。如果不指定，则使用 "Asia/Shanghai" 时区。
   
-5.导入数据格式样例
+7. 导入数据格式样例
 
     整型类（TINYINT/SMALLINT/INT/BIGINT/LARGEINT）：1, 1000, 1234
     浮点类（FLOAT/DOUBLE/DECIMAL）：1.1, 0.23, .356
@@ -181,10 +188,11 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     字符串类（CHAR/VARCHAR）："I am a student", "a"
     NULL值：\N
 
-## example
+### Syntax
 
 1. 从 HDFS 导入一批数据，指定超时时间和过滤比例。使用铭文 my_hdfs_broker 的 broker。简单认证。
 
+    ```sql
     LOAD LABEL example_db.label1
     (
     DATA INFILE("hdfs://hdfs_host:hdfs_port/user/palo/data/input/file")
@@ -200,11 +208,13 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     "timeout" = "3600",
     "max_filter_ratio" = "0.1"
     );
+    ```
 
     其中 hdfs_host 为 namenode 的 host，hdfs_port 为 fs.defaultFS 端口（默认9000）
 
 2. 从 AFS 一批数据，包含多个文件。导入不同的 table，指定分隔符，指定列对应关系。
 
+    ```sql
     LOAD LABEL example_db.label2
     (
     DATA INFILE("afs://afs_host:hdfs_port/user/palo/data/input/file1")
@@ -226,10 +236,13 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     "timeout" = "3600",
     "max_filter_ratio" = "0.1"
     );
+    ```
 
 3. 从 HDFS 导入一批数据，指定hive的默认分隔符\x01，并使用通配符*指定目录下的所有文件。
-使用简单认证，同时配置 namenode HA
 
+    使用简单认证，同时配置 namenode HA
+
+    ```sql
     LOAD LABEL example_db.label3
     (
     DATA INFILE("hdfs://hdfs_host:hdfs_port/user/palo/data/input/*")
@@ -246,9 +259,11 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     "dfs.namenode.rpc-address.my_ha.my_namenode2" = "nn2_host:rpc_port",
     "dfs.client.failover.proxy.provider" = "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider"
     )
+    ```
 
 4. 从 HDFS 导入一批“负”数据。同时使用 kerberos 认证方式。提供 keytab 文件路径。
 
+    ```sql
     LOAD LABEL example_db.label4
     (
     DATA INFILE("hdfs://hdfs_host:hdfs_port/user/palo/data/input/old_file)
@@ -262,9 +277,11 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     "kerberos_principal"="doris@YOUR.COM",
     "kerberos_keytab"="/home/palo/palo.keytab"
     )
+    ````
 
 5. 从 HDFS 导入一批数据，指定分区。同时使用 kerberos 认证方式。提供 base64 编码后的 keytab 文件内容。
 
+    ```sql
     LOAD LABEL example_db.label5
     (
     DATA INFILE("hdfs://hdfs_host:hdfs_port/user/palo/data/input/file")
@@ -279,8 +296,10 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     "kerberos_principal"="doris@YOUR.COM",
     "kerberos_keytab_content"="BQIAAABEAAEACUJBSURVLkNPTQAEcGFsbw"
     )
+    ```
 
 6. 从 BOS 导入一批数据，指定分区, 并对导入文件的列做一些转化，如下：
+
     表结构为：
     k1 varchar(20)
     k2 int
@@ -297,6 +316,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     1) k1: 不变换
     2) k2：是 tmp_k2 和 tmp_k3 数据之和
 
+    ```sql
     LOAD LABEL example_db.label6
     (
     DATA INFILE("bos://my_bucket/input/file")
@@ -314,11 +334,15 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     "bos_accesskey" = "xxxxxxxxxxxxxxxxxxxxxxxxxx",
     "bos_secret_accesskey"="yyyyyyyyyyyyyyyyyyyy"
     )
+    ```
 
 7. 导入数据到含有HLL列的表，可以是表中的列或者数据里面的列
 
     如果表中有三列分别是（id,v1,v2,v3）。其中v1和v2列是hll列。导入的源文件有3列。则（column_list）中声明第一列为id，第二三列为一个临时命名的k1,k2。
+
     在SET中必须给表中的hll列特殊声明 hll_hash。表中的v1列等于原始数据中的hll_hash(k1)列, 表中的v3列在原始数据中并没有对应的值，使用empty_hll补充默认值。
+
+    ```SQL
     LOAD LABEL example_db.label7
     (
     DATA INFILE("hdfs://hdfs_host:hdfs_port/user/palo/data/input/file")
@@ -347,9 +371,11 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     )
     )
     WITH BROKER hdfs ("username"="hdfs_user", "password"="hdfs_password");
+    ```
 
 8. 导入Parquet文件中数据  指定FORMAT 为parquet， 默认是通过文件后缀判断
 
+    ```SQL
     LOAD LABEL example_db.label9
     (
     DATA INFILE("hdfs://hdfs_host:hdfs_port/user/palo/data/input/file")
@@ -358,11 +384,13 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     (k1, k2, k3)
     )
     WITH BROKER hdfs ("username"="hdfs_user", "password"="hdfs_password");
+    ```
 
 9. 提取文件路径中的分区字段
 
     如果需要，则会根据表中定义的字段类型解析文件路径中的分区字段（partitioned fields），类似Spark中Partition Discovery的功能
 
+    ```SQL
     LOAD LABEL example_db.label10
     (
     DATA INFILE("hdfs://hdfs_host:hdfs_port/user/palo/data/input/dir/city=beijing/*/*")
@@ -373,6 +401,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     SET (uniq_id = md5sum(k1, city))
     )
     WITH BROKER hdfs ("username"="hdfs_user", "password"="hdfs_password");
+    ```
 
     hdfs://hdfs_host:hdfs_port/user/palo/data/input/dir/city=beijing目录下包括如下文件：
 
@@ -382,25 +411,31 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
 
 10. 对待导入数据进行过滤，k1 值大于 k2 值的列才能被导入
 
+    ```sql
     LOAD LABEL example_db.label10
     (
     DATA INFILE("hdfs://hdfs_host:hdfs_port/user/palo/data/input/file")
     INTO TABLE `my_table`
     where k1 > k2
     )
+    ```
 
 11. 提取文件路径中的时间分区字段，并且时间包含 %3A (在 hdfs 路径中，不允许有 ':'，所有 ':' 会由 %3A 替换)
 
     假设有如下文件：
 
     /user/data/data_time=2020-02-17 00%3A00%3A00/test.txt
+
     /user/data/data_time=2020-02-18 00%3A00%3A00/test.txt
 
+    ```PLAIN TEXT
     表结构为：
     data_time DATETIME,
     k2        INT,
     k3        INT
+    ```
 
+    ```SQL
     LOAD LABEL example_db.label11
     (
     DATA INFILE("hdfs://host:port/user/data/*/test.txt")
@@ -411,9 +446,11 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     SET (data_time=str_to_date(data_time, '%Y-%m-%d %H%%3A%i%%3A%s'))
     )
     WITH BROKER "hdfs" ("username"="user", "password"="pass");
+    ```
 
 12. 从 Aliyun OSS 导入 csv 格式的数据
 
+    ```SQL
     LOAD LABEL example_db.label12
     (
     DATA INFILE("oss://my_bucket/input/file.csv")
@@ -426,9 +463,11 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     "fs.oss.accessKeySecret" = "yyyyyyyyyyyyyyyyyyyy",
     "fs.oss.endpoint" = "oss-cn-zhangjiakou-internal.aliyuncs.com"
     )
+    ```
 
 13. 从腾讯云 COS 导入 csv 格式的数据
 
+    ```SQL
     LOAD LABEL example_db.label13
     (
     DATA INFILE("cosn://my_bucket/input/file.csv")
@@ -441,9 +480,11 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     "fs.cosn.userinfo.secretKey" = "yyyyyyyyyyyyyyyyyyyy",
     "fs.cosn.bucket.endpoint_suffix" = "cos.ap-beijing.myqcloud.com"
     )
+    ```
 
 14. 从 Amazon S3 导入 csv 格式的数据
 
+    ```SQL
     LOAD LABEL example_db.label14
     (
     DATA INFILE("s3a://my_bucket/input/file.csv")
@@ -456,6 +497,7 @@ Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应�
     "fs.s3a.secret.key" = "yyyyyyyyyyyyyyyyyyyy",
     "fs.s3a.endpoint" = "s3-ap-northeast-1.amazonaws.com"
     )
+    ```
 
 ## keyword
 

@@ -23,15 +23,15 @@ AS query_stmt
 1. 修改example_db上的视图example_view
 
     ```sql
-        ALTER VIEW example_db.example_view
-        (
-        c1 COMMENT "column 1",
+    ALTER VIEW example_db.example_view
+    (
+    c1 COMMENT "column 1",
 
-        c2 COMMENT "column 2",
+    c2 COMMENT "column 2",
 
-        c3 COMMENT "column 3"
-        )
-        AS SELECT k1, k2, SUM(v1) 
-        FROM example_table
-        GROUP BY k1, k2
+    c3 COMMENT "column 3"
+    )
+    AS SELECT k1, k2, SUM(v1) 
+    FROM example_table
+    GROUP BY k1, k2
     ```

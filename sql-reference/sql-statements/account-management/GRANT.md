@@ -6,23 +6,23 @@ GRANT 命令用于赋予指定用户或角色指定的权限。
 
 ### Syntax
 
-```plain text
 GRANT privilege_list ON db_name[.tbl_name] TO user_identity [ROLE role_name]
 
 GRANT privilege_list ON RESOURCE resource_name TO user_identity [ROLE role_name]
-```
 
 privilege_list 是需要赋予的权限列表，以逗号分隔。当前 Doris 支持如下权限：
 
-`NODE_PRIV`：集群节点操作权限，包括节点上下线等操作，只有 root 用户有该权限，不可赋予其他用户。
-`ADMIN_PRIV`：除 NODE_PRIV 以外的所有权限。
-`GRANT_PRIV`: 操作权限的权限。包括创建删除用户、角色，授权和撤权，设置密码等。
-`SELECT_PRIV`：对指定的库或表的读取权限
-`LOAD_PRIV`：对指定的库或表的导入权限
-`ALTER_PRIV`：对指定的库或表的schema变更权限
-`CREATE_PRIV`：对指定的库或表的创建权限
-`DROP_PRIV`：对指定的库或表的删除权限
-`USAGE_PRIV`: 对指定资源的使用权限
+```plain text
+NODE_PRIV：集群节点操作权限，包括节点上下线等操作，只有 root 用户有该权限，不可赋予其他用户。
+ADMIN_PRIV：除 NODE_PRIV 以外的所有权限。
+GRANT_PRIV: 操作权限的权限。包括创建删除用户、角色，授权和撤权，设置密码等。
+SELECT_PRIV：对指定的库或表的读取权限
+LOAD_PRIV：对指定的库或表的导入权限
+ALTER_PRIV：对指定的库或表的schema变更权限
+CREATE_PRIV：对指定的库或表的创建权限
+DROP_PRIV：对指定的库或表的删除权限
+USAGE_PRIV: 对指定资源的使用权限
+```
 
 旧版权限中的 ALL 和 READ_WRITE 会被转换成：SELECT_PRIV,LOAD_PRIV,ALTER_PRIV,CREATE_PRIV,DROP_PRIV；
 READ_ONLY 会被转换为 SELECT_PRIV。
@@ -67,37 +67,37 @@ user_identity：
 1. 授予所有库和表的权限给用户
 
     ```sql
-        GRANT SELECT_PRIV ON *.* TO 'jack'@'%';
+    GRANT SELECT_PRIV ON *.* TO 'jack'@'%';
     ```
 
 2. 授予指定库表的权限给用户
 
     ```sql
-        GRANT SELECT_PRIV,ALTER_PRIV,LOAD_PRIV ON db1.tbl1 TO 'jack'@'192.8.%';
+    GRANT SELECT_PRIV,ALTER_PRIV,LOAD_PRIV ON db1.tbl1 TO 'jack'@'192.8.%';
     ```
 
 3. 授予指定库表的权限给角色
 
     ```sql
-        GRANT LOAD_PRIV ON db1.* TO ROLE 'my_role';
+    GRANT LOAD_PRIV ON db1.* TO ROLE 'my_role';
     ```
 
 4. 授予所有资源的使用权限给用户
 
     ```sql
-        GRANT USAGE_PRIV ON RESOURCE * TO 'jack'@'%';
+    GRANT USAGE_PRIV ON RESOURCE * TO 'jack'@'%';
     ```
 
 5. 授予指定资源的使用权限给用户
 
     ```sql
-        GRANT USAGE_PRIV ON RESOURCE 'spark_resource' TO 'jack'@'%';
+    GRANT USAGE_PRIV ON RESOURCE 'spark_resource' TO 'jack'@'%';
     ```
 
 6. 授予指定资源的使用权限给角色
 
     ```sql
-        GRANT USAGE_PRIV ON RESOURCE 'spark_resource' TO ROLE 'my_role';
+    GRANT USAGE_PRIV ON RESOURCE 'spark_resource' TO ROLE 'my_role';
     ```
 
 ## keyword

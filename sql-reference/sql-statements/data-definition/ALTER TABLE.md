@@ -20,7 +20,8 @@ alter_clause 分为 partition、rollup、schema change、rename、index和swap�
 partition 支持如下几种修改方式
 
 1. 增加分区
-语法：
+
+    语法：
 
     ```SQL
     ADD PARTITION [IF NOT EXISTS] partition_name
@@ -39,7 +40,8 @@ partition 支持如下几种修改方式
     5) ["key"="value"] 部分可以设置分区的一些属性，具体说明见 CREATE TABLE
 
 2. 删除分区
-语法：
+
+    语法：
 
     ```sql
     DROP PARTITION [IF EXISTS] partition_name [FORCE]
@@ -51,7 +53,8 @@ partition 支持如下几种修改方式
     3) 如果执行 DROP PARTITION FORCE，则系统不会检查该分区是否存在未完成的事务，分区将直接被删除并且不能被恢复，一般不建议执行此操作
 
 3. 修改分区属性
-语法：
+
+    语法：
 
     ```sql
     MODIFY PARTITION p1|(p1[, p2, ...]) SET ("key" = "value", ...)

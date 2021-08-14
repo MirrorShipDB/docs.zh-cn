@@ -220,52 +220,52 @@ NULL值：\N
 
 4. 提取文件路径中的分区字段
 
-如果需要，则会根据表中定义的字段类型解析文件路径中的分区字段（partitioned fields），类似Spark中Partition Discovery的功能
+    如果需要，则会根据表中定义的字段类型解析文件路径中的分区字段（partitioned fields），类似Spark中Partition Discovery的功能
 
-```sql
-LOAD LABEL example_db.label10
-(
-DATA INFILE("hdfs://hdfs_host:hdfs_port/user/palo/data/input/dir/city=beijing/*/*")
-INTO TABLE `my_table`
-(k1, k2, k3)
-COLUMNS FROM PATH AS (city, utc_date)
-SET (uniq_id = md5sum(k1, city))
-)
-WITH RESOURCE 'my_spark';
+    ```sql
+    LOAD LABEL example_db.label10
+    (
+    DATA INFILE("hdfs://hdfs_host:hdfs_port/user/palo/data/input/dir/city=beijing/*/*")
+    INTO TABLE `my_table`
+    (k1, k2, k3)
+    COLUMNS FROM PATH AS (city, utc_date)
+    SET (uniq_id = md5sum(k1, city))
+    )
+    WITH RESOURCE 'my_spark';
+    ```
 
-hdfs://hdfs_host:hdfs_port/user/palo/data/input/dir/city=beijing目录下包括如下文件：
+    hdfs://hdfs_host:hdfs_port/user/palo/data/input/dir/city=beijing目录下包括如下文件：
 
-[hdfs://hdfs_host:hdfs_port/user/palo/data/input/dir/city=beijing/utc_date=2019-06-26/0000.csv, hdfs://hdfs_host:hdfs_port/user/palo/data/input/dir/city=beijing/utc_date=2019-06-26/0001.csv, ...]
-```
+    [hdfs://hdfs_host:hdfs_port/user/palo/data/input/dir/city=beijing/utc_date=2019-06-26/0000.csv, hdfs://hdfs_host:hdfs_port/user/palo/data/input/dir/city=beijing/utc_date=2019-06-26/0001.csv, ...]
 
-则提取文件路径的中的city和utc_date字段
+    则提取文件路径的中的city和utc_date字段
 
-5.对待导入数据进行过滤，k1 值大于 10 的列才能被导入。
+5. 对待导入数据进行过滤，k1 值大于 10 的列才能被导入。
 
-```sql
-LOAD LABEL example_db.label10
-(
-DATA INFILE("hdfs://hdfs_host:hdfs_port/user/palo/data/input/file")
-INTO TABLE `my_table`
-WHERE k1 > 10
-)
-WITH RESOURCE 'my_spark';
-```
+    ```sql
+    LOAD LABEL example_db.label10
+    (
+    DATA INFILE("hdfs://hdfs_host:hdfs_port/user/palo/data/input/file")
+    INTO TABLE `my_table`
+    WHERE k1 > 10
+    )
+    WITH RESOURCE 'my_spark';
+    ```
 
-6.从 hive 外部表导入，并将源表中的 uuid 列通过全局字典转化为 bitmap 类型。
+6. 从 hive 外部表导入，并将源表中的 uuid 列通过全局字典转化为 bitmap 类型。
 
-```sql
-LOAD LABEL db1.label1
-(
-DATA FROM TABLE hive_t1
-INTO TABLE tbl1
-SET
-(
-uuid=bitmap_dict(uuid)
-)
-)
-WITH RESOURCE 'my_spark';
-```
+    ```sql
+    LOAD LABEL db1.label1
+    (
+    DATA FROM TABLE hive_t1
+    INTO TABLE tbl1
+    SET
+    (
+    uuid=bitmap_dict(uuid)
+    )
+    )
+    WITH RESOURCE 'my_spark';
+    ```
 
 ## keyword
 

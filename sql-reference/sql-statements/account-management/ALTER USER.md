@@ -30,11 +30,12 @@ auth_option指定用户的认证方式，目前支持mysql_native_password和aut
 1. 修改用户在mysql中的密码
 
     ```sql
-
     ALTER USER 'jack' IDENTIFIED BY '123456';
+    ```
 
     或者
 
+    ```sql
     ALTER USER 'jack' IDENTIFIED WITH mysql_native_password BY '123456';
     ```
 
@@ -42,13 +43,17 @@ auth_option指定用户的认证方式，目前支持mysql_native_password和aut
 
     ```SQL
     ALTER USER 'jack' IDENTIFIED BY PASSWORD '*6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9';
+    ```
 
     或者
 
+    ```SQL
     ALTER USER 'jack' IDENTIFIED WITH mysql_native_password AS '*6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9';
+    ```
 
     后面加密的内容可以通过PASSWORD()获得到,例如：
 
+    ```sql
     SELECT PASSWORD('123456');
     ```
 

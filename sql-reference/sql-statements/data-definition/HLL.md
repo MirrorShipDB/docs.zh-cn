@@ -4,6 +4,7 @@
 
 HLL是基于HyperLogLog算法的工程实现，用于保存HyperLogLog计算过程的中间结果，它只能作为表的value列类型
 通过聚合来不断的减少数据量，以此来实现加快查询的目的，基于它到的是一个估算结果，误差大概在1%左右
+
 hll列是通过其它列或者导入数据里面的数据生成的，导入的时候通过hll_hash函数来指定数据中哪一列用于生成hll列
 它常用于替代count distinct，通过结合rollup在业务上用于快速计算uv等
 
@@ -46,6 +47,7 @@ EMPTY_HLL()
     a. 使用表中的列生成hll列
     curl --location-trusted -uname:password -T data -H "label:load_1" -H "columns:dt, id, name, province, os, set1=hll_hash(id), set2=hll_hash(name)"
     http://host/api/test_db/test/_stream_load
+    
     b. 使用数据中的某一列生成hll列
     curl --location-trusted -uname:password -T data -H "label:load_1" -H "columns:dt, id, name, province, sex, cuid, os, set1=hll_hash(cuid), set2=hll_hash(os)"
     http://host/api/test_db/test/_stream_load

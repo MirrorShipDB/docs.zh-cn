@@ -3,7 +3,9 @@
 ## description
 
 该语句用于将指定表的数据导出到指定位置。
+
 该功能通过 broker 进程实现。对于不同的目的存储系统，需要部署不同的 broker。可以通过 SHOW BROKER 查看已部署的 broker。
+
 这是一个异步操作，任务提交成功则返回。执行后可使用 SHOW EXPORT 命令查看进度。
 
 语法：
@@ -17,46 +19,52 @@ broker;
 ```
 
 1. table_name
-当前要导出的表的表名，目前支持engine为olap和mysql的表的导出。
+
+    当前要导出的表的表名，目前支持engine为olap和mysql的表的导出。
 
 2. partition
-可以只导出指定表的某些指定分区
+
+    可以只导出指定表的某些指定分区
 
 3. export_path
-导出的路径。目前不能导出到本地，需要导出到broker。
-如果是目录，需要以斜线结尾。否则最后一个斜线后面的部分会作为导出文件的前缀。
+
+    导出的路径。目前不能导出到本地，需要导出到broker。
+
+    如果是目录，需要以斜线结尾。否则最后一个斜线后面的部分会作为导出文件的前缀。
 
 4. opt_properties
-用于指定一些特殊参数。
 
-语法：
+    用于指定一些特殊参数。
 
-```sql
-[PROPERTIES ("key"="value", ...)]
-```
+    语法：
 
-可以指定如下参数：
+    ```sql
+    [PROPERTIES ("key"="value", ...)]
+    ```
 
-```plain text
-column_separator: 指定导出的列分隔符，默认为\t。
-line_delimiter: 指定导出的行分隔符，默认为\n。
-exec_mem_limit: 导出在单个 BE 节点的内存使用上限，默认为 2GB，单位为字节。
-timeout：导入作业的超时时间，默认为1天，单位是秒。
-include_query_id: 导出文件名中是否包含 query id，默认为 true。
-```
+    可以指定如下参数：
 
-5.broker
-用于指定导出使用的broker
+    ```plain text
+    column_separator: 指定导出的列分隔符，默认为\t。
+    line_delimiter: 指定导出的行分隔符，默认为\n。
+    exec_mem_limit: 导出在单个 BE 节点的内存使用上限，默认为 2GB，单位为字节。
+    timeout：导入作业的超时时间，默认为1天，单位是秒。
+    include_query_id: 导出文件名中是否包含 query id，默认为 true。
+    ```
 
-语法：
+5. broker
 
-```sql
-WITH BROKER broker_name ("key"="value"[,...])
-```
+    用于指定导出使用的broker
 
-这里需要指定具体的broker name, 以及所需的broker属性
+    语法：
 
-对于不同存储系统对应的 broker，这里需要输入的参数不同。具体参数可以参阅：`help broker load` 中 broker 所需属性。
+    ```sql
+    WITH BROKER broker_name ("key"="value"[,...])
+    ```
+
+    这里需要指定具体的broker name, 以及所需的broker属性
+
+    对于不同存储系统对应的 broker，这里需要输入的参数不同。具体参数可以参阅：`help broker load` 中 broker 所需属性。
 
 ## example
 

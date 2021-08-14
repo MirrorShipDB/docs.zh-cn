@@ -30,6 +30,7 @@ CREATE [EXTERNAL] TABLE [IF NOT EXISTS] [database.]table_name
 
     说明：
 
+    ```plain text
     col_name：列名称
     col_type：列类型
 
@@ -98,6 +99,7 @@ CREATE [EXTERNAL] TABLE [IF NOT EXISTS] [database.]table_name
 
     注意：
     BITMAP_UNION聚合类型列在导入时的原始数据类型必须是TINYINT,SMALLINT,INT,BIGINT。
+    ```
 
 2. index_definition
 
@@ -188,6 +190,8 @@ CREATE [EXTERNAL] TABLE [IF NOT EXISTS] [database.]table_name
     ```
 
     说明：
+
+    ```plain text
     数据按照指定的key列进行排序，且根据不同的key_type具有不同特性。
     key_type支持以下类型：
     AGGREGATE KEY:key列相同的记录，value列按照指定的聚合类型进行聚合，
@@ -200,6 +204,7 @@ CREATE [EXTERNAL] TABLE [IF NOT EXISTS] [database.]table_name
 
     注意：
     除AGGREGATE KEY外，其他key_type在建表时，value列不需要指定聚合类型。
+    ```
 
 2. partition_desc
 
@@ -248,6 +253,7 @@ CREATE [EXTERNAL] TABLE [IF NOT EXISTS] [database.]table_name
 
     说明：
     1）Fixed Range比LESS THAN相对灵活些，左右区间完全由用户自己确定
+
     2）其他与LESS THAN保持同步
 
 3. distribution_des
@@ -267,8 +273,7 @@ CREATE [EXTERNAL] TABLE [IF NOT EXISTS] [database.]table_name
 
 4. PROPERTIES
 
-    1) 如果 ENGINE 类型为 olap
-    可以在 properties 设置该表数据的初始存储介质、存储到期时间和副本数。
+    1) 如果 ENGINE 类型为 olap,可以在 properties 设置该表数据的初始存储介质、存储到期时间和副本数。
 
     ```sql
     PROPERTIES (
@@ -590,7 +595,7 @@ CREATE [EXTERNAL] TABLE [IF NOT EXISTS] [database.]table_name
 
 11. 创建一个动态分区表(需要在FE配置中开启动态分区功能)，该表每天提前创建3天的分区，并删除3天前的分区。例如今天为`2020-01-08`，则会创建分区名为`p20200108`, `p20200109`, `p20200110`, `p20200111`的分区. 分区范围分别为:
 
-    ```sql
+    ```plain text
     [types: [DATE]; keys: [2020-01-08]; ‥types: [DATE]; keys: [2020-01-09]; )
     [types: [DATE]; keys: [2020-01-09]; ‥types: [DATE]; keys: [2020-01-10]; )
     [types: [DATE]; keys: [2020-01-10]; ‥types: [DATE]; keys: [2020-01-11]; )

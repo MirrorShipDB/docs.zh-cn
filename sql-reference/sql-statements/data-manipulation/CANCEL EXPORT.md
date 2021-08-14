@@ -15,7 +15,10 @@ WHERE QUERYID = "your_query_id";
 ## example
 
 1. 取消数据库 example_db 中，query id 为 “921d8f80-7c9d-11eb-9342-acde48001122” 的导出作业
-CANCEL EXPORT FROM example_db WHERE queryid = "921d8f80-7c9d-11eb-9342-acde48001122";
+
+    ```sql
+    CANCEL EXPORT FROM example_db WHERE queryid = "921d8f80-7c9d-11eb-9342-acde48001122";
+    ```
 
 ## keyword
 

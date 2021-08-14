@@ -7,13 +7,22 @@
 语法：
 
 1) 设置数据库数据量配额，单位为B/K/KB/M/MB/G/GB/T/TB/P/PB
-ALTER DATABASE db_name SET DATA QUOTA quota;
+
+    ```sql
+    ALTER DATABASE db_name SET DATA QUOTA quota;
+    ```
 
 2) 重命名数据库
-ALTER DATABASE db_name RENAME new_db_name;
+
+    ```sql
+    ALTER DATABASE db_name RENAME new_db_name;
+    ```
 
 3) 设置数据库的副本数量配额
-ALTER DATABASE db_name SET REPLICA QUOTA quota;
+
+    ```sql
+    ALTER DATABASE db_name SET REPLICA QUOTA quota;
+    ```
 
 说明：
 
