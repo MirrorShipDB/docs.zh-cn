@@ -14,11 +14,11 @@ SHOW FILE [FROM database];
 
 ``` plain text
 FileId:     文件ID，全局唯一
-DbName`:     所属数据库名称
-Catalog`:    自定义分类
-FileName`:   文件名
-FileSize`:   文件大小，单位字节
-MD5`:        文件的 MD5
+DbName:     所属数据库名称
+Catalog:    自定义分类
+FileName:   文件名
+FileSize:   文件大小，单位字节
+MD5:        文件的 MD5
 ```
 
 ## example

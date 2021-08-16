@@ -19,7 +19,7 @@ AS query_stmt
 
 2. query_stmt 为任意支持的 SQL
 
-### Syntax
+## Example
 
 1. 在 example_db 上创建视图 example_view
 

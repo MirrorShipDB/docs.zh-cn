@@ -3,7 +3,9 @@
 ## description
 
 Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应数据源的数据，进行数据导入。
+
 可以通过 show broker 命令查看已经部署的 broker。
+
 目前支持以下6种数据源：
 
 1. Baidu HDFS：百度内部的 hdfs，仅限于百度内部使用。
@@ -114,79 +116,106 @@ WITH BROKER broker_name
 
     用于提供通过 broker 访问数据源的信息。不同的 broker，以及不同的访问方式，需要提供的信息不同。
 
-## example
+    1. Baidu HDFS/AFS
 
-1. Baidu HDFS/AFS
+        访问百度内部的 hdfs/afs 目前仅支持简单认证，需提供：
 
-    访问百度内部的 hdfs/afs 目前仅支持简单认证，需提供：
-    username：hdfs 用户名
-    password：hdfs 密码
+        username：hdfs 用户名
 
-2. BOS
+        password：hdfs 密码
 
-    需提供：
-    bos_endpoint：BOS 的endpoint
-    bos_accesskey：公有云用户的 accesskey
-    bos_secret_accesskey：公有云用户的 secret_accesskey
+    2. BOS
 
-3. Apache HDFS
+        需提供：
+        bos_endpoint：BOS 的endpoint
 
-    社区版本的 hdfs，支持简单认证、kerberos 认证。以及支持 HA 配置。
-    简单认证：
-    hadoop.security.authentication = simple (默认)
-    username：hdfs 用户名
-    password：hdfs 密码
+        bos_accesskey：公有云用户的 accesskey
 
-    kerberos 认证：
-    hadoop.security.authentication = kerberos
-    kerberos_principal：指定 kerberos 的 principal
-    kerberos_keytab：指定 kerberos 的 keytab 文件路径。该文件必须为 broker 进程所在服务器上的文件。
-    kerberos_keytab_content：指定 kerberos 中 keytab 文件内容经过 base64 编码之后的内容。这个跟 kerberos_keytab 配置二选一就可以。
+        bos_secret_accesskey：公有云用户的 secret_accesskey
 
-    namenode HA：
-    通过配置 namenode HA，可以在 namenode 切换时，自动识别到新的 namenode
-    dfs.nameservices: 指定 hdfs 服务的名字，自定义，如："dfs.nameservices" = "my_ha"
-    dfs.ha.namenodes.xxx：自定义 namenode 的名字,多个名字以逗号分隔。其中 xxx 为 dfs.nameservices 中自定义的名字，如 "dfs.ha.namenodes.my_ha" = "my_nn"
-    dfs.namenode.rpc-address.xxx.nn：指定 namenode 的rpc地址信息。其中 nn 表示 dfs.ha.namenodes.xxx 中配置的 namenode 的名字，如："dfs.namenode.rpc-address.my_ha.my_nn" = "host:port"
-    dfs.client.failover.proxy.provider：指定 client 连接 namenode 的 provider，默认为：org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider
+    3. Apache HDFS
 
-4. Amazon S3
+        社区版本的 hdfs，支持简单认证、kerberos 认证。以及支持 HA 配置。
 
-    需提供：
-    fs.s3a.access.key：AmazonS3的access key
-    fs.s3a.secret.key：AmazonS3的secret key
-    fs.s3a.endpoint：AmazonS3的endpoint
+        简单认证：
 
-5. Aliyun OSS
+        hadoop.security.authentication = simple (默认)
 
-    需提供：
-    fs.oss.accessKeyId：Aliyun OSS的access key
-    fs.oss.accessKeySecret：Aliyun OSS的secret key
-    fs.oss.endpoint：Aliyun OSS的endpoint
+        username：hdfs 用户名
 
-6. opt_properties
+        password：hdfs 密码
 
-    用于指定一些特殊参数。
+        kerberos 认证：
 
-    语法：
+        hadoop.security.authentication = kerberos
 
-    [PROPERTIES ("key"="value", ...)]
+        kerberos_principal：指定 kerberos 的 principal
 
-    可以指定如下参数：
-    timeout：         指定导入操作的超时时间。默认超时为4小时。单位秒。
-    max_filter_ratio：最大容忍可过滤（数据不规范等原因）的数据比例。默认零容忍。
-    exec_mem_limit：  导入内存限制。默认为 2GB。单位为字节。
-    strict mode：     是否对数据进行严格限制。默认为 false。
-    timezone:         指定某些受时区影响的函数的时区，如 strftime/alignment_timestamp/from_unixtime 等等，具体请查阅 [时区] 文档。如果不指定，则使用 "Asia/Shanghai" 时区。
-  
-7. 导入数据格式样例
+        kerberos_keytab：指定 kerberos 的 keytab 文件路径。该文件必须为 broker 进程所在服务器上的文件。
 
-    整型类（TINYINT/SMALLINT/INT/BIGINT/LARGEINT）：1, 1000, 1234
-    浮点类（FLOAT/DOUBLE/DECIMAL）：1.1, 0.23, .356
-    日期类（DATE/DATETIME）：2017-10-03, 2017-06-13 12:34:03。
-    （注：如果是其他日期格式，可以在导入命令中，使用 strftime 或者 time_format 函数进行转换）
-    字符串类（CHAR/VARCHAR）："I am a student", "a"
-    NULL值：\N
+        kerberos_keytab_content：指定 kerberos 中 keytab 文件内容经过 base64 编码之后的内容。这个跟 kerberos_keytab 配置二选一就可以。
+
+        namenode HA：
+
+        通过配置 namenode HA，可以在 namenode 切换时，自动识别到新的 namenode
+
+        dfs.nameservices: 指定 hdfs 服务的名字，自定义，如："dfs.nameservices" = "my_ha"
+
+        dfs.ha.namenodes.xxx：自定义 namenode 的名字,多个名字以逗号分隔。其中 xxx 为 dfs.nameservices 中自定义的名字，如 "dfs.ha.namenodes.my_ha" = "my_nn"
+
+        dfs.namenode.rpc-address.xxx.nn：指定 namenode 的rpc地址信息。其中 nn 表示 dfs.ha.namenodes.xxx 中配置的 namenode 的名字，如："dfs.namenode.rpc-address.my_ha.my_nn" = "host:port"
+
+        dfs.client.failover.proxy.provider：指定 client 连接 namenode 的 provider，默认为：org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider
+
+    4. Amazon S3
+
+        需提供：
+        fs.s3a.access.key：AmazonS3的access key
+
+        fs.s3a.secret.key：AmazonS3的secret key
+
+        fs.s3a.endpoint：AmazonS3的endpoint
+
+    5. Aliyun OSS
+
+        需提供：
+        fs.oss.accessKeyId：Aliyun OSS的access key
+
+        fs.oss.accessKeySecret：Aliyun OSS的secret key
+
+        fs.oss.endpoint：Aliyun OSS的endpoint
+
+    6. opt_properties
+
+        用于指定一些特殊参数。
+
+        语法：
+
+        [PROPERTIES ("key"="value", ...)]
+
+        可以指定如下参数：
+        timeout：         指定导入操作的超时时间。默认超时为4小时。单位秒。
+
+        max_filter_ratio：最大容忍可过滤（数据不规范等原因）的数据比例。默认零容忍。
+
+        exec_mem_limit：  导入内存限制。默认为 2GB。单位为字节。
+
+        strict mode：     是否对数据进行严格限制。默认为 false。
+
+        timezone:         指定某些受时区影响的函数的时区，如 strftime/alignment_timestamp/from_unixtime 等等，具体请查阅 [时区] 文档。如果不指定，则使用 "Asia/Shanghai" 时区。
+
+    7. 导入数据格式样例
+
+        整型类（TINYINT/SMALLINT/INT/BIGINT/LARGEINT）：1, 1000, 1234
+
+        浮点类（FLOAT/DOUBLE/DECIMAL）：1.1, 0.23, .356
+
+        日期类（DATE/DATETIME）：2017-10-03, 2017-06-13 12:34:03。
+        （注：如果是其他日期格式，可以在导入命令中，使用 strftime 或者 time_format 函数进行转换）
+
+        字符串类（CHAR/VARCHAR）："I am a student", "a"
+
+        NULL值：\N
 
 ### Syntax
 

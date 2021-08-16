@@ -5,6 +5,7 @@
 ### Syntax
 
 DATE函数
+
 DATE(expr)
 
 将输入的类型转化为DATE类型
@@ -15,10 +16,10 @@ DATE类型
 
 ## example
 
-    ```sql
-    mysql> SELECT DATE('2003-12-31 01:02:03');
-    -> '2003-12-31'
-    ```
+```sql
+mysql> SELECT DATE('2003-12-31 01:02:03');
+-> '2003-12-31'
+```
 
 ## keyword
 

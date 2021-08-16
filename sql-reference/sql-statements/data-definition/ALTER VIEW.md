@@ -26,9 +26,7 @@ AS query_stmt
     ALTER VIEW example_db.example_view
     (
     c1 COMMENT "column 1",
-
     c2 COMMENT "column 2",
-
     c3 COMMENT "column 3"
     )
     AS SELECT k1, k2, SUM(v1) 
