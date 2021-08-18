@@ -52,7 +52,7 @@ SELECT /*+ SET_VAR(enable_cbo = true) */ * from table;
 
 DorisDB提供一个新旧优化器**对比**的工具，用于回放fe中的audit.log，可以检查新优化器查询结果是否有误，在使用新优化器前，**建议使用DorisDB提供的对比工具检查一段时间**：
 
-1. 下载DorisDB [new\_planner\_test.zip](http://dorisdb-public.oss-cn-zhangjiakou.aliyuncs.com/new_planner_test.zip)
+1. 下载DorisDB [new_planner_test.zip](http://dorisdb-public.oss-cn-zhangjiakou.aliyuncs.com/new_planner_test.zip)
 2. 解压后的文件夹中有：jar，config
 3. 按照README配置DorisDB的端口地址，FE的http_port，以及用户名密码
 4. 使用命令`java -jar new_planner_test.jar $fe.audit.log.path`执行测试

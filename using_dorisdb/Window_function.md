@@ -11,8 +11,8 @@
 窗口函数的语法：
 
 ~~~SQL
-function(args) OVER(partition_by_clause order_by_clause [window_clause])    
-partition_by_clause ::= PARTITION BY expr [, expr ...]    
+function(args) OVER(partition_by_clause order_by_clause [window_clause])
+partition_by_clause ::= PARTITION BY expr [, expr ...]
 order_by_clause ::= ORDER BY expr [ASC | DESC] [, expr [ASC | DESC] ...]
 ~~~
 
@@ -37,8 +37,8 @@ Order By从句和外层的Order By基本一致。它定义了输入行的排列�
 这个例子展示了在select列表中增加一个id列，它的值是1，2，3等等，顺序按照events表中的date_and_time列排序。
 
 ~~~SQL
-SELECT row_number() OVER (ORDER BY date_and_time) AS id,   
-    c1, c2, c3, c4   
+SELECT row_number() OVER (ORDER BY date_and_time) AS id,
+    c1, c2, c3, c4
 FROM events;
 ~~~
 
@@ -72,41 +72,45 @@ order by stock_symbol, closing_date
 得到原始数据如下：
 
 ~~~Plain Text
- | stock_symbol | closing_price | closing_date        |
- |--------------|---------------|---------------------|
- | JDR          | 12.86         | 2014-10-02 00:00:00 |
- | JDR          | 12.89         | 2014-10-03 00:00:00 |
- | JDR          | 12.94         | 2014-10-04 00:00:00 |
- | JDR          | 12.55         | 2014-10-05 00:00:00 |
- | JDR          | 14.03         | 2014-10-06 00:00:00 |
- | JDR          | 14.75         | 2014-10-07 00:00:00 |
- | JDR          | 13.98         | 2014-10-08 00:00:00 |
++--------------+---------------+---------------------+
+| stock_symbol | closing_price | closing_date        |
++--------------+---------------+---------------------+
+| JDR          | 12.86         | 2014-10-02 00:00:00 |
+| JDR          | 12.89         | 2014-10-03 00:00:00 |
+| JDR          | 12.94         | 2014-10-04 00:00:00 |
+| JDR          | 12.55         | 2014-10-05 00:00:00 |
+| JDR          | 14.03         | 2014-10-06 00:00:00 |
+| JDR          | 14.75         | 2014-10-07 00:00:00 |
+| JDR          | 13.98         | 2014-10-08 00:00:00 |
++--------------+---------------+---------------------+
 ~~~
 
 这个查询使用窗口函数产生moving_average这一列，它的值是3天的股票均价，即前一天、当前以及后一天三天的均价。第一天没有前一天的值，最后一天没有后一天的值，所以这两行只计算了两天的均值。这里Partition By没有起到作用，因为所有的数据都是JDR的数据，但如果还有其他股票信息，Partition By会保证窗口函数值作用在本Partition之内。
 
 ~~~SQL
-select stock_symbol, closing_date, closing_price,    
-    avg(closing_price) over (partition by stock_symbol
-                             order by closing_date    
-                             rows between 1 preceding and 1 following
-    ) as moving_average    
+select stock_symbol, closing_date, closing_price,
+    avg(closing_price)
+        over (partition by stock_symbol
+              order by closing_date
+              rows between 1 preceding and 1 following
+        ) as moving_average
 from stock_ticker;
 ~~~
 
 得到如下数据：
 
 ~~~Plain Text
- | stock_symbol | closing_date        | closing_price | moving_average |
- |--------------|---------------------|---------------|----------------|
- | JDR          | 2014-10-02 00:00:00 | 12.86         | 12.87          |
- | JDR          | 2014-10-03 00:00:00 | 12.89         | 12.89          |
- | JDR          | 2014-10-04 00:00:00 | 12.94         | 12.79          |
- | JDR          | 2014-10-05 00:00:00 | 12.55         | 13.17          |
- | JDR          | 2014-10-06 00:00:00 | 14.03         | 13.77          |
- | JDR          | 2014-10-07 00:00:00 | 14.75         | 14.25          |
- | JDR          | 2014-10-08 00:00:00 | 13.98         | 14.36          |
-
++--------------+---------------------+---------------+----------------+
+| stock_symbol | closing_date        | closing_price | moving_average |
++--------------+---------------------+---------------+----------------+
+| JDR          | 2014-10-02 00:00:00 | 12.86         | 12.87          |
+| JDR          | 2014-10-03 00:00:00 | 12.89         | 12.89          |
+| JDR          | 2014-10-04 00:00:00 | 12.94         | 12.79          |
+| JDR          | 2014-10-05 00:00:00 | 12.55         | 13.17          |
+| JDR          | 2014-10-06 00:00:00 | 14.03         | 13.77          |
+| JDR          | 2014-10-07 00:00:00 | 14.75         | 14.25          |
+| JDR          | 2014-10-08 00:00:00 | 13.98         | 14.36          |
++--------------+---------------------+---------------+----------------+
 ~~~
 
 <br>
@@ -130,30 +134,32 @@ AVG([DISTINCT | ALL] *expression*) [OVER (*analytic_clause*)]
 计算当前行和它**前后各一行**数据的x平均值
 
 ~~~SQL
-select x, property,    
-    avg(x) over    
-    (   
-        partition by property    
-        order by x    
-        rows between 1 preceding and 1 following    
-    ) as 'moving average'    
+select x, property,
+    avg(x)
+        over (
+            partition by property
+            order by x
+            rows between 1 preceding and 1 following
+        ) as 'moving average'
 from int_t
 where property in ('odd','even');
 ~~~
 
 ~~~Plain Text
- | x  | property | moving average |
- |----|----------|----------------|
- | 2  | even     | 3              |
- | 4  | even     | 4              |
- | 6  | even     | 6              |
- | 8  | even     | 8              |
- | 10 | even     | 9              |
- | 1  | odd      | 2              |
- | 3  | odd      | 3              |
- | 5  | odd      | 5              |
- | 7  | odd      | 7              |
- | 9  | odd      | 8              |
++----+----------+----------------+
+| x  | property | moving average |
++----+----------+----------------+
+| 2  | even     | 3              |
+| 4  | even     | 4              |
+| 6  | even     | 6              |
+| 8  | even     | 8              |
+| 10 | even     | 9              |
+| 1  | odd      | 2              |
+| 3  | odd      | 3              |
+| 5  | odd      | 5              |
+| 7  | odd      | 7              |
+| 9  | odd      | 8              |
++----+----------+----------------+
 ~~~
 
 <br>
@@ -171,29 +177,31 @@ COUNT([DISTINCT | ALL] expression) [OVER (analytic_clause)]
 计算从**当前行到第一行**x出现的次数。
 
 ~~~SQL
-select x, property,   
-    count(x) over   
-    (   
-        partition by property    
-        order by x    
-        rows between unbounded preceding and current row    
-    ) as 'cumulative total'    
+select x, property,
+    count(x)
+        over (
+            partition by property
+            order by x
+            rows between unbounded preceding and current row
+        ) as 'cumulative total'
 from int_t where property in ('odd','even');
 ~~~
 
 ~~~Plain Text
- | x  | property | cumulative count |
- |----|----------|------------------|
- | 2  | even     | 1                |
- | 4  | even     | 2                |
- | 6  | even     | 3                |
- | 8  | even     | 4                |
- | 10 | even     | 5                |
- | 1  | odd      | 1                |
- | 3  | odd      | 2                |
- | 5  | odd      | 3                |
- | 7  | odd      | 4                |
- | 9  | odd      | 5                |
++----+----------+------------------+
+| x  | property | cumulative count |
++----+----------+------------------+
+| 2  | even     | 1                |
+| 4  | even     | 2                |
+| 6  | even     | 3                |
+| 8  | even     | 4                |
+| 10 | even     | 5                |
+| 1  | odd      | 1                |
+| 3  | odd      | 2                |
+| 5  | odd      | 3                |
+| 7  | odd      | 4                |
+| 9  | odd      | 5                |
++----+----------+------------------+
 ~~~
 
 <br>
@@ -213,22 +221,28 @@ DENSE_RANK() OVER(partition_by_clause order_by_clause)
 
 ~~~SQL
 select x, y,
-    dense_rank() over(partition by x order by y) as rank
+    dense_rank()
+        over (
+            partition by x
+            order by y
+        ) as rank
 from int_t;
 ~~~
 
 ~~~Plain Text
- | x | y | rank |
- |---|---|------|
- | 1 | 1 | 1    |
- | 1 | 2 | 2    |
- | 1 | 2 | 2    |
- | 2 | 1 | 1    |
- | 2 | 2 | 2    |
- | 2 | 3 | 3    |
- | 3 | 1 | 1    |
- | 3 | 1 | 1    |
- | 3 | 2 | 2    |
++---+---+------+
+| x | y | rank |
++---+---+------+
+| 1 | 1 | 1    |
+| 1 | 2 | 2    |
+| 1 | 2 | 2    |
+| 2 | 1 | 1    |
+| 2 | 2 | 2    |
+| 2 | 3 | 3    |
+| 3 | 1 | 1    |
+| 3 | 1 | 1    |
+| 3 | 2 | 2    |
++---+---+------+
 ~~~
 
 <br>
@@ -252,35 +266,42 @@ FIRST_VALUE(expr) OVER(partition_by_clause order_by_clause [window_clause])
  from mail_merge;
  ~~~
 
- ~~~Plain Text
- | name    | country | greeting     |
- |---------|---------|--------------|
- | Pete    | USA     | Hello        |
- | John    | USA     | Hi           |
- | Boris   | Germany | Guten tag    |
- | Michael | Germany | Guten morgen |
- | Bjorn   | Sweden  | Hej          |
- | Mats    | Sweden  | Tja          |
+~~~Plain Text
++---------+---------+--------------+
+| name    | country | greeting     |
++---------+---------+--------------+
+| Pete    | USA     | Hello        |
+| John    | USA     | Hi           |
+| Boris   | Germany | Guten tag    |
+| Michael | Germany | Guten morgen |
+| Bjorn   | Sweden  | Hej          |
+| Mats    | Sweden  | Tja          |
++---------+---------+--------------+
 ~~~
 
 使用FIRST_VALUE()，根据country分组，返回每个分组中第一个greeting的值：
 
 ~~~SQL
-select country, name,    
-    first_value(greeting)    
-        over (partition by country order by name, greeting) as greeting        
+select country, name,
+    first_value(greeting)
+        over (
+            partition by country
+            order by name, greeting
+        ) as greeting
 from mail_merge;
 ~~~
 
 ~~~Plain Text
++---------+---------+-----------+
 | country | name    | greeting  |
-|---------|---------|-----------|
++---------+---------+-----------+
 | Germany | Boris   | Guten tag |
 | Germany | Michael | Guten tag |
 | Sweden  | Bjorn   | Hej       |
 | Sweden  | Mats    | Hej       |
 | USA     | John    | Hi        |
 | USA     | Pete    | Hi        |
++---------+---------+-----------+
 ~~~
 
 <br>
@@ -300,17 +321,20 @@ LAG (expr, offset, default) OVER (partition_by_clause order_by_clause)
 计算前一天的收盘价
 
 ~~~SQL
-select stock_symbol, closing_date, closing_price,    
-    lag(closing_price,1, 0) over (
+select stock_symbol, closing_date, closing_price,
+    lag(closing_price,1, 0) over
+    (
         partition by stock_symbol
-        order by closing_date) as "yesterday closing"   
-from stock_ticker   
+        order by closing_date
+    ) as "yesterday closing"
+from stock_ticker
 order by closing_date;
 ~~~
 
 ~~~Plain Text
++--------------+---------------------+---------------+-------------------+
 | stock_symbol | closing_date        | closing_price | yesterday closing |
-|--------------|---------------------|---------------|-------------------|
++--------------+---------------------+---------------+-------------------+
 | JDR          | 2014-09-13 00:00:00 | 12.86         | 0                 |
 | JDR          | 2014-09-14 00:00:00 | 12.89         | 12.86             |
 | JDR          | 2014-09-15 00:00:00 | 12.94         | 12.89             |
@@ -318,6 +342,7 @@ order by closing_date;
 | JDR          | 2014-09-17 00:00:00 | 14.03         | 12.55             |
 | JDR          | 2014-09-18 00:00:00 | 14.75         | 14.03             |
 | JDR          | 2014-09-19 00:00:00 | 13.98         | 14.75             |
++--------------+---------------------+---------------+-------------------+
 ~~~
 
 <br>
@@ -335,21 +360,26 @@ LAST_VALUE(expr) OVER(partition_by_clause order_by_clause [window_clause])
 使用FIRST_VALUE()举例中的数据：
 
 ~~~SQL
-select country, name,    
-    last_value(greeting)   
-        over (partition by country order by name, greeting) as greeting   
+select country, name,
+    last_value(greeting)
+        over (
+            partition by country
+            order by name, greeting
+        ) as greeting
 from mail_merge;
 ~~~
 
 ~~~Plain Text
++---------+---------+--------------+
 | country | name    | greeting     |
-|---------|---------|--------------|
++---------+---------+--------------+
 | Germany | Boris   | Guten morgen |
 | Germany | Michael | Guten morgen |
 | Sweden  | Bjorn   | Tja          |
 | Sweden  | Mats    | Tja          |
 | USA     | John    | Hello        |
 | USA     | Pete    | Hello        |
++---------+---------+--------------+
 ~~~
 
 <br>
@@ -369,22 +399,23 @@ LEAD (expr, offset, default]) OVER (partition_by_clause order_by_clause)
 计算第二天的收盘价对比当天收盘价的走势，即第二天收盘价比当天高还是低。
 
 ~~~SQL
-select stock_symbol, closing_date, closing_price,    
-    case   
+select stock_symbol, closing_date, closing_price,
+    case
         (lead(closing_price,1, 0)
             over (partition by stock_symbol
                   order by closing_date)
-         - closing_price) > 0   
-    when true then "higher"   
-    when false then "flat or lower"    
-    end as "trending"   
-from stock_ticker    
+         - closing_price) > 0
+    when true then "higher"
+    when false then "flat or lower"
+    end as "trending"
+from stock_ticker
 order by closing_date;
 ~~~
 
 ~~~Plain Text
++--------------+---------------------+---------------+---------------+
 | stock_symbol | closing_date        | closing_price | trending      |
-|--------------|---------------------|---------------|---------------|
++--------------+---------------------+---------------+---------------+
 | JDR          | 2014-09-13 00:00:00 | 12.86         | higher        |
 | JDR          | 2014-09-14 00:00:00 | 12.89         | higher        |
 | JDR          | 2014-09-15 00:00:00 | 12.94         | flat or lower |
@@ -392,6 +423,7 @@ order by closing_date;
 | JDR          | 2014-09-17 00:00:00 | 14.03         | higher        |
 | JDR          | 2014-09-18 00:00:00 | 14.75         | flat or lower |
 | JDR          | 2014-09-19 00:00:00 | 13.98         | flat or lower |
++--------------+---------------------+---------------+---------------+
 ~~~
 
 <br>
@@ -409,19 +441,20 @@ MAX([DISTINCT | ALL] expression) [OVER (analytic_clause)]
 计算**从第一行到当前行之后一行**的最大值
 
 ~~~SQL
-select x, property,   
-    max(x) over    
-        (   
-            order by property, x    
-            rows between unbounded preceding and 1 following    
-        ) as 'local maximum'    
+select x, property,
+    max(x)
+        over (
+            order by property, x
+            rows between unbounded preceding and 1 following
+        ) as 'local maximum'
 from int_t
 where property in ('prime','square');
 ~~~
 
 ~~~Plain Text
++---+----------+---------------+
 | x | property | local maximum |
-|---|----------|---------------|
++---+----------+---------------+
 | 2 | prime    | 3             |
 | 3 | prime    | 5             |
 | 5 | prime    | 7             |
@@ -429,6 +462,7 @@ where property in ('prime','square');
 | 1 | square   | 7             |
 | 4 | square   | 9             |
 | 9 | square   | 9             |
++---+----------+---------------+
 ~~~
 
 <br>
@@ -446,19 +480,20 @@ MIN([DISTINCT | ALL] expression) [OVER (analytic_clause)]
 计算**从第一行到当前行之后一行**的最小值
 
 ~~~SQL
-select x, property,   
-    min(x) over    
-        (    
-            order by property, x desc    
-            rows between unbounded preceding and 1 following   
-        ) as 'local minimum'   
+select x, property,
+    min(x)
+        over (
+            order by property, x desc
+            rows between unbounded preceding and 1 following
+        ) as 'local minimum'
 from int_t
 where property in ('prime','square');
 ~~~
 
 ~~~Plain Text
++---+----------+---------------+
 | x | property | local minimum |
-|---|----------|---------------|
++---+----------+---------------+
 | 7 | prime    | 5             |
 | 5 | prime    | 3             |
 | 3 | prime    | 2             |
@@ -466,7 +501,7 @@ where property in ('prime','square');
 | 9 | square   | 2             |
 | 4 | square   | 1             |
 | 1 | square   | 1             |
-
++---+----------+---------------+
 ~~~
 
 <br>
@@ -491,8 +526,9 @@ from int_t;
 ~~~
 
 ~~~Plain Text
++---+---+------+
 | x | y | rank |
-|---|---|------|
++---+---+------+
 | 1 | 1 | 1    |
 | 1 | 2 | 2    |
 | 1 | 2 | 2    |
@@ -502,6 +538,7 @@ from int_t;
 | 3 | 1 | 1    |
 | 3 | 1 | 1    |
 | 3 | 2 | 3    |
++---+---+------+
 ~~~
 
 <br>
@@ -524,8 +561,9 @@ from int_t;
 ~~~
 
 ~~~Plain Text
++---+---+------+
 | x | y | rank |
-|---|---|------|
++---+---+------+
 | 1 | 1 | 1    |
 | 1 | 2 | 2    |
 | 1 | 2 | 3    |
@@ -535,6 +573,7 @@ from int_t;
 | 3 | 1 | 1    |
 | 3 | 1 | 2    |
 | 3 | 2 | 3    |
++---+---+------+
 ~~~
 
 <br>
@@ -552,19 +591,20 @@ SUM([DISTINCT | ALL] expression) [OVER (analytic_clause)]
 按照property进行分组，在组内计算**当前行以及前后各一行**的x列的和。
 
 ~~~SQL
-select x, property,   
-    sum(x) over    
-        (   
-            partition by property   
-            order by x   
+select x, property,
+    sum(x)
+        over (
+            partition by property
+            order by x
             rows between 1 preceding and 1 following
-        ) as 'moving total'    
+        ) as 'moving total'
 from int_t where property in ('odd','even');
 ~~~
 
 ~~~Plain Text
++----+----------+--------------+
 | x  | property | moving total |
-|----|----------|--------------|
++----+----------+--------------+
 | 2  | even     | 6            |
 | 4  | even     | 12           |
 | 6  | even     | 18           |
@@ -574,4 +614,5 @@ from int_t where property in ('odd','even');
 | 3  | odd      | 9            |
 | 5  | odd      | 15           |
 | 7  | odd      | 21           |
++----+----------+--------------+
 ~~~

@@ -35,12 +35,12 @@ PROPERTIES
 
 参数说明：
 
-* host：MySQL的连接地址
-* port：MySQL的连接端口号
-* user：MySQL登陆的用户名
-* password：MySQL登陆的密码
-* database：MySQL相关数据库名
-* table：MySQL相关数据表名
+* **host**：MySQL的连接地址
+* **port**：MySQL的连接端口号
+* **user**：MySQL登陆的用户名
+* **password**：MySQL登陆的密码
+* **database**：MySQL相关数据库名
+* **table**：MySQL相关数据表名
 
 <br>
 
@@ -71,10 +71,10 @@ BROKER PROPERTIES (
 
 参数说明：
 
-* broker\_name：Broker名字
-* path：HDFS文件路径
-* column\_separator：列分隔符
-* line\_delimiter：行分隔符
+* **broker_name**：Broker名字
+* **path**：HDFS文件路径
+* **column_separator**：列分隔符
+* **line_delimiter**：行分隔符
 
 DorisDB不能直接访问HDFS文件，需要通过Broker进行访问。所以，建表时除了需要指定HDFS文件的相关信息之外，还需要指定Broker的相关信息。关于Broker的相关介绍，可以参见[Broker导入](../loading/BrokerLoad.md)。
 
@@ -109,12 +109,12 @@ PROPERTIES (
 
 参数说明：
 
-* host：ES集群连接地址，可指定一个或多个，DorisDB通过这个地址获取到ES版本号、index的shard分布信息
-* user：开启**basic认证**的ES集群的用户名，需要确保该用户有访问 /*cluster/state/*nodes/http 等路径权限和对index的读权限
-* password：对应用户的密码信息
-* index：DorisDB中的表对应的ES的index名字，可以是alias
-* type：指定index的type，默认是**doc**
-* transport：内部保留，默认为**http**
+* **host**：ES集群连接地址，可指定一个或多个，DorisDB通过这个地址获取到ES版本号、index的shard分布信息
+* **user**：开启**basic认证**的ES集群的用户名，需要确保该用户有访问 /*cluster/state/*nodes/http 等路径权限和对index的读权限
+* **password**：对应用户的密码信息
+* **index**：DorisDB中的表对应的ES的index名字，可以是alias
+* **type**：指定index的type，默认是**doc**
+* **transport**：内部保留，默认为**http**
 
 <br>
 
@@ -129,8 +129,8 @@ DorisDB支持对ElasticSearch表进行谓词下推，把过滤条件推给Elasti
 |  \>=,  <=, >, <   |  range   |
 |  and   |  bool.filter   |
 |  or   |  bool.should   |
-|  not   |  bool.must\_not   |
-|  not in   |  bool.must\_not + terms   |
+|  not   |  bool.must_not   |
+|  not in   |  bool.must_not + terms   |
 |  esquery   |  ES Query DSL   |
 
 表1 ：支持的谓词下推列表
@@ -139,7 +139,7 @@ DorisDB支持对ElasticSearch表进行谓词下推，把过滤条件推给Elasti
 
 ### 查询示例
 
-通过**esquery函数**将一些**无法用sql表述的ES query**如match、geoshape等下推给ES进行过滤处理。esquery的第一个列名参数用于关联index，第二个参数是ES的基本Query DSL的json表述，使用花括号{}包含，**json的root key有且只能有一个**，如match、geo\_shape、bool等。
+通过**esquery函数**将一些**无法用sql表述的ES query**如match、geoshape等下推给ES进行过滤处理。esquery的第一个列名参数用于关联index，第二个参数是ES的基本Query DSL的json表述，使用花括号{}包含，**json的root key有且只能有一个**，如match、geo_shape、bool等。
 
 * match查询：
 
@@ -222,7 +222,7 @@ select * from es_table where esquery(k4, ' {
 -- 创建一个名为hive0的Hive资源
 CREATE EXTERNAL RESOURCE "hive0"
 PROPERTIES (
-  "type" = "hive", 
+  "type" = "hive",
   "hive.metastore.uris" = "thrift://10.10.44.98:9083"
 );
 
@@ -281,33 +281,33 @@ PROPERTIES (
 
 说明：
 
-* 外表列
+* 外表列：
   * 列名需要与Hive表一一对应。
   * 列的顺序**不需要**与Hive表一致。
   * 可以只选择Hive表中的**部分列**，但**分区列**必须要全部包含。
   * 外表的分区列无需通过partition by语句指定，需要与普通列一样定义到描述列表中。不需要指定分区信息，DorisDB会自动从Hive同步。
-* ENGINE指定为HIVE。
-* PROPERTIES属性
-  * hive.resource：指定使用的Hive资源。
-  * database：指定Hive中的数据库。
-  * table：指定Hive中的表，**不支持view**。
+  * ENGINE指定为HIVE。
+* PROPERTIES属性：
+  * **hive.resource**：指定使用的Hive资源。
+  * **database**：指定Hive中的数据库。
+  * **table**：指定Hive中的表，**不支持view**。
 * 支持的列类型对应关系如下表：
-  |  Hive列类型   | DorisDB列类型    | 描述 |
-  | --- | --- | ---|
-  |   INT/INTEGER  | INT    |
-  |   BIGINT  | BIGINT    |
-  |   TIMESTAMP  | DATETIME    |Timestamp转成Datetime，会损失精度和时区信息，<br>根据sessionVariable中的时区转成无时区Datatime|
-  |  STRING  | VARCHAR   |
-  |  VARCHAR  | VARCHAR   |
-  |  CHAR  | CHAR   |
-  |  DOUBLE | DOUBLE |
-  | FLOATE | FLOAT|
+    |  Hive列类型   | DorisDB列类型    | 描述 |
+    | --- | --- | ---|
+    |   INT/INTEGER  | INT    |
+    |   BIGINT  | BIGINT    |
+    |   TIMESTAMP  | DATETIME    |Timestamp转成Datetime，会损失精度和时区信息，<br>根据sessionVariable中的时区转成无时区Datatime|
+    |  STRING  | VARCHAR   |
+    |  VARCHAR  | VARCHAR   |
+    |  CHAR  | CHAR   |
+    |  DOUBLE | DOUBLE |
+    | FLOATE | FLOAT|
 
-不支持：
+    说明：
 
-* Hive表Schema变更**不会自动同步**，需要在DorisDB中重建Hive外表。
-* 当前Hive的存储格式仅支持Parquet和ORC类型
-* 压缩格式支持snappy，lz4
+  * Hive表Schema变更**不会自动同步**，需要在DorisDB中重建Hive外表。
+  * 当前Hive的存储格式仅支持Parquet和ORC类型
+  * 压缩格式支持snappy，lz4
 
 <br>
 
@@ -322,6 +322,6 @@ select count(*) from profile_wos_p7;
 
 ### 配置
 
-* fe配置文件路径为fe/conf，如果需要自定义hadoop集群的配置可以在该目录下添加配置文件，例如：hdfs集群采用了高可用的nameservice，需要将hadoop集群中的hdfs-site.xml放到该目录下；如果hdfs配置了viewfs，需要将core-site.xml放到该目录下。
-* be配置文件路径为be/conf，如果需要自定义hadoop集群的配置可以在该目录下添加配置文件，例如：hdfs集群采用了高可用的nameservice，需要将hadoop集群中的hdfs-site.xml放到该目录下；如果hdfs配置了viewfs，需要将core-site.xml放到该目录下。
+* fe配置文件路径为`fe/conf`，如果需要自定义hadoop集群的配置可以在该目录下添加配置文件，例如：hdfs集群采用了高可用的nameservice，需要将hadoop集群中的hdfs-site.xml放到该目录下；如果hdfs配置了viewfs，需要将core-site.xml放到该目录下。
+* be配置文件路径为`be/conf`，如果需要自定义hadoop集群的配置可以在该目录下添加配置文件，例如：hdfs集群采用了高可用的nameservice，需要将hadoop集群中的hdfs-site.xml放到该目录下；如果hdfs配置了viewfs，需要将core-site.xml放到该目录下。
 * be所在的机器也需要配置JAVA_HOME，一定要配置成**jdk环境**，不能配置成jre环境。
