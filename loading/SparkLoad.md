@@ -106,7 +106,6 @@ PROPERTIES 是 Spark 资源相关参数，如下：
 *
   * **type**：资源类型，必填，目前仅支持 spark。
   * **spark** 相关参数如下：
-  * 
   * `spark.master`: 必填，目前支持yarn。
   * `spark.submit.deployMode`: Spark 程序的部署模式，必填，支持 cluster，client 两种。
   * `spark.hadoop.fs.defaultFS`: master为yarn时必填。
