@@ -2,16 +2,16 @@
 
 + [DorisDB介绍](/introduction/DorisDB_intro.md)
 + 快速开始
-  + [DorisDB基本概念](/quick_start/Basic.md)
+  + [DorisDB基本概念](/quick_start/Concepts.md)
   + [DorisDB系统架构](/quick_start/Architecture.md)
-  + [DorisDB手动部署](/quick_start/Installation.md)
-  + [数据流和控制流](/quick_start/Data_control_flow.md)
-  + [数据导入和查询](/quick_start/Loading_and_query.md)
-  + [测试常见问题](/quick_start/FAQ.md)
-  + [下一步](/quick_start/Next.md)
+  + [DorisDB手动部署](/quick_start/Deploy.md)
+  + [数据流和控制流](/quick_start/Data_flow_and_control_flow.md)
+  + [数据导入和查询](/quick_start/Import_and_query.md)
+  + [测试常见问题](/quick_start/Test_faq.md)
+  + [下一步](/quick_start/Next_step.md)
 + 表设计
-  + [理解DorisDB表设计](/table_design/Table_intro.md)
-  + [数据模型介绍](/table_design/Table_modeling.md)
+  + [理解DorisDB表设计](/table_design/DorisDB_table_design.md)
+  + [数据模型介绍](/table_design/Data_model.md)
   + [数据分布](/table_design/Data_distribution.md)
   + [排序键和shortkey index](/table_design/Sort_key.md)
   + [物化视图](/table_design/Materialized_view.md)
@@ -19,10 +19,10 @@
   + [Bloomfilter索引](/table_design/Bloomfilter_index.md)
 + 数据导入
   + [导入总览](/loading/Loading_intro.md)
-  + [Broker Load](/loading/BrokerLoad.md)
-  + [Spark Load](/loading/SparkLoad.md)
   + [Stream Load](/loading/StreamLoad.md)
+  + [Broker Load](/loading/BrokerLoad.md)
   + [Routine Load](/loading/RoutineLoad.md)
+  + [Spark Load](/loading/SparkLoad.md)
   + [Insert Into导入](/loading/InsertInto.md)
   + [导入过程中完成数据转换](/loading/Etl_in_loading.md)
   + [Json数据导入](/loading/Json_loading.md)
@@ -93,6 +93,7 @@
       + [st_x](/sql-reference/sql-functions/spatial-functions/st_x.md)
       + [st_y](/sql-reference/sql-functions/spatial-functions/st_y.md)
     + 字符串函数
+      + [append_trailing_char_if_absent](/sql-reference/sql-functions/string-functions/append_trailing_char_if_absent.md)
       + [ascii](/sql-reference/sql-functions/string-functions/ascii.md)
       + [char_length](/sql-reference/sql-functions/string-functions/char_length.md)
       + [concat](/sql-reference/sql-functions/string-functions/concat.md)
@@ -120,6 +121,7 @@
       + [right](/sql-reference/sql-functions/string-functions/right.md)
       + [rpad](/sql-reference/sql-functions/string-functions/rpad.md)
       + [split_part](/sql-reference/sql-functions/string-functions/split_part.md)
+      + [starts_with](/sql-reference/sql-functions/string-functions/starts_with.md)
       + [strleft](/sql-reference/sql-functions/string-functions/strleft.md)
       + [strright](/sql-reference/sql-functions/string-functions/strright.md)
     + 聚合函数
