@@ -45,7 +45,7 @@ INSERT INTO table_name
 
 Insert Into 本身就是一个 SQL 命令，其返回结果会根据执行结果的不同，分为以下几种：
 
-* 执行成功
+执行成功
 
 ~~~sql
 mysql> insert into tbl1 select * from empty_tbl;
@@ -69,18 +69,22 @@ Query OK, 2 rows affected, 2 warnings (0.31 sec)
 
 ~~~
 
-* rows affected 表示总共有多少行数据被导入。warnings 表示被过滤的行数。
-* label 为用户指定的 label 或自动生成的 label。Label 是该 Insert Into 导入作业的标识。每个导入作业，都有一个在单 database 内部唯一的 Label。
-* status 表示导入数据是否可见。如果可见，显示 visible，如果不可见，显示 committed。
-* txnId 为这个 insert 对应的导入事务的 id。
-* err 字段会显示一些其他非预期错误。当需要查看被过滤的行时，用户可以使用如下语句。返回结果中的 URL 可以用于查询错误的数据。
+rows affected 表示总共有多少行数据被导入。warnings 表示被过滤的行数。
+
+label 为用户指定的 label 或自动生成的 label。Label 是该 Insert Into 导入作业的标识。每个导入作业，都有一个在单 database 内部唯一的 Label。
+
+status 表示导入数据是否可见。如果可见，显示 visible，如果不可见，显示 committed。
+txnId 为这个 insert 对应的导入事务的 id。
+
+err 字段会显示一些其他非预期错误。当需要查看被过滤的行时，用户可以使用如下语句。返回结果中的 URL 可以用于查询错误的数据。
 
 ~~~sql
 SHOW LOAD WHERE label="xxx";
 ~~~
 
-* 执行失败
-* 执行失败表示没有任何数据被成功导入，并返回如下：
+执行失败
+
+执行失败表示没有任何数据被成功导入，并返回如下：
 
 ~~~sql
 mysql> insert into tbl1 select * from tbl2 where k1 = "a";
@@ -89,7 +93,7 @@ ERROR 1064 (HY000): all partitions have no load data. url: [http://10.74.167.16:
 
 ~~~
 
-* 其中 ERROR 1064 (HY000): all partitions have no load data 显示失败原因。后面的 url 可以用于查询错误的数据。
+其中 ERROR 1064 (HY000): all partitions have no load data 显示失败原因。后面的 url 可以用于查询错误的数据。
 
 ---
 
