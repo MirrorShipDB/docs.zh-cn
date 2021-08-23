@@ -57,7 +57,7 @@ FROM(select(murmur_hash3_32(c2) & 1023) AS bucket,
 2. 目前, 只有聚合表支持HLL类型的指标列.
 3. 当在HLL类型列上使用count distinct时，DorisDB会自动转化为HLL_UNION_AGG计算。
 
-具体函数语法参见 [HLL_UNION_AGG](../sql-reference/sql-functions/aggregate-functions/hll_union_agg.md)。
+具体操作函数参见 [hll_union_agg](../sql-reference/sql-functions/aggregate-functions/hll_union_agg.md)。
 
 #### 示例
 
