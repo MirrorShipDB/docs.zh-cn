@@ -198,7 +198,193 @@ e.g. schema change 等，本来操作就少，“失败就报警”就可以了�
 
 ## 使用Prometheus+Grafana
 
-针对有自建监控告警系统需求的用户，如果需要使用开源的Prometheus+Grafana 可以参考[开源文档](https://doris.apache.org/master/zh-CN/administrator-guide/operation/monitor-alert.html)
+DorisDB可使用[Prometheus](https://prometheus.io/)作为监控数据存储方案，使用[Grafana](https://grafana.com/)作为可视化组件。
+
+### 组件
+
+>本文档仅提供基于Prometheus和Grafana实现的一种DorisDB可视化监控方案，原则上不维护和开发这些组件。更多详细的介绍和使用，请参考对应的官网文档。
+
+#### Prometheus
+
+Prometheus 是一款开源的系统监控和报警套件。它可以通过 Pull 或 Push 采集被监控系统的监控项，存入自身的时序数据库中。并且通过丰富的多维数据查询语言，满足用户的不同数据展示需求。
+
+#### Grafana
+
+Grafana 是一款开源的数据分析和展示平台。支持包括 Prometheus 在内的多个主流时序数据库源。通过对应的数据库查询语句，从数据源中获取展现数据。通过灵活可配置的 Dashboard，快速的将这些数据以图表的形式展示给用户。
+
+### 监控架构
+
+![8.10.2-1](../assets/8.10.2-1.png)
+Prometheus通过Pull方式访问FE/BE的Metric接口，然后将监控数据存入时序数据库。
+
+用户可以通过 Web 页面对 Grafana 进行配置，包括数据源的设置、用户设置、Dashboard 绘制等。这里也是最终用户查看监控数据的地方。
+
+### 部署
+
+#### Prometheus
+
+**1.** 从[Prometheus官网](https://prometheus.io/download/)下载最新版本的Prometheus，以下步骤以prometheus-2.29.1.linux-amd64版本为例
+
+```bash
+wget https://github.com/prometheus/prometheus/releases/download/v2.29.1/prometheus-2.29.1.linux-amd64.tar.gz
+tar -xf prometheus-2.29.1.linux-amd64.tar.gz
+```
+
+**2.** vi prometheus.yml，添加DorisDB监控相关的配置
+
+```Plain text
+# my global config
+global:
+  scrape_interval:     15s # 全局的采集间隔，默认是 1m，这里设置为 15s
+  evaluation_interval: 15s # 全局的规则触发间隔，默认是 1m，这里设置 15s
+
+
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'DorisDB_Cluster01' # 每一个集群称之为一个job，可以自定义名字作为DorisDB集群名
+    metrics_path: '/metrics'    # 指定获取监控项目的Restful Api
+
+    static_configs:
+      - targets: ['fe_host1:http_port','fe_host3:http_port','fe_host3:http_port']
+        labels:
+          group: fe # 这里配置了 fe 的 group，该 group 中包含了 3 个 Frontends
+
+      - targets: ['be_host1:http_port', 'be_host2:http_port', 'be_host3:http_port']
+        labels:
+          group: be # 这里配置了 be 的 group，该 group 中包含了 3 个 Backends
+    - job_name: 'DorisDB_Cluster02' # 可以在Prometheus中监控多个DorisDB集群
+    metrics_path: '/metrics'
+
+    static_configs:
+      - targets: ['fe_host1:http_port','fe_host3:http_port','fe_host3:http_port']
+        labels:
+          group: fe
+
+      - targets: ['be_host1:http_port', 'be_host2:http_port', 'be_host3:http_port']
+        labels:
+          group: be
+```
+
+**3.** 启动 Prometheus
+
+```bash
+nohup ./prometheus \
+    --config.file="./prometheus.yml" \
+    --web.listen-address=":9090" \
+    --log.level="info" &
+```
+
+该命令将后台运行 Prometheus，并指定其 web 端口为 9090。启动后，即开始采集数据，并将数据存放在 ./data 目录中。
+
+**4.** 访问 Prometheus
+
+Prometheus 可以通过 web 页面进行简单的访问。通过浏览器打开 9090 端口，即可访问 Prometheus 的页面。点击导航栏中，Status -> Targets，可以看到所有分组 Job 的监控主机节点。正常情况下，所有节点都应为 UP，表示数据采集正常。如果节点状态不为 UP，可以先访问 DorisDB 的 metrics 接口检查是否可以访问，或查询 Prometheus 相关文档尝试解决。
+
+至此，一个简单的 Prometheus 已经搭建、配置完毕。更多高级使用方式，请参阅[官方文档](https://prometheus.io/docs/introduction/overview/)
+
+#### Grafana
+
+**1.** 从[Grafana官网](https://grafana.com/grafana/download)下载最新版本的Grafana，以下以grafana-8.0.6.linux-amd64版本为例
+
+```SHELL
+wget https://dl.grafana.com/oss/release/grafana-8.0.6.linux-amd64.tar.gz
+tar -zxf grafana-8.0.6.linux-amd64.tar.gz
+```
+
+**2.** vi ./conf/defaults.ini 添加配置
+
+```Plain text
+...
+[paths]
+data = ./data
+logs = ./data/log
+plugins = ./data/plugins
+[server]
+http_port = 8000
+domain = localhost
+...
+```
+
+**3.** 启动Grafana
+
+```Plain text
+nohup ./bin/grafana-server \
+    --config="./conf/grafana.ini" &
+```
+
+### Dashboard
+
+#### DashBoard配置
+
+登录grafana，即上一步配置的地址http://grafana_host:8000，默认用户名/密码为admin/admin。
+
+**1.** 数据源配置
+
+配置路径：Configuration-->Data sources-->Add data source
+
+Data Source配置简介
+
+![8.10.2-2](../assets/8.10.2-2.png)
+
+```Plain text
+Name: 数据源的名称，自定义，比如 dorisdb_monitor
+Type: 选择 Prometheus
+URL: Prometheus 的 web 地址，如 http://prometheus_host:9090
+Access: 选择 Server 方式，即通过 Grafana 进程所在服务器，访问 Prometheus。
+其余选项默认即可。
+```
+
+点击最下方 Save & Test，如果显示 Data source is working，即表示数据源可用。
+
+**2.** 添加Dashboard
+
+确认数据源可用后，点击左边导航栏的 + 号，开始添加 Dashboard。这里我们已经准备好了 DorisDB 的 Dashboard 模板（本文档开头）。下载完成后，点击上方的 New dashboard->Import dashboard->Upload .json File，将下载的 json 文件导入。
+导入后，可以命名 Dashboard，默认是 DorisDB Overview。同时，需要选择数据源，这里选择之前创建的 dorisdb_monitor
+点击 Import，即完成导入。之后，可以看到 DorisDB 的 Dashboard 展示。
+
+#### Dashboard说明
+
+这里我们简要介绍 DorisDB Dashboard。Dashboard 的内容可能会随版本升级，不断变化，本文档不保证是最新的 Dashboard 说明。
+
+**1. 顶栏**
+![8.10.2-3](../assets/8.10.2-3.png)
+左上角为 Dashboard 名称。
+右上角显示当前监控时间范围，可以下拉选择不同的时间范围，还可以指定定时刷新页面间隔。
+cluster_name: 即 Prometheus 配置文件中的各个 job_name，代表一个 Doris 集群。选择不同的 cluster，下方的图表将展示对应集群的监控信息。
+
+```Plain text
+fe_master: 对应集群的 Master Frontend 节点。
+fe_instance: 对应集群的所有 Frontend 节点。选择不同的 Frontend，下方的图表将展示对应 Frontend 的监控信息。
+be_instance: 对应集群的所有 Backend 节点。选择不同的 Backend，下方的图表将展示对应 Backend 的监控信息。
+interval: 有些图表展示了速率相关的监控项，这里可选择以多大间隔进行采样计算速率（注：15s 间隔可能导致一些图表无法显示）。
+```
+
+**2.Row**
+![8.10.2-4](../assets/8.10.2-4.png)
+
+Grafana 中，Row 的概念，即一组图表的集合。如上图中的 Overview、Cluster Overview 即两个不同的 Row。可以通过点击 Row，对 Row 进行折叠。当前 Dashboard 有如下 Rows（持续更新中）：
+
+```Plain text
+Overview: 所有 Doris 集群的汇总展示。
+Cluster Overview: 选定集群的汇总展示。
+Query Statistic: 选定集群的查询相关监控。
+Jobs: 导入任务相关监控。
+Transaction: 事务相关监控。
+FE JVM: 选定 Frontend 的 JVM 监控。
+BE: 选定集群的 Backends 的汇总展示。
+BE Task: 选定集群的 Backends 任务信息的展示。
+```
+
+一个典型的图标分为以下几部分：
+![8.10.2-5](../assets/8.10.2-5.png)
+鼠标悬停左上角的 i 图标，可以查看该图表的说明。
+点击下方的图例，可以单独查看某一监控项。再次点击，则显示所有。
+在图表中拖拽可以选定时间范围。
+标题的 [] 中显示选定的集群名称。
+一些数值对应左边的Y轴，一些对应右边的，可以通过图例末尾的 -right 区分。
+点击图表名称->Edit，可以对图表进行编辑。
+
+### 其他
 
 如果仅仅需要将监控数据接入自有的Prometheus系统，可以通过下列接口访问：
 
