@@ -80,7 +80,7 @@
       + [to_days](/sql-reference/sql-functions/date-time-functions/to_days.md)
       + [unix_timestamp](/sql-reference/sql-functions/date-time-functions/unix_timestamp.md)
       + [utc_timestamp](/sql-reference/sql-functions/date-time-functions/utc_timestamp.md)
-      + [workofyear](/sql-reference/sql-functions/date-time-functions/workofyear.md)
+      + [weekofyear](/sql-reference/sql-functions/date-time-functions/workofyear.md)
       + [year](/sql-reference/sql-functions/date-time-functions/year.md)
     + 地理位置函数
       + [st_astext](/sql-reference/sql-functions/spatial-functions/st_astext.md)
