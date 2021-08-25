@@ -40,7 +40,7 @@ FROM(select(murmur_hash3_32(c2) & 1023) AS bucket,
 
 该算法对db0.table0的col2进行去重分析.
 
-* 使用哈希函数murmur\_hash3\_32对col2计算hash值为32有符号整数,
+* 使用哈希函数murmur_hash3_32对col2计算hash值为32有符号整数,
 * 采用1024个桶, 此时修正因子为0.721, 取hash值低10bit为桶的下标,
 * 忽略hash值的符号位, 从次高位开始向低位查找, 确定bit 1首次出现的位置.
 * 把算出的hash值, 按bucket分组, 桶内使用MAX聚合求bit 1的首次出现的最大位置;
@@ -53,22 +53,22 @@ FROM(select(murmur_hash3_32(c2) & 1023) AS bucket,
 
 ### 如何使用HyperLogLog
 
-1. 使用HyperLogLog去重, 需要在建表语句中, 将目标的指标列的类型设置为HLL,  聚合函数设置为HLL\_UNION.
+1. 使用HyperLogLog去重, 需要在建表语句中, 将目标的指标列的类型设置为HLL,  聚合函数设置为HLL_UNION.
 2. 目前, 只有聚合表支持HLL类型的指标列.
-3. 当在HLL类型列上使用count distinct时，DorisDB会自动转化为HLL\_UNION\_AGG计算。
+3. 当在HLL类型列上使用count distinct时，DorisDB会自动转化为HLL_UNION_AGG计算。
 
-具体操作函数参见 [hll_union_agg](../sql-reference/sql-functions/aggregate-functions/hll_union_agg.md)
+具体操作函数参见 [hll_union_agg](../sql-reference/sql-functions/aggregate-functions/hll_union_agg.md)。
 
 #### 示例
 
-首先，创建一张含有**HLL**列的表，其中uv列为聚合列，列类型为HLL，聚合函数为HLL\_UNION
+首先，创建一张含有**HLL**列的表，其中uv列为聚合列，列类型为HLL，聚合函数为HLL_UNION
 
 ~~~sql
 CREATE TABLE test(
         dt DATE,
         id INT,
         uv HLL HLL_UNION
-) 
+)
 DISTRIBUTED BY HASH(ID) BUCKETS 32;
 ~~~
 
@@ -114,7 +114,7 @@ LOAD LABEL test_db.label
 
 查询数据
 
-* HLL列不允许直接查询它的原始值，可以用函数HLL\_UNION\_AGG进行查询
+* HLL列不允许直接查询它的原始值，可以用函数HLL_UNION_AGG进行查询
 * 求总uv
 
 `SELECT HLL_UNION_AGG(uv) FROM test;`

@@ -33,8 +33,8 @@
 | min | min |
 | max | max |
 | count | count |
-| bitmap\_union | bitmap\_union, bitmap\_union\_count, count(distinct) |
-| hll\_union | hll\_raw\_agg, hll\_union\_agg, ndv, approx\_count\_distinct |
+| bitmap_union | bitmap_union, bitmap_union_count, count(distinct) |
+| hll_union | hll_raw_agg, hll_union_agg, ndv, approx_count_distinct |
 
 其中 bitmap 和 hll 的聚合函数在查询匹配到物化视图后，查询的聚合算子会根据物化视图的表结构进行改写。
 
@@ -60,19 +60,20 @@ HELP CREATE MATERIALIZED VIEW
 
 ~~~SQL
 CREATE TABLE sales_records(
-    record_id int, 
-    seller_id int, 
-    store_id int, 
-    sale_date date, 
+    record_id int,
+    seller_id int,
+    store_id int,
+    sale_date date,
     sale_amt bigint
-) distributed BY hash(record_id) 
+) distributed BY hash(record_id)
 properties("replication_num" = "1");
 ~~~
 
-表 sales\_records 的结构为:
+表 sales_records 的结构为:
 
 ~~~PlainText
 MySQL [test]> desc sales_records;
+
 +-----------+--------+------+-------+---------+-------+
 | Field     | Type   | Null | Key   | Default | Extra |
 +-----------+--------+------+-------+---------+-------+
@@ -84,16 +85,16 @@ MySQL [test]> desc sales_records;
 +-----------+--------+------+-------+---------+-------+
 ~~~
 
-如果用户经常对不同门店的销售量做分析，则可以为 sales\_records 表创建一张“以售卖门店为分组，对相同售卖门店的销售额求和”的物化视图。创建语句如下：
+如果用户经常对不同门店的销售量做分析，则可以为 sales_records 表创建一张“以售卖门店为分组，对相同售卖门店的销售额求和”的物化视图。创建语句如下：
 
 ~~~sql
-CREATE MATERIALIZED VIEW store_amt AS 
+CREATE MATERIALIZED VIEW store_amt AS
 SELECT store_id, SUM(sale_amt)
-FROM sales_records 
+FROM sales_records
 GROUP BY store_id;
 ~~~
 
-更详细物化视图创建语法请参考本手册的"SQL语法"章节，或者在 MySQL 客户端使用命令 `help create materialized view` 获得帮助。
+更详细物化视图创建语法请参看SQL参考手册 [CREATE MATERIALIZED VIEW](../sql-reference/sql-statements/data-definition/CREATE%20MATERIALIZED%20VIEW.md) ，或者在 MySQL 客户端使用命令 `help create materialized view` 获得帮助。
 
 <br>
 
@@ -111,7 +112,7 @@ SHOW ALTER MATERIALIZED VIEW FROM db_name;
 SHOW ALTER TABLE ROLLUP FROM db_name;
 ~~~
 
-> db\_name：替换成真实的 db name，比如"test"。
+> db_name：替换成真实的 db name，比如"test"。
 
 查询结果为:
 
@@ -129,6 +130,7 @@ SHOW ALTER TABLE ROLLUP FROM db_name;
 
 ~~~PlainText
 mysql> desc sales_records all;
+
 +---------------+---------------+-----------+--------+------+-------+---------+-------+
 | IndexName     | IndexKeysType | Field     | Type   | Null | Key   | Default | Extra |
 +---------------+---------------+-----------+--------+------+-------+---------+-------+
@@ -147,9 +149,9 @@ mysql> desc sales_records all;
 
 ### 查询命中物化视图
 
-当物化视图创建完成后，用户再查询不同门店的销售量时，就会直接从刚才创建的物化视图 store\_amt 中读取聚合好的数据，达到提升查询效率的效果。
+当物化视图创建完成后，用户再查询不同门店的销售量时，就会直接从刚才创建的物化视图 store_amt 中读取聚合好的数据，达到提升查询效率的效果。
 
-用户的查询依旧指定查询 sales\_records 表，比如：
+用户的查询依旧指定查询 sales_records 表，比如：
 
 ~~~SQL
 SELECT store_id, SUM(sale_amt) FROM sales_records GROUP BY store_id;
@@ -219,7 +221,7 @@ EXPLAIN SELECT store_id, SUM(sale_amt) FROM sales_records GROUP BY store_id;
 +-----------------------------------------------------------------------------+
 ~~~
 
-查询计划树中的 OlapScanNode 显示 `PREAGGREGATION: ON` 和 `rollup: store_amt`，说明使用物化视图 store\_amt 的预先聚合计算结果。也就是说查询已经命中到物化视图 store\_amt，并直接从物化视图中读取数据了。
+查询计划树中的 OlapScanNode 显示 `PREAGGREGATION: ON` 和 `rollup: store_amt`，说明使用物化视图 store_amt 的预先聚合计算结果。也就是说查询已经命中到物化视图 store_amt，并直接从物化视图中读取数据了。
 
 <br>
 
@@ -236,9 +238,7 @@ EXPLAIN SELECT store_id, SUM(sale_amt) FROM sales_records GROUP BY store_id;
 DROP MATERIALIZED VIEW IF EXISTS store_amt on sales_records;
 ~~~
 
-<br>
-
-删除处于创建中的物化视图，需要先取消异步任务，然后再删除物化视图，以表 db0.table0 上的物化视图 mv 为例:
+删除处于创建中的物化视图，需要先取消异步任务，然后再删除物化视图，以表 `db0.table0` 上的物化视图 mv 为例:
 
 首先使用获得JobId，执行命令:
 
@@ -273,7 +273,7 @@ cancel alter table rollup from db0.table0 (22478);
 
 ~~~SQL
 CREATE TABLE advertiser_view_record(
-    TIME date, 
+    TIME date,
     advertiser varchar(10),
     channel varchar(10),
     user_id int
@@ -284,17 +284,17 @@ properties("replication_num" = "1");
 用户查询广告 UV，使用下面查询语句：
 
 ~~~SQL
-SELECT advertiser, channel, count(distinct user_id) 
-FROM advertiser_view_record 
+SELECT advertiser, channel, count(distinct user_id)
+FROM advertiser_view_record
 GROUP BY advertiser, channel;
 ~~~
 
-这种情况下，可以创建物化视图，使用 bitmap\_union 预先聚合:
+这种情况下，可以创建物化视图，使用 bitmap_union 预先聚合:
 
 ~~~SQL
-CREATE MATERIALIZED VIEW advertiser_uv AS 
+CREATE MATERIALIZED VIEW advertiser_uv AS
 SELECT advertiser, channel, bitmap_union(to_bitmap(user_id))
-FROM advertiser_view_record 
+FROM advertiser_view_record
 GROUP BY advertiser, channel;
 ~~~
 
@@ -304,14 +304,14 @@ GROUP BY advertiser, channel;
 
 ### 近似去重
 
-用户可以在明细表上使用表达式 `hll_union(hll_hash(col))` 创建物化视图，实现近似去重的预计算.
+用户可以在明细表上使用表达式 `hll_union(hll_hash(col))` 创建物化视图，实现近似去重的预计算。
 
 在同上一样的场景中，用户创建如下物化视图:
 
 ~~~SQL
-CREATE MATERIALIZED VIEW advertiser_uv AS 
+CREATE MATERIALIZED VIEW advertiser_uv AS
 SELECT advertiser, channel, hll_union(hll_hash(user_id))
-FROM advertiser_view_record 
+FROM advertiser_view_record
 GROUP BY advertiser, channel;
 ~~~
 
@@ -322,13 +322,13 @@ GROUP BY advertiser, channel;
 用户的基表 tableA 有 (k1, k2, k3) 三列。其中 k1, k2 为排序键。这时候如果用户查询条件中包含 `where k1=1 and k2=2`，就能通过 shortkey 索引加速查询。但是用户查询语句中使用条件 `k3=3`，则无法通过 shortkey 索引加速。此时，可创建以 k3 作为第一列的物化视图:
 
 ~~~SQL
-CREATE MATERIALIZED VIEW mv_1 AS 
-SELECT k3, k2, k1 
-FROM tableA 
+CREATE MATERIALIZED VIEW mv_1 AS
+SELECT k3, k2, k1
+FROM tableA
 ORDER BY k3;
 ~~~
 
-这时候查询就会直接从刚才创建的 mv\_1 物化视图中读取数据。物化视图对 k3 是存在前缀索引的，查询效率也会提升。
+这时候查询就会直接从刚才创建的 mv_1 物化视图中读取数据。物化视图对 k3 是存在前缀索引的，查询效率也会提升。
 
 <br>
 

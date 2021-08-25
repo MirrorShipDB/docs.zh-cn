@@ -40,6 +40,7 @@
   + [数组](/using_dorisdb/Array.md)
   + [窗口函数](/using_dorisdb/Window_function.md)
   + [CBO优化器](/using_dorisdb/Cost_based_optimizer.md)
+  + [Lateral Join](/using_dorisdb/Lateral_join.md)
 + 参考手册
   + SQL参考
     + [用户账户管理](/reference/Account_reference.md)

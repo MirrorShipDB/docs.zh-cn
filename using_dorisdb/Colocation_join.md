@@ -8,8 +8,8 @@ shuffle join 和 broadcast join 中，参与 join 的两张表的数据行，若
 
 ## 名词解释
 
-* Colocation Group（CG）：一个 CG 中会包含一张及以上的 Table。一个CG内的 Table 有相同的分桶方式和副本放置方式，使用 Colocation Group Schema 描述。
-* Colocation Group Schema（CGS）： 包含 CG 的分桶键，分桶数以及副本数等信息。
+* **Colocation Group（CG）**：一个 CG 中会包含一张及以上的 Table。一个CG内的 Table 有相同的分桶方式和副本放置方式，使用 Colocation Group Schema 描述。
+* **Colocation Group Schema（CGS）**： 包含 CG 的分桶键，分桶数以及副本数等信息。
 
 <br>
 
@@ -17,11 +17,7 @@ shuffle join 和 broadcast join 中，参与 join 的两张表的数据行，若
 
 Colocation Join 功能，是将一组拥有相同 CGS 的 Table 组成一个 CG。并保证这些 Table 对应的分桶副本会落在相同一组BE 节点上。使得当 CG 内的表进行分桶列上的 Join 操作时，可以直接进行本地数据 Join，减少数据在节点间的传输耗时。
 
-<br>
-
 分桶键 hash 值，对分桶数取模得到桶的序号(Bucket Seq)， 假设一个 Table 的分桶数为 8，则共有 \[0, 1, 2, 3, 4, 5, 6, 7\] 8 个分桶（Bucket)，每个 Bucket 内会有一个或多个子表（Tablet)，子表数量取决于表的分区数(Partition)：为单分区表时，一个 Bucket 内仅有一个 Tablet。如果是多分区表，则会有多个Tablet。
-
-<br>
 
 为了使得 Table 能够有相同的数据分布，同一 CG 内的 Table 必须保证下列约束：
 
@@ -62,9 +58,7 @@ PROPERTIES(
 
 如果指定的 Group 不存在，则 DorisDB 会自动创建一个只包含当前这张表的 Group。如果 Group 已存在，则 DorisDB 会检查当前表是否满足 Colocation Group Schema。如果满足，则会创建该表，并将该表加入 Group。同时，表会根据已存在的 Group 中的数据分布规则创建分片和副本。
 
-<br>
-
-Group 归属于一个 Database，Group 的名字在一个 Database 内唯一。在内部存储是 Group 的全名为 dbId\_groupName，但用户只感知 groupName。
+Group 归属于一个 Database，Group 的名字在一个 Database 内唯一。在内部存储是 Group 的全名为 dbId_groupName，但用户只感知 groupName。
 
 <br>
 
@@ -88,13 +82,13 @@ SHOW PROC '/colocation_group';
 +-------------+--------------+--------------+------------+----------------+----------+----------+
 ~~~
 
-* GroupId：一个 Group 的全集群唯一标识，前半部分为 db id，后半部分为 group id。
-* GroupName：Group 的全名。
-* TabletIds：该 Group 包含的 Table 的 id 列表。
-* BucketsNum：分桶数。
-* ReplicationNum：副本数。
-* DistCols：Distribution columns，即分桶列类型。
-* IsStable：该 Group 是否稳定（稳定的定义，见 Colocation 副本均衡和修复 一节）。
+* **GroupId**：一个 Group 的全集群唯一标识，前半部分为 db id，后半部分为 group id。
+* **GroupName**：Group 的全名。
+* **TabletIds**：该 Group 包含的 Table 的 id 列表。
+* **BucketsNum**：分桶数。
+* **ReplicationNum**：副本数。
+* **DistCols**：Distribution columns，即分桶列类型。
+* **IsStable**：该 Group 是否稳定（稳定的定义，见 Colocation 副本均衡和修复 一节）。
 
 <br>
 
@@ -117,8 +111,8 @@ SHOW PROC '/colocation_group/10005.10008';
 +-------------+---------------------+
 ~~~
 
-* BucketIndex：分桶序列的下标。
-* BackendIds：分桶中数据分片所在的 BE 节点 id 列表。
+* **BucketIndex**：分桶序列的下标。
+* **BackendIds**：分桶中数据分片所在的 BE 节点 id 列表。
 
 > 注意：以上命令需要 AMDIN 权限。暂不支持普通用户查看。
 
@@ -168,7 +162,7 @@ DorisDB 会尽力将 Colocation 表的分片均匀分布在所有 BE 节点上�
 
 > 注1：当前的 Colocation 副本均衡和修复算法，对于异构部署的 DorisDB 集群效果可能不佳。所谓异构部署，即 BE 节点的磁盘容量、数量、磁盘类型（SSD 和 HDD）不一致。在异构部署情况下，可能出现小容量的 BE 节点和大容量的 BE 节点存储了相同的副本数量。
 >
-> 注2：当一个 Group 处于 Unstable 状态时，其中的表的 Join 将退化为普通 Join。此时可能会极大降低集群的查询性能。如果不希望系统自动均衡，可以设置 FE 的配置项 disable\_colocate\_balance 来禁止自动均衡。然后在合适的时间打开即可。（具体参阅 [高级操作](#高级操作) 一节）
+> 注2：当一个 Group 处于 Unstable 状态时，其中的表的 Join 将退化为普通 Join。此时可能会极大降低集群的查询性能。如果不希望系统自动均衡，可以设置 FE 的配置项 disable_colocate_balance 来禁止自动均衡。然后在合适的时间打开即可。（具体参阅 [高级操作](#高级操作) 一节）
 
 <br>
 
@@ -320,17 +314,17 @@ HASH JOIN 节点会显示对应原因：`colocate: false, reason: group is not s
 
 ### FE 配置项
 
-* **disable\_colocate\_relocate**
+* **disable_colocate_relocate**
 
     是否关闭 DorisDB 的自动 Colocation 副本修复。默认为 false，即不关闭。该参数只影响 Colocation 表的副本修复，不影响普通表。
 
-* **disable\_colocate\_balance**
+* **disable_colocate_balance**
 
     是否关闭 DorisDB 的自动 Colocation 副本均衡。默认为 false，即不关闭。该参数只影响 Colocation 表的副本均衡，不影响普通表。
 
 以上参数可以动态修改，设置方式请参阅 `HELP ADMIN SHOW CONFIG;` 和 `HELP ADMIN SET CONFIG;`。
 
-* **disable\_colocate\_join**
+* **disable_colocate_join**
 
     可以通过改该变量在 session 粒度关闭 colocate join功能。
 
@@ -340,7 +334,7 @@ HASH JOIN 节点会显示对应原因：`colocate: false, reason: group is not s
 
 DorisDB 提供了几个和 Colocation Join 有关的 HTTP Restful API，用于查看和修改 Colocation Group。
 
-该 API 实现在 FE 端，使用 fe\_host:fe\_http\_port 进行访问，需要 ADMIN 权限。
+该 API 实现在 FE 端，使用 fe_host:fe_http_port 进行访问，需要 ADMIN 权限。
 
 1. 查看集群的全部 Colocation 信息
 
@@ -432,4 +426,4 @@ DorisDB 提供了几个和 Colocation Join 有关的 HTTP Restful API，用于�
 
     其中 Body 是以嵌套数组表示的 BucketsSequence 以及每个 Bucket 中分片分布所在 BE 的 id。
 
-    > 注意，使用该命令，可能需要将 FE 的配置 disable\_colocate\_relocate 和 disable\_colocate\_balance 设为 true。即关闭系统自动的 Colocation 副本修复和均衡。否则可能在修改后，会被系统自动重置。
+    > 注意，使用该命令，可能需要将 FE 的配置 disable_colocate_relocate 和 disable_colocate_balance 设为 true。即关闭系统自动的 Colocation 副本修复和均衡。否则可能在修改后，会被系统自动重置。
