@@ -210,14 +210,14 @@ Prometheus 是一款开源的系统监控和报警套件。它可以通过 Pull 
 
 #### Grafana
 
-Grafana 是一款开源的数据分析和展示平台。支持包括 Prometheus 在内的多个主流时序数据库源。通过对应的数据库查询语句，从数据源中获取展现数据。通过灵活可配置的 Dashboard，快速的将这些数据以图表的形式展示给用户。
+Grafana 是一款开源的数据分析和展示平台。支持多种数据源，详情可参考官网文档。通过对应的查询语句，从数据源中获取展现数据。通过灵活可配置的 Dashboard，快速的将这些数据以图表的形式展示给用户。
 
 ### 监控架构
 
 ![8.10.2-1](../assets/8.10.2-1.png)
 Prometheus通过Pull方式访问FE/BE的Metric接口，然后将监控数据存入时序数据库。
 
-用户可以通过 Web 页面对 Grafana 进行配置，包括数据源的设置、用户设置、Dashboard 绘制等。这里也是最终用户查看监控数据的地方。
+用户可以通过Grafana配置Prometheus为数据源，自定义绘制Dashboard。
 
 ### 部署
 
@@ -338,25 +338,27 @@ Access: 选择 Server 方式，即通过 Grafana 进程所在服务器，访问 
 
 **2.** 添加Dashboard
 
-确认数据源可用后，点击左边导航栏的 + 号，开始添加 Dashboard。这里我们已经准备好了 DorisDB 的 Dashboard 模板（本文档开头）。下载完成后，点击上方的 New dashboard->Import dashboard->Upload .json File，将下载的 json 文件导入。
-导入后，可以命名 Dashboard，默认是 DorisDB Overview。同时，需要选择数据源，这里选择之前创建的 dorisdb_monitor
+[Dashboard模版下载](http://dorisdb-thirdparty.oss-cn-zhangjiakou.aliyuncs.com/DorisDB-Overview.json?Expires=4783479921&OSSAccessKeyId=LTAI4GFYjbX9e7QmFnAAvkt8&Signature=w4YeV2FrzopmPuVF7axMOxtxZik%3D)，Dashboard模版会不定期更新。欢迎提供更优的Dashboard。
+
+确认数据源可用后，点击左边导航栏的 + 号，开始添加 Dashboard。这里我们使用上文下载的 DorisDB 的 Dashboard 模板。点击左边的导航栏 + 号--> Import -->Upload Json File，将下载的 json 文件导入。
+导入后，可以命名 Dashboard，默认是 DorisDB Overview。同时，需要选择数据源，这里选择之前创建的 dorisdb_monitor。
 点击 Import，即完成导入。之后，可以看到 DorisDB 的 Dashboard 展示。
 
 #### Dashboard说明
 
-这里我们简要介绍 DorisDB Dashboard。Dashboard 的内容可能会随版本升级，不断变化，本文档不保证是最新的 Dashboard 说明。
+这里我们简要介绍 DorisDB Dashboard。Dashboard 的内容可能会随版本升级，不断更新，请参考上文Dashboard模版。
 
 **1. 顶栏**
 ![8.10.2-3](../assets/8.10.2-3.png)
 左上角为 Dashboard 名称。
 右上角显示当前监控时间范围，可以下拉选择不同的时间范围，还可以指定定时刷新页面间隔。
-cluster_name: 即 Prometheus 配置文件中的各个 job_name，代表一个 Doris 集群。选择不同的 cluster，下方的图表将展示对应集群的监控信息。
+cluster_name: 即 Prometheus 配置文件中的各个 job_name，代表一个 DorisDB 集群。选择不同的 cluster，下方的图表将展示对应集群的监控信息。
 
 ```Plain text
 fe_master: 对应集群的 Master Frontend 节点。
 fe_instance: 对应集群的所有 Frontend 节点。选择不同的 Frontend，下方的图表将展示对应 Frontend 的监控信息。
 be_instance: 对应集群的所有 Backend 节点。选择不同的 Backend，下方的图表将展示对应 Backend 的监控信息。
-interval: 有些图表展示了速率相关的监控项，这里可选择以多大间隔进行采样计算速率（注：15s 间隔可能导致一些图表无法显示）。
+interval: 有些图表展示了速率相关的监控项，这里可选择以多大间隔进行采样计算速率（注：15s 间隔可能导致一些图表无法显示**）。
 ```
 
 **2.Row**
@@ -377,12 +379,15 @@ BE Task: 选定集群的 Backends 任务信息的展示。
 
 一个典型的图标分为以下几部分：
 ![8.10.2-5](../assets/8.10.2-5.png)
+
+```
 鼠标悬停左上角的 i 图标，可以查看该图表的说明。
 点击下方的图例，可以单独查看某一监控项。再次点击，则显示所有。
 在图表中拖拽可以选定时间范围。
 标题的 [] 中显示选定的集群名称。
 一些数值对应左边的Y轴，一些对应右边的，可以通过图例末尾的 -right 区分。
 点击图表名称->Edit，可以对图表进行编辑。
+```
 
 ### 其他
 
