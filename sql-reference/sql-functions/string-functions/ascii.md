@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`INT ascii(VARCHAR str)`
+```Haskell
+INT ascii(VARCHAR str)
+```
 
 返回字符串第一个字符对应的 ascii 码
 

@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`DATETIME TIMESTAMPADD(unit, interval, DATETIME datetime_expr)`
+```Haskell
+DATETIME TIMESTAMPADD(unit, interval, DATETIME datetime_expr)
+```
 
 将整数表达式间隔添加到日期或日期时间表达式datetime_expr中。
 

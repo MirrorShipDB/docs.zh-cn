@@ -5,7 +5,9 @@
 
 ### Syntax
 
-`STDDEV(expr)`
+```Haskell
+STDDEV(expr)
+```
 
 返回expr表达式的标准差
 

@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`VARCHAR reverse(VARCHAR str)`
+```Haskell
+VARCHAR reverse(VARCHAR str)
+```
 
 将字符串反转，返回的字符串的顺序和源字符串的顺序相反。
 

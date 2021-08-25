@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`GEOMETRY ST_Polygon(VARCHAR wkt)`
+```Haskell
+GEOMETRY ST_Polygon(VARCHAR wkt)
+```
 
 将一个WKT（Well Known Text）转化为对应的多边形内存形式
 

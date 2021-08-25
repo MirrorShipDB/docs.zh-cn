@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`INT DATE_SUB(DATETIME date,INTERVAL expr type)`
+```Haskell
+INT DATE_SUB(DATETIME date,INTERVAL expr type)
+```
 
 从日期减去指定的时间间隔
 

@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`INT length(VARCHAR str)`
+```Haskell
+INT length(VARCHAR str)
+```
 
 返回字符串的字节。
 

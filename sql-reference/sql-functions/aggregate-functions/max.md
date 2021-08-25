@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`MAX(expr)`
+```Haskell
+MAX(expr)
+```
 
 返回expr表达式的最大值
 

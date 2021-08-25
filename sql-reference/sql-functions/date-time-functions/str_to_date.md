@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`DATETIME STR_TO_DATE(VARCHAR str, VARCHAR format)`
+```Haskell
+DATETIME STR_TO_DATE(VARCHAR str, VARCHAR format)
+```
 
 通过format指定的方式将str转化为DATE类型，如果转化结果不对返回NULL
 

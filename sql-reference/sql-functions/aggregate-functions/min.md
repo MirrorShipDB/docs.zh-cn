@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`MIN(expr)`
+```Haskell
+MIN(expr)
+```
 
 返回expr表达式的最小值
 

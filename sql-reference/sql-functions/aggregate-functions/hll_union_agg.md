@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`HLL_UNION_AGG(hll)`
+```Haskell
+HLL_UNION_AGG(hll)
+```
 
 HLL是基于HyperLogLog算法的工程实现，用于保存HyperLogLog计算过程的中间结果
 

@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`bitmap_remove(BITMAP lhs, BIGINT input)`
+```Haskell
+bitmap_remove(BITMAP lhs, BIGINT input)
+```
 
 从 lhs 中删除 **input** 作为结果集合返回
 

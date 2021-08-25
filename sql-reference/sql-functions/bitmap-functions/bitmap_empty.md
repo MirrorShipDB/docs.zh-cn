@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`BITMAP BITMAP_EMPTY()`
+```Haskell
+BITMAP BITMAP_EMPTY()
+```
 
 返回一个空bitmap。主要用于 insert 或 stream load 时填充默认值。例如
 

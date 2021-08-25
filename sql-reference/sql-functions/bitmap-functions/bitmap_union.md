@@ -6,7 +6,9 @@
 
 ### Syntax
 
-`BITMAP BITMAP_UNION(BITMAP value)`
+```Haskell
+BITMAP BITMAP_UNION(BITMAP value)
+```
 
 输入一组 bitmap 值，求这一组 bitmap 值的并集，并返回。
 

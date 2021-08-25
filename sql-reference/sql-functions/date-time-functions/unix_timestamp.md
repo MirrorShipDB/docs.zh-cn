@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`INT UNIX_TIMESTAMP(), UNIX_TIMESTAMP(DATETIME date), UNIX_TIMESTAMP(DATETIME date, STRING fmt),`
+```Haskell
+INT UNIX_TIMESTAMP(), UNIX_TIMESTAMP(DATETIME date), UNIX_TIMESTAMP(DATETIME date, STRING fmt),
+```
 
 将 Date 或者 Datetime 类型转化为 unix 时间戳。
 

@@ -5,7 +5,9 @@
 
 ### Syntax
 
-`SUM(expr)`
+```Haskell
+SUM(expr)
+```
 
 用于返回选中字段所有值的和
 

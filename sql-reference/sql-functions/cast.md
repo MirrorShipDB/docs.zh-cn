@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`cast (input as type)`
+```Haskell
+cast (input as type)
+```
 
 将  input转成指定的(type)的值,如`cast (input as BIGINT)`将当前列 input 转换为 BIGINT 类型的值
 

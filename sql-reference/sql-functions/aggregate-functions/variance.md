@@ -5,7 +5,9 @@
 
 ### Syntax
 
-`VARIANCE(expr)`
+```Haskell
+VARIANCE(expr)
+```
 
 返回expr表达式的方差
 

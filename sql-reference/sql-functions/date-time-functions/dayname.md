@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`VARCHAR DAYNAME(DATE)`
+```Haskell
+VARCHAR DAYNAME(DATE)
+```
 
 返回日期对应的日期名字
 

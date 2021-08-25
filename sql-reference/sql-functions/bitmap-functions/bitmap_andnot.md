@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`bitmap_andnot(BITMAP lhs, BITMAP rhs)`
+```Haskell
+bitmap_andnot(BITMAP lhs, BITMAP rhs)
+```
 
 计算得到在 **lhs** 中，但是不在 **rhs** 中的集合(差集).
 

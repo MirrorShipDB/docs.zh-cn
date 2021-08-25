@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`bitmap_xor(BITMAP lhs, BITMAP rhs)`
+```Haskell
+bitmap_xor(BITMAP lhs, BITMAP rhs)
+```
 
 计算得到 **lhs** 独有或者 **rhs** 独有的元素所构成的集合，逻辑上等价于`bitmap_andnot(bitmap_or(lhs, rhs), bitmap_and(lhs, rhs))`(补集)
 

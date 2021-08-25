@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`BOOLEAN NULL_OR_EMPTY (VARCHAR str)`
+```Haskell
+BOOLEAN NULL_OR_EMPTY (VARCHAR str)
+```
 
 如果字符串为空字符串或者NULL，返回true。否则，返回false。
 

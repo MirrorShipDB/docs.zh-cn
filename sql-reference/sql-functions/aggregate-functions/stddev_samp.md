@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`STDDEV_SAMP(expr)`
+```Haskell
+STDDEV_SAMP(expr)
+```
 
 返回expr表达式的样本标准差
 

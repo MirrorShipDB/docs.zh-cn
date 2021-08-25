@@ -5,7 +5,9 @@
 
 ### Syntax
 
-`VAR_SAMP(expr)`
+```Haskell
+VAR_SAMP(expr)
+```
 
 返回expr表达式的样本方差
 
