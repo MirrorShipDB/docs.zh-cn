@@ -19,7 +19,7 @@ HLL是基于HyperLogLog算法的工程实现，用于保存HyperLogLog计算过�
 ## example
 
 ```plain text
-MySQL > select HLL_UNION_AGG(uv_set) 
+MySQL > select HLL_UNION_AGG(uv_set)
 from test_uv;;
 +-------------------------+
 | HLL_UNION_AGG(`uv_set`) |

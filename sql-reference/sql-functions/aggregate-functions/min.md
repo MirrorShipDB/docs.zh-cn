@@ -13,8 +13,8 @@ MIN(expr)
 ## example
 
 ```plain text
-MySQL > select min(scan_rows) 
-from log_statis 
+MySQL > select min(scan_rows)
+from log_statis
 group by datetime;
 +------------------+
 | min(`scan_rows`) |

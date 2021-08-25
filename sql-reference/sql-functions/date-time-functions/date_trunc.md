@@ -8,8 +8,8 @@
 select ADDDATE(DATE_FORMAT(DATE_ADD(from_unixtime(`自定义 SQL 查询`.`timestamp`), INTERVAL 8 HOUR),
                            '%Y-%m-%d %H:%i:00'),
                INTERVAL 0 SECOND),
-    count() 
-from xxx group 1 ; 
+    count()
+from xxx group 1 ;
 ```
 
 ## 动机
@@ -21,7 +21,7 @@ from xxx group 1 ;
 date_trunc与此类似，对datetime进行高位截断：
 
 ```sql
-date_trunc("minute", datetime): 
+date_trunc("minute", datetime):
 2020-11-04 11:12:19 => 2020-11-04 11:12:00
 ```
 

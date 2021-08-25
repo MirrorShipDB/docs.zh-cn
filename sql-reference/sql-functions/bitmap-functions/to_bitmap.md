@@ -12,7 +12,9 @@ BITMAP TO_BITMAP(expr)
 该函数主要用于stream load任务将整型字段导入Doris表的bitmap字段。例如
 
 ```bash
-cat data | curl --location-trusted -u user:passwd -T - -H "columns: dt,page,user_id, user_id=to_bitmap(user_id)"   http://host:8410/api/test/testDb/_stream_load
+cat data | curl --location-trusted -u user:passwd -T - \
+    -H "columns: dt,page,user_id, user_id=to_bitmap(user_id)" \
+    http://host:8410/api/test/testDb/_stream_load
 ```
 
 ## example

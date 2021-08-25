@@ -13,8 +13,8 @@ STDDEV_SAMP(expr)
 ## example
 
 ```plain text
-MySQL > select stddev_samp(scan_rows) 
-from log_statis 
+MySQL > select stddev_samp(scan_rows)
+from log_statis
 group by datetime;
 +--------------------------+
 | stddev_samp(`scan_rows`) |

@@ -24,12 +24,12 @@ Columns: tag varchar, date datetime, user_id bitmap bitmap_union
 
 ```SQL
 -- 求今天和昨天不同 tag 下的用户留存
-MySQL > select tag, bitmap_intersect(user_id) 
+select tag, bitmap_intersect(user_id)
 from (
-    select tag, date, bitmap_union(user_id) user_id 
-    from table 
-    where date in ('2020-05-18', '2020-05-19') 
-    group by tag, date) a 
+    select tag, date, bitmap_union(user_id) user_id
+    from table
+    where date in ('2020-05-18', '2020-05-19')
+    group by tag, date) a
 group by tag;
 ```
 
@@ -37,11 +37,11 @@ group by tag;
 
 ```SQL
 --求今天和昨天不同 tag 下留存的用户都是哪些
-MySQL > select tag, bitmap_to_string(bitmap_intersect(user_id)) 
+select tag, bitmap_to_string(bitmap_intersect(user_id))
 from (
-    select tag, date, bitmap_union(user_id) user_id 
-    from table where date in ('2020-05-18', '2020-05-19') 
-    group by tag, date) a 
+    select tag, date, bitmap_union(user_id) user_id
+    from table where date in ('2020-05-18', '2020-05-19')
+    group by tag, date) a
 group by tag;
 ```
 

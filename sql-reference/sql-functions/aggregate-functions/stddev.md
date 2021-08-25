@@ -14,8 +14,8 @@ STDDEV(expr)
 ## example
 
 ```plain text
-MySQL > select stddev(scan_rows) 
-from log_statis 
+MySQL > select stddev(scan_rows)
+from log_statis
 group by datetime;
 +---------------------+
 | stddev(`scan_rows`) |
@@ -23,8 +23,8 @@ group by datetime;
 |  2.3736656687790934 |
 +---------------------+
 
-MySQL > select stddev_pop(scan_rows) 
-from log_statis 
+MySQL > select stddev_pop(scan_rows)
+from log_statis
 group by datetime;
 +-------------------------+
 | stddev_pop(`scan_rows`) |

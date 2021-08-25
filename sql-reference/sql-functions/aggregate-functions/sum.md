@@ -14,8 +14,8 @@ SUM(expr)
 ## example
 
 ```plain text
-MySQL > select sum(scan_rows) 
-from log_statis 
+MySQL > select sum(scan_rows)
+from log_statis
 group by datetime;
 +------------------+
 | sum(`scan_rows`) |
