@@ -215,6 +215,7 @@ Grafana 是一款开源的数据分析和展示平台。支持多种数据源，
 ### 监控架构
 
 ![8.10.2-1](../assets/8.10.2-1.png)
+
 Prometheus通过Pull方式访问FE/BE的Metric接口，然后将监控数据存入时序数据库。
 
 用户可以通过Grafana配置Prometheus为数据源，自定义绘制Dashboard。
@@ -349,7 +350,9 @@ Access: 选择 Server 方式，即通过 Grafana 进程所在服务器，访问 
 这里我们简要介绍 DorisDB Dashboard。Dashboard 的内容可能会随版本升级，不断更新，请参考上文Dashboard模版。
 
 **1. 顶栏**
+
 ![8.10.2-3](../assets/8.10.2-3.png)
+
 左上角为 Dashboard 名称。
 右上角显示当前监控时间范围，可以下拉选择不同的时间范围，还可以指定定时刷新页面间隔。
 cluster_name: 即 Prometheus 配置文件中的各个 job_name，代表一个 DorisDB 集群。选择不同的 cluster，下方的图表将展示对应集群的监控信息。
@@ -362,6 +365,7 @@ interval: 有些图表展示了速率相关的监控项，这里可选择以多�
 ```
 
 **2.Row**
+
 ![8.10.2-4](../assets/8.10.2-4.png)
 
 Grafana 中，Row 的概念，即一组图表的集合。如上图中的 Overview、Cluster Overview 即两个不同的 Row。可以通过点击 Row，对 Row 进行折叠。当前 Dashboard 有如下 Rows（持续更新中）：
@@ -378,6 +382,7 @@ BE Task: 选定集群的 Backends 任务信息的展示。
 ```
 
 一个典型的图标分为以下几部分：
+
 ![8.10.2-5](../assets/8.10.2-5.png)
 
 ```Plain text
