@@ -95,7 +95,11 @@ insert into page_uv values
 采用本地文件导入
 
 ```shell
-cat <<<'DONE' |curl --location-trusted -u root: -H "label:label_1600960288796" -H "column_separator:,"  -H "columns:page_id,visit_date,visit_users, visit_users=to_bitmap(visit_users)" -T - http://DorisDB_be0:8040/api/db0/page_uv/_stream_load
+cat <<<'DONE' | \
+    curl --location-trusted -u root: -H "label:label_1600960288796" \
+        -H "column_separator:," \
+        -H "columns:page_id,visit_date,visit_users, visit_users=to_bitmap(visit_users)" -T - \
+        http://DorisDB_be0:8040/api/db0/page_uv/_stream_load
 1,2020-06-23 01:30:30,130
 1,2020-06-23 01:30:30,230
 1,2020-06-23 01:30:30,120

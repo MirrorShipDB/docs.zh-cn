@@ -16,10 +16,9 @@ BITMAP BITMAP_INTERSECT(BITMAP value)
 
 表结构
 
-```plain text
+```yml
 KeysType: AGG_KEY
 Columns: tag varchar, date datetime, user_id bitmap bitmap_union
-
 ```
 
 ```SQL

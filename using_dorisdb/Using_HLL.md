@@ -77,7 +77,9 @@ DISTRIBUTED BY HASH(ID) BUCKETS 32;
 导入数据，Stream Load模式:
 
 ~~~bash
-curl --location-trusted -u root: -H "label:label_1600997542287" -H "column_separator:,"  -H " columns:dt,id,user_id, uv=hll_hash(user_id)" -T /root/test.csv http://doris_be0:8040/api/db0/test/_stream_load
+curl --location-trusted -u root: -H "label:label_1600997542287" \
+    -H "column_separator:," \
+    -H "columns:dt,id,user_id, uv=hll_hash(user_id)" -T /root/test.csv http://doris_be0:8040/api/db0/test/_stream_load
 {
     "TxnId": 2504748,
     "Label": "label_1600997542287",

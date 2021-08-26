@@ -13,7 +13,7 @@ bitmap_xor(BITMAP lhs, BITMAP rhs)
 ## example
 
 ```plain text
-mysql> select bitmap_to_string(**bitmap_xor**(bitmap_from_string('1, 3'), bitmap_from_string('2'))) cnt;
+mysql> select bitmap_to_string(bitmap_xor(bitmap_from_string('1, 3'), bitmap_from_string('2'))) cnt;
 +------+
 |cnt   |
 +------+

@@ -53,7 +53,9 @@ DorisDB数据导入整体生态图如下。
 利用curl命令封装HTTP请求，完成数据的导入
 
 ```bash
-curl --location-trusted -u test:123456 -T table1_data -H "label: table1_20170707"  -H "column_separator:," http://127.0.0.1:8030/api/example_db/table1/_stream_load
+curl --location-trusted -u test:123456 -T table1_data -H "label: table1_20170707" \
+    -H "column_separator:," \
+    http://127.0.0.1:8030/api/example_db/table1/_stream_load
 ```
 
 > 注意：这里test是fe的IP地址，端口8030是fe.conf中配置的http port。
@@ -72,7 +74,9 @@ curl --location-trusted -u test:123456 -T table1_data -H "label: table1_20170707
 利用curl命令封装HTTP请求，完成数据的导入
 
 ```bash
-curl --location-trusted -u test:123456 -T table2_data -H "label:table2_20170707" -H "column_separator:," http://127.0.0.1:8030/api/example_db/table2/_stream_load
+curl --location-trusted -u test:123456 -T table2_data -H "label:table2_20170707" \
+    -H "column_separator:," \
+    http://127.0.0.1:8030/api/example_db/table2/_stream_load
 ```
 
   <br>

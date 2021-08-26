@@ -15,19 +15,25 @@ BITMAP BITMAP_UNION(BITMAP value)
 ## example
 
 ```sql
-MySQL > select page_id, bitmap_union(user_id) from table group by page_id;
+select page_id, bitmap_union(user_id)
+from table
+group by page_id;
 ```
 
 和 bitmap_count 函数组合使用可以求得网页的 PV 数据
 
 ```sql
-MySQL > select page_id, bitmap_count(bitmap_union(user_id)) from table group by page_id;
+select page_id, bitmap_count(bitmap_union(user_id))
+from table
+group by page_id;
 ```
 
 当 user_id 字段为 int 时，上面查询语义等同于
 
 ```sql
-MySQL > select page_id, count(distinct user_id) from table group by page_id;
+select page_id, count(distinct user_id)
+from table
+group by page_id;
 ```
 
 ## keyword

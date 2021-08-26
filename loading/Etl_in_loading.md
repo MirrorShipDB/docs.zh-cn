@@ -44,7 +44,11 @@ DISTRIBUTED BY HASH(user_id) BUCKETS 3;
 
 通过下面的命令能够将本地数据导入到对应表中：
 
-`curl --location-trusted -u root -H "column_separator:," -H "columns: user_id, user_gender, event_date, event_type" -T load-columns.txt http://{FE_HOST}:{FE_HTTP_PORT}/api/test/event/_stream_load`
+~~~bash
+curl --location-trusted -u root -H "column_separator:," \
+    -H "columns: user_id, user_gender, event_date, event_type" -T load-columns.txt \
+    http://{FE_HOST}:{FE_HTTP_PORT}/api/test/event/_stream_load
+~~~
 
 CSV 格式的文件中的列，本来是没有命名的，通过 **columns**，可以按顺序对其命名（一些 CSV 中，会在首行给出列名，但其实系统是不感知的，会当做普通数据处理）。在这个 case 中，通过 **columns** 字段，描述了文件中**按顺序**的字段名字分别是 user_id, user_gender, event_date, event_type。然后，columns 的字段，会和系统中导入表的字段做**列名对应**，并将数据导入到表中：
 
@@ -134,7 +138,11 @@ DISTRIBUTED BY HASH(user_id) BUCKETS 3;
 
 在导入本地文件的时候，可以通过下面的命令实现导入event_type=1的数据。具体是通过指定HTTP请求中的Header "where:event_type=1"来过滤数据：
 
-`curl --location-trusted -u root -H "column_separator:," -H "where:event_type=1" -T load-rows.txt http://{FE_HOST}:{FE_HTTP_PORT}/test/event/_stream_load`
+~~~bash
+curl --location-trusted -u root -H "column_separator:," \
+    -H "where:event_type=1" -T load-rows.txt \
+    http://{FE_HOST}:{FE_HTTP_PORT}/test/event/_stream_load
+~~~
 
 ### HDFS导入
 
@@ -208,7 +216,11 @@ DISTRIBUTED BY HASH(date) BUCKETS 1;
 
 通过下面的命令，能够在导入本地文件的同时，生成对应的衍生列。方法是指定HTTP请求中的`Header "columns:date, year=year(date), month=month(date), day=day(date)"`，让DorisDB在导入过程中根据文件内容计算生成对应的列。
 
-`curl --location-trusted -u root -H "column_separator:," -H "columns:date,year=year(date),month=month(date),day=day(date)" -T load-date.txt http://127.0.0.1:8431/api/test/dim_date/_stream_load`
+~~~bash
+curl --location-trusted -u root -H "column_separator:," \
+    -H "columns:date,year=year(date),month=month(date),day=day(date)" -T load-date.txt \
+    http://127.0.0.1:8431/api/test/dim_date/_stream_load
+~~~
 
 这里需要注意：
 

@@ -30,13 +30,19 @@ Stream Load 通过 HTTP 协议提交和传输数据。这里通过 curl 命令�
 
 **语法：**
 
-`curl --location-trusted -u user:passwd [-H ""...] -T data.file -XPUT http://fe_host:http_port/api/{db}/{table}/_stream_load`
+~~~bash
+curl --location-trusted -u user:passwd [-H ""...] -T data.file -XPUT \
+    http://fe_host:http_port/api/{db}/{table}/_stream_load
+~~~
 
 Header中支持的属性见下文的导入任务参数说明，格式为: -H "key1:value1"。如果同时有多个任务参数，需要用多个 -H 来指示，类似于 \-H "key1:value1" -H "key2:value2"……
 
 **示例：**
 
-`curl --location-trusted -u root -T date -H "label:123" http://abc.com:8030/api/test/date/_stream_load`
+~~~bash
+curl --location-trusted -u root -T date -H "label:123" \
+    http://abc.com:8030/api/test/date/_stream_load
+~~~
 
 创建导入任务的详细语法可执行HELP STREAM LOAD查看，下面介绍该命令中部分参数的意义。
 
@@ -167,7 +173,10 @@ Stream Load的默认超时为300秒，按照DorisDB目前最大的导入限速�
 
 * step3：创建导入任务
 
-`curl --location-trusted -u user:password -T /home/store_sales -H "label:abc" [http://abc.com:8000/api/bj_sales/store_sales/_stream_load](http://abc.com:8000/api/bj_sales/store_sales/_stream_load)`
+~~~bash
+curl --location-trusted -u user:password -T /home/store_sales \
+    -H "label:abc" [http://abc.com:8000/api/bj_sales/store_sales/_stream_load](http://abc.com:8000/api/bj_sales/store_sales/_stream_load)
+~~~
 
 ### 代码集成示例
 
