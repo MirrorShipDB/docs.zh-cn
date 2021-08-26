@@ -19,10 +19,10 @@
   + [Bloomfilter索引](/table_design/Bloomfilter_index.md)
 + 数据导入
   + [导入总览](/loading/Loading_intro.md)
-  + [Broker Load](/loading/BrokerLoad.md)
-  + [Spark Load](/loading/SparkLoad.md)
   + [Stream Load](/loading/StreamLoad.md)
+  + [Broker Load](/loading/BrokerLoad.md)
   + [Routine Load](/loading/RoutineLoad.md)
+  + [Spark Load](/loading/SparkLoad.md)
   + [Insert Into导入](/loading/InsertInto.md)
   + [导入过程中完成数据转换](/loading/Etl_in_loading.md)
   + [Json数据导入](/loading/Json_loading.md)
@@ -40,6 +40,7 @@
   + [数组](/using_dorisdb/Array.md)
   + [窗口函数](/using_dorisdb/Window_function.md)
   + [CBO优化器](/using_dorisdb/Cost_based_optimizer.md)
+  + [Lateral Join](/using_dorisdb/Lateral_join.md)
 + 参考手册
   + SQL参考
     + [用户账户管理](/reference/Account_reference.md)
