@@ -1,4 +1,4 @@
-# lower
+# lcase
 
 ## description
 
@@ -23,4 +23,4 @@ mysql> SELECT lcase("AbC123");
 
 ## keyword
 
-LOWER
+LCASE

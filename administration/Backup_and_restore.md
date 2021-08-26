@@ -99,7 +99,7 @@ SHOW BACKUP
 * UnfinishedTasks：在 SNAPSHOTTING，UPLOADING 等阶段，会有多个子任务在同时进行，这里展示的当前段，未完成子任务的 task id。
 * TaskErrMsg：如果有子任务执行出错，这里会显示对应子任务的错误信息。
 * Status：用于记录在整个作业过程中，可能出现的一些状态信息。
-* Timeout：作业的超时时间，单位是秒。
+* Timeout：作业的超时时间，单位是「秒」。
 SHOW SNAPSHOT
 
 * 查看远端仓库中已存在的备份。
@@ -147,7 +147,7 @@ SHOW RESTORE
 * UnfinishedTasks：在 SNAPSHOTTING，DOWNLOADING, COMMITTING 等阶段，会有多个子任务在同时进行，这里展示的当前阶段，未完成的子任务的 task id。
 * TaskErrMsg：如果有子任务执行出错，这里会显示对应子任务的错误信息。
 * Status：用于记录在整个作业过程中，可能出现的一些状态信息。
-* Timeout：作业的超时时间，单位是秒。
+* Timeout：作业的超时时间，单位是「秒」。
 
 CANCEL BACKUP
 

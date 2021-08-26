@@ -106,7 +106,7 @@ ERROR 1064 (HY000): all partitions have no load data. url: [http://10.74.167.16:
 ### Session 变量
 
 * enable_insert_strict：Insert Into 导入本身不能控制导入可容忍的错误率。用户只能通过 enable_insert_strict 这个 Session 参数用来控制。当该参数设置为 false 时，表示至少有一条数据被正确导入，则返回成功。如果有失败数据，则还会返回一个 Label。当该参数设置为 true 时，表示如果有一条数据错误，则导入失败。该参数默认为 true。可通过 SET enable_insert_strict = false; 来设置。
-* query_timeout：Insert Into 本身也是一个 SQL 命令，因此 Insert Into 语句也受到 Session 变量 query_timeout 的限制。可以通过 SET query_timeout = xxx; 来增加超时时间，单位是秒。
+* query_timeout：Insert Into 本身也是一个 SQL 命令，因此 Insert Into 语句也受到 Session 变量 query_timeout 的限制。可以通过 SET query_timeout = xxx; 来增加超时时间，单位是「秒」。
 
 ## 导入示例
 
