@@ -158,15 +158,10 @@ Group by指定的列不会参加聚合操作。Group by从句可以加入Having�
 mysql> select tiny_column, sum(short_column) from small_table group by tiny_column;
 
 +-------------+---------------------+
-
-tiny_column | sum('short_column')
-
+| tiny_column |  sum('short_column')|
 +-------------+---------------------+
-
-          1 |                   2
-
-          2 |                   1
-
+|          1  |        2            |
+|          2  |        1            |
 +-------------+---------------------+
 
 2 rows in set (0.07 sec)
@@ -184,13 +179,9 @@ Having从句不是过滤表中的行数据，而是过滤聚合函数产出的�
 mysql> select tiny_column, sum(short_column) from small_table group by tiny_column having sum(short_column) = 1;
 
 +-------------+---------------------+
-
-tiny_column | sum('short_column')
-
+|tiny_column  | sum('short_column') |
 +-------------+---------------------+
-
-          2 |                   1
-
+|         2   |        1            |
 +-------------+---------------------+
 
 1 row in set (0.07 sec)
@@ -200,13 +191,9 @@ tiny_column | sum('short_column')
 mysql> select tiny_column, sum(short_column) from small_table group by tiny_column having tiny_column > 1;
 
 +-------------+---------------------+
-
-tiny_column | sum('short_column')
-
+|tiny_column  | sum('short_column') |
 +-------------+---------------------+
-
-          2 |                   1
-
+|      2      |          1          |
 +-------------+---------------------+
 
 1 row in set (0.07 sec)
@@ -232,13 +219,9 @@ Limit从句用于限制返回结果的最大行数。设置返回结果的最大
 mysql> select tiny_column from small_table limit 1;
 
 +-------------+
-
-tiny_column
-
+|tiny_column  |
 +-------------+
-
-1
-
+|     1       |
 +-------------+
 
 1 row in set (0.02 sec)
@@ -248,15 +231,10 @@ tiny_column
 mysql> select tiny_column from small_table limit 10000;
 
 +-------------+
-
-tiny_column
-
+|tiny_column  |
 +-------------+
-
-1
-
-2
-
+|      1      |
+|      2      |
 +-------------+
 
 2 rows in set (0.01 sec)
@@ -276,17 +254,11 @@ Offset从句使得结果集跳过前若干行结果后直接返回后续的结�
 mysql> select varchar_column from big_table order by varchar_column limit 3;
 
 +----------------+
-
-varchar_column
-
+| varchar_column | 
 +----------------+
-
-beijing       
-
-chongqing     
-
-tianjin       
-
+|    beijing     | 
+|    chongqing   | 
+|    tianjin     | 
 +----------------+
 
 3 rows in set (0.02 sec)
@@ -296,13 +268,9 @@ tianjin
 mysql> select varchar_column from big_table order by varchar_column limit 1 offset 0;
 
 +----------------+
-
-varchar_column
-
+|varchar_column  |
 +----------------+
-
-beijing       
-
+|     beijing    |
 +----------------+
 
 1 row in set (0.01 sec)
@@ -312,13 +280,9 @@ beijing
 mysql> select varchar_column from big_table order by varchar_column limit 1 offset 1;
 
 +----------------+
-
-varchar_column
-
+|varchar_column  |
 +----------------+
-
-chongqing     
-
+|    chongqing   | 
 +----------------+
 
 1 row in set (0.01 sec)
@@ -328,13 +292,9 @@ chongqing
 mysql> select varchar_column from big_table order by varchar_column limit 1 offset 2;
 
 +----------------+
-
-varchar_column
-
+|varchar_column  |
 +----------------+
-
-tianjin       
-
+|     tianjin    |     
 +----------------+
 
 1 row in set (0.02 sec)
@@ -368,19 +328,12 @@ query_1 UNION [DISTINCT | ALL] query_2
 mysql> (select tiny_column from small_table) union all (select tiny_column from small_table);
 
 +-------------+
-
-tiny_column
-
+|tiny_column  |
 +-------------+
-
-1
-
-2
-
-1
-
-2
-
+|      1      |
+|      2      |
+|      1      |
+|      2      |
 +-------------+
 
 4 rows in set (0.10 sec)
@@ -390,41 +343,29 @@ tiny_column
 mysql> (select tiny_column from small_table) union (select tiny_column from small_table);
 
 +-------------+
-
-tiny_column
-
+|tiny_column  |
 +-------------+
-
-2
-
-1
-
+|      2      |
+|      1      |
 +-------------+
 
 2 rows in set (0.11 sec)
 ```
 
 ```plain text
-mysql> select * from (select tiny_column from small_table union all\
+mysql> select * from (select tiny_column from small_table union all
 
--> select tiny_column from small_table) as t1 \
+select tiny_column from small_table) as t1 
 
--> order by tiny_column limit 4;
-
-+-------------+
-
-tiny_column
+order by tiny_column limit 4;
 
 +-------------+
-
-1
-
-1
-
-2
-
-2
-
+| tiny_column |
++-------------+
+|       1     |
+|       1     |
+|       2     |
+|       2     |
 +-------------+
 
 4 rows in set (0.11 sec)
@@ -434,6 +375,7 @@ tiny_column
 
 Distinct操作符对结果集进行去重。示例：
 
+```SQL
 -- Returns the unique values from one column.
 
 select distinct tiny_column from big_table limit 2;
@@ -441,42 +383,33 @@ select distinct tiny_column from big_table limit 2;
 -- Returns the unique combinations of values from multiple columns.
 
 select distinct tiny_column, int_column from big_table limit 2;
+```
 
 distinct可以和聚合函数(通常是count函数)一同使用，count(disitnct)用于计算出一个列或多个列上包含多少不同的组合。
 
-```plain text
-mysql> -- Counts the unique values from one column.
-
+```SQL
+-- Counts the unique values from one column.
 mysql> select count(distinct tiny_column) from small_table;
+```
 
+```plain text
 +-------------------------------+
-
-count(DISTINCT 'tiny_column')
-
+| count(DISTINCT 'tiny_column') |
 +-------------------------------+
-
-2
-
+|             2                 |
 +-------------------------------+
-
 1 row in set (0.06 sec)
 ```
 
-```plain text
-mysql> -- Counts the unique combinations of values from multiple columns.
-```
-
-```plain text
+```SQL
+ -- Counts the unique combinations of values from multiple columns.
 mysql> select count(distinct tiny_column, int_column) from big_table limit 2;
 ```
 
 DorisDB支持多个聚合函数同时使用distinct。
 
-```plain text
-mysql> -- Count the unique value from multiple aggregation function separately.
-```
-
-```plain text
+```SQL
+-- Count the unique value from multiple aggregation function separately.
 mysql> select count(distinct tiny_column, int_column), count(distinct varchar_column) from big_table;
 ```
 
@@ -508,25 +441,25 @@ SELECT * FROM t1 WHERE [NOT] EXISTS (SELECT a FROM t2 WHERE t1.y = t2.b);
 
 子查询还支持标量子查询。分为不相关标量子查询、相关标量子查询和标量子查询作为普通函数的参数。举例：
 
--- 1) 不相关标量子查询，谓词为=号。例如输出最高工资的人的信息。
+1.不相关标量子查询，谓词为=号。例如输出最高工资的人的信息。
 
 ```sql
 SELECT name FROM table WHERE salary = (SELECT MAX(salary) FROM table);
 ```
 
--- 2) 不相关标量子查询，谓词为>,<等。例如输出比平均工资高的人的信息。
+2.不相关标量子查询，谓词为>,<等。例如输出比平均工资高的人的信息。
 
 ```sql
 SELECT name FROM table WHERE salary > (SELECT AVG(salary) FROM table);
 ```
 
--- 3) 相关标量子查询。例如输出各个部门工资最高的信息。
+3.相关标量子查询。例如输出各个部门工资最高的信息。
 
 ```sql
 SELECT name FROM table a WHERE salary = （SELECT MAX(salary) FROM table b WHERE b.部门= a.部门）;
 ```
 
--- 4) 标量子查询作为普通函数的参数。
+4.标量子查询作为普通函数的参数。
 
 ```sql
 SELECT name FROM table WHERE salary = abs((SELECT MAX(salary) FROM table));
@@ -546,13 +479,13 @@ SELECT name FROM table WHERE salary = abs((SELECT MAX(salary) FROM table));
 
 举例：
 
+```sql
 -- Define one subquery at the outer level, and another at the inner level as part of the
 
 -- initial stage of the UNION ALL query.
 
 with t1 as (select 1) (with t2 as (select 2)
 
-```sql
 select * from t2) union all select * from t1;
 ```
 
@@ -641,13 +574,9 @@ Like操作符
 mysql> select varchar_column from small_table where varchar_column like 'm%';
 
 +----------------+
-
-varchar_column
-
+|varchar_column  |
 +----------------+
-
-milan         
-
+|     milan      |
 +----------------+
 
 1 row in set (0.02 sec)
@@ -657,13 +586,9 @@ milan
 mysql> select varchar_column from small_table where varchar_column like 'm____';
 
 +----------------+
-
-varchar_column
-
+| varchar_column | 
 +----------------+
-
-milan         
-
+|    milan       | 
 +----------------+
 
 1 row in set (0.01 sec)
@@ -685,13 +610,9 @@ NOT:单元操作符，反转表达式的结果。如果参数为TRUE，则该操
 mysql> select true and true;
 
 +-------------------+
-
-(TRUE) AND (TRUE)
-
+| (TRUE) AND (TRUE) | 
 +-------------------+
-
-1
-
+|         1         | 
 +-------------------+
 
 1 row in set (0.00 sec)
@@ -701,13 +622,9 @@ mysql> select true and true;
 mysql> select true and false;
 
 +--------------------+
-
-(TRUE) AND (FALSE)
-
+| (TRUE) AND (FALSE) | 
 +--------------------+
-
-                 0
-
+|         0          | 
 +--------------------+
 
 1 row in set (0.01 sec)
@@ -717,13 +634,9 @@ mysql> select true and false;
 mysql> select true or false;
 
 +-------------------+
-
-(TRUE) OR (FALSE)
-
+| (TRUE) OR (FALSE) | 
 +-------------------+
-
-1
-
+|        1          | 
 +-------------------+
 
 1 row in set (0.01 sec)
@@ -733,13 +646,9 @@ mysql> select true or false;
 mysql> select not true;
 
 +----------+
-
-NOT TRUE
-
+| NOT TRUE | 
 +----------+
-
-       0
-
+|     0    | 
 +----------+
 
 1 row in set (0.01 sec)
@@ -761,13 +670,9 @@ NOT TRUE
 mysql> select varchar_column from small_table where varchar_column regexp '(mi|MI).*';
 
 +----------------+
-
-varchar_column
-
+| varchar_column | 
 +----------------+
-
-milan         
-
+|     milan      |       
 +----------------+
 
 1 row in set (0.01 sec)
@@ -777,13 +682,9 @@ milan
 mysql> select varchar_column from small_table where varchar_column regexp 'm.*';
 
 +----------------+
-
-varchar_column
-
+| varchar_column | 
 +----------------+
-
-milan         
-
+|     milan      |  
 +----------------+
 
 1 row in set (0.01 sec)
