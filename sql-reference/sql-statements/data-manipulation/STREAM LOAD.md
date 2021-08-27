@@ -104,28 +104,28 @@ SHOW LOAD WARNINGS ON 'url'
 
 1. 将本地文件'testData'中的数据导入到数据库'testDb'中'testTbl'的表，使用Label用于去重。指定超时时间为 100 秒
 
-    ```sql
+    ```bash
     curl --location-trusted -u root -H "label:123" -H "timeout:100" -T testData \
         http://host:port/api/testDb/testTbl/_stream_load
     ```
 
 2. 将本地文件'testData'中的数据导入到数据库'testDb'中'testTbl'的表，使用Label用于去重, 并且只导入k1等于20180601的数据
 
-    ```sql
+    ```bash
     curl --location-trusted -u root -H "label:123" -H "where: k1=20180601" -T testData \
         http://host:port/api/testDb/testTbl/_stream_load
     ```
 
 3. 将本地文件'testData'中的数据导入到数据库'testDb'中'testTbl'的表, 允许20%的错误率（用户是defalut_cluster中的）
 
-    ```sql
+    ```bash
     curl --location-trusted -u root -H "label:123" -H "max_filter_ratio:0.2" -T testData \
         http://host:port/api/testDb/testTbl/_stream_load
     ```
 
 4. 将本地文件'testData'中的数据导入到数据库'testDb'中'testTbl'的表, 允许20%的错误率，并且指定文件的列名（用户是defalut_cluster中的）
 
-    ```sql
+    ```bash
     curl --location-trusted -u root  -H "label:123" -H "max_filter_ratio:0.2" \
         -H "columns: k2, k1, v1" -T testData \
         http://host:port/api/testDb/testTbl/_stream_load
@@ -133,7 +133,7 @@ SHOW LOAD WARNINGS ON 'url'
 
 5. 将本地文件'testData'中的数据导入到数据库'testDb'中'testTbl'的表中的p1, p2分区, 允许20%的错误率。
 
-    ```sql
+    ```bash
     curl --location-trusted -u root  -H "label:123" -H "max_filter_ratio:0.2" \
         -H "partitions: p1, p2" -T testData \
         http://host:port/api/testDb/testTbl/_stream_load
@@ -148,7 +148,7 @@ SHOW LOAD WARNINGS ON 'url'
 
 7. 导入含有HLL列的表，可以是表中的列或者数据中的列用于生成HLL列，也可使用hll_empty补充数据中没有的列
 
-    ```sql
+    ```bash
     curl --location-trusted -u root \
         -H "columns: k1, k2, v1=hll_hash(k1), v2=hll_empty()" -T testData \
         http://host:port/api/testDb/testTbl/_stream_load
@@ -156,7 +156,7 @@ SHOW LOAD WARNINGS ON 'url'
 
 8. 导入数据进行严格模式过滤，并设置时区为 Africa/Abidjan
 
-    ```sql
+    ```bash
     curl --location-trusted -u root -H "strict_mode: true" \
         -H "timezone: Africa/Abidjan" -T testData \
         http://host:port/api/testDb/testTbl/_stream_load
@@ -164,7 +164,7 @@ SHOW LOAD WARNINGS ON 'url'
 
 9. 导入含有BITMAP列的表，可以是表中的列或者数据中的列用于生成BITMAP列，也可以使用bitmap_empty填充空的Bitmap
 
-    ```sql
+    ```bash
     curl --location-trusted -u root \
         -H "columns: k1, k2, v1=to_bitmap(k1), v2=bitmap_empty()" -T testData \
         http://host:port/api/testDb/testTbl/_stream_load
