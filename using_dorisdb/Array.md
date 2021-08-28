@@ -102,7 +102,7 @@ select array_append([], 10);
 
 * **从ORC Parquet文件导入**
 
-  DorisDB 中的数组类型，与ORC/Parquet格式中的list结构相对应，不需要额外指定，具体请参考DorisDB 企业文档中 `broker load` 导入相关章节。
+  DorisDB 中的数组类型，与ORC/Parquet格式中的list结构相对应，不需要额外指定，具体请参考DorisDB 企业文档中 `broker load` 导入相关章节。当前ORC的list结构可以直接导入，Parquet格式正在开发中。
 
 * **从CSV文件导入**
 

@@ -58,7 +58,7 @@ curl --location-trusted -u test:123456 -T table1_data -H "label: table1_20170707
     http://127.0.0.1:8030/api/example_db/table1/_stream_load
 ```
 
-> 注意：这里test是fe的IP地址，端口8030是fe.conf中配置的http port。
+> 注意：这里test是fe的用户名，端口8030是fe.conf中配置的http port。
 
 * **示例2**: 以"table2\_20170707"为Label，使用本地文件table2\_data导入table2表。
 

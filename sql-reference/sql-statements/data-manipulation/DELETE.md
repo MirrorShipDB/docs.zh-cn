@@ -21,7 +21,6 @@ column_name1 op { value | value_list } [ AND column_name2 op { value | value_lis
 3) 当选定的 key 列不存在于某个 rollup 中时，无法进行 delete。
 4) 条件之间只能是“与”的关系。
 若希望达成“或”的关系，需要将条件分写在两个 DELETE 语句中。
-5) 如果为RANGE分区表，则必须指定 PARTITION。如果是单分区表，可以不指定。
 
 注意：
 
@@ -43,6 +42,13 @@ column_name1 op { value | value_list } [ AND column_name2 op { value | value_lis
     ```sql
     DELETE FROM my_table PARTITION p1
     WHERE k1 >= 3 AND k2 = "abc";
+    ```
+
+3. 删除 my\_table 所有分区中 k2 列值为 "abc" 或者 "cba" 的数据行
+
+    ```sql
+    DELETE FROM my_table
+    WHERE  k2 in ("abc", "cba");
     ```
 
 ## keyword
