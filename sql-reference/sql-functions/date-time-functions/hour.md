@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`INT HOUR(DATETIME date)`
+```Haskell
+INT HOUR(DATETIME date)
+```
 
 获得日期中的小时的信息，返回值范围从0-23。
 

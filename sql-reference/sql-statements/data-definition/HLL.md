@@ -45,11 +45,13 @@ EMPTY_HLL()
 
     ```plain text
     a. 使用表中的列生成hll列
-    curl --location-trusted -uname:password -T data -H "label:load_1" -H "columns:dt, id, name, province, os, set1=hll_hash(id), set2=hll_hash(name)"
+    curl --location-trusted -uname:password -T data -H "label:load_1" \
+        -H "columns:dt, id, name, province, os, set1=hll_hash(id), set2=hll_hash(name)"
     http://host/api/test_db/test/_stream_load
     
     b. 使用数据中的某一列生成hll列
-    curl --location-trusted -uname:password -T data -H "label:load_1" -H "columns:dt, id, name, province, sex, cuid, os, set1=hll_hash(cuid), set2=hll_hash(os)"
+    curl --location-trusted -uname:password -T data -H "label:load_1" \
+        -H "columns:dt, id, name, province, sex, cuid, os, set1=hll_hash(cuid), set2=hll_hash(os)"
     http://host/api/test_db/test/_stream_load
     ```
 

@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`array_max(array(type))`
+```Haskell
+array_max(array(type))
+```
 
 求取一个ARRAY中的所有数据中的最大值，返回这个结果.
 

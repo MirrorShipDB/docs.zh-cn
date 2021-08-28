@@ -90,10 +90,10 @@ FROM KAFKA
 * **PROPERTIES子句**：选填。用于指定导入作业的通用参数。
 
 * **desired_concurrent_number**：导入并发度，指定一个导入作业最多会被分成多少个子任务执行。必须大于0，默认为3。
-* **max_batch_interval**：每个子任务最大执行时间，单位是秒。范围为 5 到 60。默认为10。**1.15版本后**: 该参数是子任务的调度时间，即任务多久执行一次，任务的消费数据时间为fe.conf中的routine_load_task_consume_second，默认为3s，
+* **max_batch_interval**：每个子任务最大执行时间，单位是「秒」。范围为 5 到 60。默认为10。**1.15版本后**: 该参数是子任务的调度时间，即任务多久执行一次，任务的消费数据时间为fe.conf中的routine_load_task_consume_second，默认为3s，
 任务的执行超时时间为fe.conf中的routine_load_task_timeout_second，默认为15s。
 * **max_batch_rows**：每个子任务最多读取的行数。必须大于等于200000。默认是200000。**1.15版本后**: 该参数只用于定义错误检测窗口范围，窗口的范围是10 * **max-batch-rows**。
-* **max_batch_size**：每个子任务最多读取的字节数。单位是字节，范围是 100MB 到 1GB。默认是 100MB。**1.15版本后**: 废弃该参数，任务消费数据的时间为fe.conf中的routine_load_task_consume_second，默认为3s。
+* **max_batch_size**：每个子任务最多读取的字节数。单位是「字节」，范围是 100MB 到 1GB。默认是 100MB。**1.15版本后**: 废弃该参数，任务消费数据的时间为fe.conf中的routine_load_task_consume_second，默认为3s。
 * **max_error_number**：采样窗口内，允许的最大错误行数。必须大于等于0。默认是 0，即不允许有错误行。注意：被 where 条件过滤掉的行不算错误行。
 * **strict_mode**：是否开启严格模式，默认为开启。如果开启后，非空原始数据的列类型变换如果结果为 NULL，则会被过滤，关闭方式为 "strict_mode" = "false"。
 * **timezone**：指定导入作业所使用的时区。默认为使用 Session 的 timezone 参数。该参数会影响所有导入涉及的和时区有关的函数结果。
@@ -180,16 +180,16 @@ ReasonOfStateChanged:
 * State：导入任务状态。RUNNING，表示该导入任务处于持续运行中。
 * Statistic为进度信息，记录了从创建任务开始后的导入信息。
 
-* receivedBytes：接收到的数据大小，单位为Byte
+* receivedBytes：接收到的数据大小，单位是「Byte」
 * errorRows：导入错误行数
 * committedTaskNum：FE提交的Task数
 * loadedRows：已导入的行数
-* loadRowsRate：导入数据速率，单位为行每秒(row/s)
+* loadRowsRate：导入数据速率，单位是「行每秒(row/s)」
 * abortedTaskNum：BE失败的Task数
 * totalRows：接收的总行数
 * unselectedRows：被where条件过滤的行数
-* receivedBytesRate：接收数据速率，单位为Bytes/s
-* taskExecuteTimeMs：导入耗时，单位为ms
+* receivedBytesRate：接收数据速率，单位是「Bytes/s」
+* taskExecuteTimeMs：导入耗时，单位是「ms」
 * ErrorLogUrls：错误信息日志，可以通过URL看到导入过程中的错误信息
 
 ### 暂停导入任务

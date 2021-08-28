@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`array_sum(array(type))`
+```Haskell
+array_sum(array(type))
+```
 
 对一个ARRAY中的所有数据做和，返回这个结果.
 

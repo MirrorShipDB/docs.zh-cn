@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`BITMAP BITMAP_OR(BITMAP lhs, BITMAP rhs)`
+```Haskell
+BITMAP BITMAP_OR(BITMAP lhs, BITMAP rhs)
+```
 
 计算两个输入bitmap的并集，返回新的bitmap.
 

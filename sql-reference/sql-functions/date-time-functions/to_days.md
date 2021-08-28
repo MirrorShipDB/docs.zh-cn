@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`INT TO_DAYS(DATETIME date)`
+```Haskell
+INT TO_DAYS(DATETIME date)
+```
 
 返回date距离0000-01-01的天数
 

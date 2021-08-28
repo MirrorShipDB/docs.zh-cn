@@ -57,7 +57,7 @@ FROM(select(murmur_hash3_32(c2) & 1023) AS bucket,
 2. 目前, 只有聚合表支持HLL类型的指标列.
 3. 当在HLL类型列上使用count distinct时，DorisDB会自动转化为HLL_UNION_AGG计算。
 
-具体操作函数参见 [hll_union_agg](../sql-reference/sql-functions/aggregate-functions/hll_union_agg.md)。
+具体函数语法参见 [HLL_UNION_AGG](../sql-reference/sql-functions/aggregate-functions/hll_union_agg.md)。
 
 #### 示例
 
@@ -77,7 +77,9 @@ DISTRIBUTED BY HASH(ID) BUCKETS 32;
 导入数据，Stream Load模式:
 
 ~~~bash
-curl --location-trusted -u root: -H "label:label_1600997542287" -H "column_separator:,"  -H " columns:dt,id,user_id, uv=hll_hash(user_id)" -T /root/test.csv http://doris_be0:8040/api/db0/test/_stream_load
+curl --location-trusted -u root: -H "label:label_1600997542287" \
+    -H "column_separator:," \
+    -H "columns:dt,id,user_id, uv=hll_hash(user_id)" -T /root/test.csv http://doris_be0:8040/api/db0/test/_stream_load
 {
     "TxnId": 2504748,
     "Label": "label_1600997542287",

@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`array_min(array(type))`
+```Haskell
+array_min(array(type))
+```
 
 求取一个ARRAY中的所有数据中的最小值，返回这个结果.
 

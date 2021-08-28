@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`array_contains(any_array, any_element)`
+```Haskell
+array_contains(any_array, any_element)
+```
 
 检查数组中是否包含某个元素，是的话返回1，否则返回0.
 

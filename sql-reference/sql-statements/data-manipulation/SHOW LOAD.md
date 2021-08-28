@@ -70,8 +70,9 @@ SHOW LOAD WARNINGS ON 'url'
 
 6. 小批量导入是查看导入状态的命令
 
-    ```sql
-    curl --location-trusted -u {user}:{passwd} http://{hostname}:{port}/api/{database}/_load_info?label={labelname}
+    ```bash
+    curl --location-trusted -u {user}:{passwd} \
+        http://{hostname}:{port}/api/{database}/_load_info?label={labelname}
     ```
 
 ## keyword

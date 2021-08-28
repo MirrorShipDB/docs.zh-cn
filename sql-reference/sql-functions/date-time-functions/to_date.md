@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`DATE TO_DATE(DATETIME)`
+```Haskell
+DATE TO_DATE(DATETIME datetime)
+```
 
 返回 DATETIME 类型中的日期部分。
 

@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`array_avg(array(type))`
+```Haskell
+array_avg(array(type))
+```
 
 求取一个ARRAY中的所有数据的平均数，返回这个结果.
 

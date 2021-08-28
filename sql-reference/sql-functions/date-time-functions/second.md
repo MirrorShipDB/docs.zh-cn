@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`INT SECOND(DATETIME date)`
+```Haskell
+INT SECOND(DATETIME date)
+```
 
 获得日期中的秒的信息，返回值范围从0-59。
 

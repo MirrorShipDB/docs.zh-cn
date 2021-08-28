@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`INT MINUTE(DATETIME date)`
+```Haskell
+INT MINUTE(DATETIME date)
+```
 
 获得日期中的分钟的信息，返回值范围从0-59。
 

@@ -7,7 +7,8 @@ NAME:
 stream-load: load data to table in streaming
 
 SYNOPSIS
-curl --location-trusted -u user:passwd [-H ""...] -T data.file -XPUT http://fe_host:http_port/api/{db}/{table}/_stream_load
+curl --location-trusted -u user:passwd [-H ""...] -T data.file -XPUT \
+    http://fe_host:http_port/api/{db}/{table}/_stream_load
 
 DESCRIPTION
 该语句用于向指定的 table 导入数据，与普通Load区别是，这种导入方式是同步导入。
@@ -103,56 +104,70 @@ SHOW LOAD WARNINGS ON 'url'
 
 1. 将本地文件'testData'中的数据导入到数据库'testDb'中'testTbl'的表，使用Label用于去重。指定超时时间为 100 秒
 
-    ```sql
-    curl --location-trusted -u root -H "label:123" -H "timeout:100" -T testData http://host:port/api/testDb/testTbl/_stream_load
+    ```bash
+    curl --location-trusted -u root -H "label:123" -H "timeout:100" -T testData \
+        http://host:port/api/testDb/testTbl/_stream_load
     ```
 
 2. 将本地文件'testData'中的数据导入到数据库'testDb'中'testTbl'的表，使用Label用于去重, 并且只导入k1等于20180601的数据
 
-    ```sql
-    curl --location-trusted -u root -H "label:123" -H "where: k1=20180601" -T testData http://host:port/api/testDb/testTbl/_stream_load
+    ```bash
+    curl --location-trusted -u root -H "label:123" -H "where: k1=20180601" -T testData \
+        http://host:port/api/testDb/testTbl/_stream_load
     ```
 
 3. 将本地文件'testData'中的数据导入到数据库'testDb'中'testTbl'的表, 允许20%的错误率（用户是defalut_cluster中的）
 
-    ```sql
-    curl --location-trusted -u root -H "label:123" -H "max_filter_ratio:0.2" -T testData http://host:port/api/testDb/testTbl/_stream_load
+    ```bash
+    curl --location-trusted -u root -H "label:123" -H "max_filter_ratio:0.2" -T testData \
+        http://host:port/api/testDb/testTbl/_stream_load
     ```
 
 4. 将本地文件'testData'中的数据导入到数据库'testDb'中'testTbl'的表, 允许20%的错误率，并且指定文件的列名（用户是defalut_cluster中的）
 
-    ```sql
-    curl --location-trusted -u root  -H "label:123" -H "max_filter_ratio:0.2" -H "columns: k2, k1, v1" -T testData http://host:port/api/testDb/testTbl/_stream_load
+    ```bash
+    curl --location-trusted -u root  -H "label:123" -H "max_filter_ratio:0.2" \
+        -H "columns: k2, k1, v1" -T testData \
+        http://host:port/api/testDb/testTbl/_stream_load
     ```
 
 5. 将本地文件'testData'中的数据导入到数据库'testDb'中'testTbl'的表中的p1, p2分区, 允许20%的错误率。
 
-    ```sql
-    curl --location-trusted -u root  -H "label:123" -H "max_filter_ratio:0.2" -H "partitions: p1, p2" -T testData http://host:port/api/testDb/testTbl/_stream_load
+    ```bash
+    curl --location-trusted -u root  -H "label:123" -H "max_filter_ratio:0.2" \
+        -H "partitions: p1, p2" -T testData \
+        http://host:port/api/testDb/testTbl/_stream_load
     ```
 
 6. 使用streaming方式导入（用户是defalut_cluster中的）
 
     ```sql
-    seq 1 10 | awk '{OFS="\t"}{print $1, $1 * 10}' | curl --location-trusted -u root -T - http://host:port/api/testDb/testTbl/_stream_load
+    seq 1 10 | awk '{OFS="\t"}{print $1, $1 * 10}' | curl --location-trusted -u root -T - \
+     http://host:port/api/testDb/testTbl/_stream_load
     ```
 
 7. 导入含有HLL列的表，可以是表中的列或者数据中的列用于生成HLL列，也可使用hll_empty补充数据中没有的列
 
-    ```sql
-    curl --location-trusted -u root -H "columns: k1, k2, v1=hll_hash(k1), v2=hll_empty()" -T testData http://host:port/api/testDb/testTbl/_stream_load
+    ```bash
+    curl --location-trusted -u root \
+        -H "columns: k1, k2, v1=hll_hash(k1), v2=hll_empty()" -T testData \
+        http://host:port/api/testDb/testTbl/_stream_load
     ```
 
 8. 导入数据进行严格模式过滤，并设置时区为 Africa/Abidjan
 
-    ```sql
-    curl --location-trusted -u root -H "strict_mode: true" -H "timezone: Africa/Abidjan" -T testData http://host:port/api/testDb/testTbl/_stream_load
+    ```bash
+    curl --location-trusted -u root -H "strict_mode: true" \
+        -H "timezone: Africa/Abidjan" -T testData \
+        http://host:port/api/testDb/testTbl/_stream_load
     ```
 
 9. 导入含有BITMAP列的表，可以是表中的列或者数据中的列用于生成BITMAP列，也可以使用bitmap_empty填充空的Bitmap
 
-    ```sql
-    curl --location-trusted -u root -H "columns: k1, k2, v1=to_bitmap(k1), v2=bitmap_empty()" -T testData http://host:port/api/testDb/testTbl/_stream_load
+    ```bash
+    curl --location-trusted -u root \
+        -H "columns: k1, k2, v1=to_bitmap(k1), v2=bitmap_empty()" -T testData \
+        http://host:port/api/testDb/testTbl/_stream_load
     ```
 
 10. 简单模式，导入json数据
@@ -166,7 +181,8 @@ SHOW LOAD WARNINGS ON 'url'
     json数据格式：
     {"category":"C++","author":"avc","title":"C++ primer","price":895}
     导入命令：
-    curl --location-trusted -u root  -H "label:123" -H "format: json" -T testData http://host:port/api/testDb/testTbl/_stream_load
+    curl --location-trusted -u root  -H "label:123" -H "format: json" -T testData \
+        http://host:port/api/testDb/testTbl/_stream_load
     为了提升吞吐量，支持一次性导入条数据，json数据格式如下：
     [
     {"category":"C++","author":"avc","title":"C++ primer","price":89.5},
@@ -185,7 +201,9 @@ SHOW LOAD WARNINGS ON 'url'
     {"category":"xuxb333","author":"3avc","title":"SayingsoftheCentury","price":895}
     ]
     通过指定jsonpath进行精准导入，例如只导入category、author、price三个属性
-    curl --location-trusted -u root  -H "columns: category, price, author" -H "label:123" -H "format: json" -H "jsonpaths: [\"$.category\",\"$.price\",\"$.author\"]" -H "strip_outer_array: true" -T testData http://host:port/api/testDb/testTbl/_stream_load
+    curl --location-trusted -u root \
+        -H "columns: category, price, author" -H "label:123" -H "format: json" -H "jsonpaths: [\"$.category\",\"$.price\",\"$.author\"]" -H "strip_outer_array: true" -T testData \
+        http://host:port/api/testDb/testTbl/_stream_load
     ```
 
     ```plain text
@@ -206,7 +224,9 @@ SHOW LOAD WARNINGS ON 'url'
     ]
     }
     通过指定jsonpath进行精准导入，例如只导入category、author、price三个属性
-    curl --location-trusted -u root  -H "columns: category, price, author" -H "label:123" -H "format: json" -H "jsonpaths: [\"$.category\",\"$.price\",\"$.author\"]" -H "strip_outer_array: true" -H "json_root: $.RECORDS" -T testData http://host:port/api/testDb/testTbl/_stream_load
+    curl --location-trusted -u root \
+        -H "columns: category, price, author" -H "label:123" -H "format: json" -H "jsonpaths: [\"$.category\",\"$.price\",\"$.author\"]" -H "strip_outer_array: true" -H "json_root: $.RECORDS" -T testData \
+        http://host:port/api/testDb/testTbl/_stream_load
     ```
 
 ## keyword

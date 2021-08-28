@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`VARCHAR split_part(VARCHAR content, VARCHAR delimiter, INT field)`
+```Haskell
+VARCHAR split_part(VARCHAR content, VARCHAR delimiter, INT field)
+```
 
 根据分割符拆分字符串, 返回指定的分割部分(从一开始计数)。
 

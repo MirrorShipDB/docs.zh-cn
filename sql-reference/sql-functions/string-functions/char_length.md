@@ -4,9 +4,11 @@
 
 ### Syntax
 
-`INT char_length(VARCHAR str)`
+```Haskell
+INT char_length(VARCHAR str)
+```
 
-返回字符串的长度，对于多字节字符，返回字符数, 目前仅支持utf8 编码。这个函数还有一个别名 `character_length`。
+返回字符串的长度，对于多字节字符，返回**字符**数, 目前仅支持utf8 编码。这个函数还有一个别名 `character_length`。
 
 ## example
 
