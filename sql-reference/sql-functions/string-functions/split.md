@@ -10,7 +10,6 @@ ARRAY<VARCHAR> split(VARCHAR content, VARCHAR delimiter)
 
 根据分隔符拆分字符串，将拆分后的所有字符串以ARRAY的格式返回
 
-
 ## example
 
 ```Plain Text
