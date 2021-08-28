@@ -25,8 +25,8 @@ flink的用户想要将数据sink到DorisDB当中，但是flink官方只提供�
 <dependency>
     <groupId>com.dorisdb.connector</groupId>
     <artifactId>flink-connector-doris</artifactId>
-    <version>1.0.27-SNAPSHOT</version>  <!-- for flink-1.11 ~ flink-1.12 -->
-    <version>1.0.27_1.13-SNAPSHOT</version>  <!-- for flink-1.13 -->
+    <version>1.0.32-SNAPSHOT</version>  <!-- for flink-1.11 ~ flink-1.12 -->
+    <version>1.0.32_1.13-SNAPSHOT</version>  <!-- for flink-1.13 -->
 </dependency>
 ```
 
@@ -139,7 +139,7 @@ tEnv.executeSql(
 
 ### 注意事项
 
-- 支持exactly-once的数据sink保证，需要外部系统的 two phase commit 机制。由于 DorisDB 无此机制，我们需要依赖flink的checkpoint-interval在每次checkpoint时阻塞flush所有缓存数据，以此达到精准一次。但如果DorisDB挂掉了，会导致用户的flink sink stream 算子长时间阻塞，并引起flink的监控报警或强制kill。
+- 支持exactly-once的数据sink保证，需要外部系统的 two phase commit 机制。由于 DorisDB 无此机制，我们需要依赖flink的checkpoint-interval在每次checkpoint时保存批数据以及其label，在checkpoint完成后的第一次invoke中阻塞flush所有缓存在state当中的数据，以此达到精准一次。但如果DorisDB挂掉了，会导致用户的flink sink stream 算子长时间阻塞，并引起flink的监控报警或强制kill。
 
 - 默认使用csv格式进行导入，用户可以通过指定`'sink.properties.row_delimiter' = '\\x02'`（此参数自 DorisDB-1.15.0 开始支持）与`'sink.properties.column_separator' = '\\x01'`来自定义行分隔符与列分隔符。
 
