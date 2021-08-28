@@ -47,7 +47,11 @@ table_or_subquery1 CROSS JOIN table_or_subquery2
 
 DorisDB支持self-joins，即自己和自己join。例如同一张表的不同列进行join。
 
-实际上没有特殊的语法标识self-join。self-join中join两边的条件都来自同一张表，我们需要给他们分配不同的别名。例如：
+实际上没有特殊的语法标识self-join。self-join中join两边的条件都来自同一张表，
+
+我们需要给他们分配不同的别名。
+
+例如：
 
 ```sql
 SELECT lhs.id, rhs.parent, lhs.c1, rhs.c2 FROM tree_data lhs, tree_data rhs WHERE lhs.id = rhs.parent;
@@ -69,9 +73,11 @@ SELECT * FROM t1 CROSS JOIN t2;
 
 Inner join 是大家最熟知，最常用的join。返回的结果来自相近的2张表所请求的列，join 的条件为两个表的列包含有相同的值。
 
-如果两个表的某个列名相同，我们需要使用全名（table_name.column_name形式）或者给列名起别名。例如：
+如果两个表的某个列名相同，我们需要使用全名（table_name.column_name形式）或者给列名起别名。
 
--- 下列3个查询是等价的。
+例如：
+
+下列3个查询是等价的。
 
 ```sql
 SELECT t1.id, c1, c2 FROM t1, t2 WHERE t1.id = t2.id;
@@ -86,7 +92,6 @@ SELECT t1.id, c1, c2 FROM t1 INNER JOIN t2 ON t1.id = t2.id;
 Outer join返回左表或者右表或者两者所有的行。如果在另一张表中没有匹配的数据，则将其设置为NULL。例如：
 
 ```sql
-
 SELECT * FROM t1 LEFT OUTER JOIN t2 ON t1.id = t2.id;
 
 SELECT * FROM t1 RIGHT OUTER JOIN t2 ON t1.id = t2.id;
@@ -112,7 +117,9 @@ SELECT t1.id, c1, c2 FROM t1 INNER JOIN t2 ON t1.id > t2.id;
 
 Left semi join只返回左表中能匹配右表数据的行，不管能匹配右表多少行数据，
 
-左表的该行最多只返回一次。Right semi join原理相似，只是返回的数据是右表的。例如：
+左表的该行最多只返回一次。Right semi join原理相似，只是返回的数据是右表的。
+
+例如：
 
 ```sql
 SELECT t1.c1, t1.c2, t1.c2 FROM t1 LEFT SEMI JOIN t2 ON t1.id = t2.id;
@@ -154,9 +161,16 @@ Group by从句通常和聚合函数（例如COUNT(), SUM(), AVG(), MIN()和MAX()
 
 Group by指定的列不会参加聚合操作。Group by从句可以加入Having从句来过滤聚合函数产出的结果。例如：
 
-```plain text
-mysql> select tiny_column, sum(short_column) from small_table group by tiny_column;
+```sql
+select 
+tiny_column, sum(short_column)
+from 
+small_table 
+group by 
+tiny_column;
+```
 
+```plain text
 +-------------+---------------------+
 | tiny_column |  sum('short_column')|
 +-------------+---------------------+
@@ -175,9 +189,17 @@ Having从句不是过滤表中的行数据，而是过滤聚合函数产出的�
 
 示例：
 
-```plain text
-mysql> select tiny_column, sum(short_column) from small_table group by tiny_column having sum(short_column) = 1;
+```sql
+select 
+tiny_column, sum(short_column) 
+from small_table 
+group by 
+tiny_column 
+having sum
+(short_column) = 1;
+```
 
+```plain text
 +-------------+---------------------+
 |tiny_column  | sum('short_column') |
 +-------------+---------------------+
@@ -187,9 +209,15 @@ mysql> select tiny_column, sum(short_column) from small_table group by tiny_colu
 1 row in set (0.07 sec)
 ```
 
-```plain text
-mysql> select tiny_column, sum(short_column) from small_table group by tiny_column having tiny_column > 1;
+```sql
+select 
+tiny_column, sum(short_column) 
+from small_table 
+group by tiny_column 
+having tiny_column > 1;
+```
 
+```plain text
 +-------------+---------------------+
 |tiny_column  | sum('short_column') |
 +-------------+---------------------+
@@ -377,11 +405,9 @@ Distinct操作符对结果集进行去重。示例：
 
 ```SQL
 -- Returns the unique values from one column.
-
 select distinct tiny_column from big_table limit 2;
 
 -- Returns the unique combinations of values from multiple columns.
-
 select distinct tiny_column, int_column from big_table limit 2;
 ```
 
@@ -389,7 +415,7 @@ distinct可以和聚合函数(通常是count函数)一同使用，count(disitnct
 
 ```SQL
 -- Counts the unique values from one column.
-mysql> select count(distinct tiny_column) from small_table;
+select count(distinct tiny_column) from small_table;
 ```
 
 ```plain text
@@ -403,14 +429,14 @@ mysql> select count(distinct tiny_column) from small_table;
 
 ```SQL
  -- Counts the unique combinations of values from multiple columns.
-mysql> select count(distinct tiny_column, int_column) from big_table limit 2;
+ select count(distinct tiny_column, int_column) from big_table limit 2;
 ```
 
 DorisDB支持多个聚合函数同时使用distinct。
 
 ```SQL
 -- Count the unique value from multiple aggregation function separately.
-mysql> select count(distinct tiny_column, int_column), count(distinct varchar_column) from big_table;
+select count(distinct tiny_column, int_column), count(distinct varchar_column) from big_table;
 ```
 
 ### 子查询
@@ -419,7 +445,9 @@ mysql> select count(distinct tiny_column, int_column), count(distinct varchar_co
 
 ### 不相关子查询
 
-不相关子查询支持[NOT] IN和EXISTS。举例：
+不相关子查询支持[NOT] IN和EXISTS。
+
+举例：
 
 ```sql
 SELECT x FROM t1 WHERE x [NOT] IN (SELECT y FROM t2);
@@ -431,7 +459,9 @@ SELECT x FROM t1 WHERE EXISTS (SELECT y FROM t2 WHERE y = 1);
 
 ### 相关子查询
 
-相关子查询支持[NOT] IN和[NOT] EXISTS。举例：
+相关子查询支持[NOT] IN和[NOT] EXISTS。
+
+举例：
 
 ```sql
 SELECT * FROM t1 WHERE x [NOT] IN (SELECT a FROM t2 WHERE t1.y = t2.b);
@@ -439,7 +469,9 @@ SELECT * FROM t1 WHERE x [NOT] IN (SELECT a FROM t2 WHERE t1.y = t2.b);
 SELECT * FROM t1 WHERE [NOT] EXISTS (SELECT a FROM t2 WHERE t1.y = t2.b);
 ```
 
-子查询还支持标量子查询。分为不相关标量子查询、相关标量子查询和标量子查询作为普通函数的参数。举例：
+子查询还支持标量子查询。分为不相关标量子查询、相关标量子查询和标量子查询作为普通函数的参数。
+
+举例：
 
 1.不相关标量子查询，谓词为=号。例如输出最高工资的人的信息。
 
@@ -481,9 +513,7 @@ SELECT name FROM table WHERE salary = abs((SELECT MAX(salary) FROM table));
 
 ```sql
 -- Define one subquery at the outer level, and another at the inner level as part of the
-
 -- initial stage of the UNION ALL query.
-
 with t1 as (select 1) (with t2 as (select 2)
 
 select * from t2) union all select * from t1;
@@ -497,7 +527,7 @@ SQL操作符是一系列用于比较的函数，这些操作符广泛的用于se
 
 算术操作符通常出现在包含左操作数，操作符，右操作数（大部分情况下）组成的表达式中。
 
-+和-：可以作为单元或2元操作符。当其作为单元操作符时，如+1, -2.5 或者-col_name， 表达的意思是该值乘以+1或者-1。
+**+和-**：可以作为单元或2元操作符。当其作为单元操作符时，如+1, -2.5 或者-col_name， 表达的意思是该值乘以+1或者-1。
 
 因此单元操作符+返回的是未发生变化的值，单元操作符-改变了该值的符号位。
 
@@ -507,14 +537,14 @@ SQL操作符是一系列用于比较的函数，这些操作符广泛的用于se
 
 +或者-作为2元操作符时，例如2+2，3+1.5 或者col1 + col2，表达的含义是左值相应的加或者减去右值。左值和右值必须都是数字类型。
 
-*和/： 分别代表着乘法和除法。两侧的操作数必须都是数据类型。当两个数相乘时.
+***和/**： 分别代表着乘法和除法。两侧的操作数必须都是数据类型。当两个数相乘时.
 类型较小的操作数在需要的情况下类型可能会提升（比如SMALLINT提升到INT或者BIGINT 等），表达式的结果被提升到下一个较大的类型，
 
 比如TINYINT 乘以INT 产生的结果的类型会是BIGINT）。当两个数相乘时，为了避免精度丢失，操作数和表达式结果都会被解释成DOUBLE 类型。
 
 如果用户想把表达式结果转换成其他类型，需要用CAST 函数转换。
 
-%：取模操作符。返回左操作数除以右操作数的余数。左操作数和右操作数都必须是整型。
+**%**：取模操作符。返回左操作数除以右操作数的余数。左操作数和右操作数都必须是整型。
 
 &，|和^：按位操作符返回对两个操作数进行按位与，按位或，按位异或操作的结果。两个操作数都要求是一种整型类型。
 
@@ -543,7 +573,7 @@ expression BETWEEN lower_bound AND upper_bound
 举例：
 
 ```sql
-mysql> select c1 from t1 where month between 1 and 6;
+select c1 from t1 where month between 1 and 6;
 ```
 
 比较操作符
@@ -561,7 +591,7 @@ In操作符会和VALUE集合进行比较，如果可以匹配该集合中任何�
 举例：
 
 ```sql
-mysql> select * from small_table where tiny_column in (1,2);
+ select * from small_table where tiny_column in (1,2);
 ```
 
 Like操作符
@@ -703,11 +733,11 @@ AS关键词是可选的，用户可以直接在原名后面指定别名。如果
 举例：
 
 ```sql
-mysql> select tiny_column as name, int_column as sex from big_table;
+select tiny_column as name, int_column as sex from big_table;
 
-mysql> select sum(tiny_column) as total_count from big_table;
+select sum(tiny_column) as total_count from big_table;
 
-mysql> select one.tiny_column, two.int_column from small_table one, <br> big_table two where one.tiny_column = two.tiny_column;
+select one.tiny_column, two.int_column from small_table one, <br> big_table two where one.tiny_column = two.tiny_column;
 ```
 
 ## keyword
