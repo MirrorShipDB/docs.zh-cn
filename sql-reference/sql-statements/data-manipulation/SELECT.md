@@ -162,12 +162,9 @@ Group by从句通常和聚合函数（例如COUNT(), SUM(), AVG(), MIN()和MAX()
 Group by指定的列不会参加聚合操作。Group by从句可以加入Having从句来过滤聚合函数产出的结果。例如：
 
 ```sql
-select 
-tiny_column, sum(short_column)
-from 
-small_table 
-group by 
-tiny_column;
+select tiny_column, sum(short_column)
+from small_table 
+group by tiny_column;
 ```
 
 ```plain text
@@ -190,13 +187,10 @@ Having从句不是过滤表中的行数据，而是过滤聚合函数产出的�
 示例：
 
 ```sql
-select 
-tiny_column, sum(short_column) 
+select tiny_column, sum(short_column) 
 from small_table 
-group by 
-tiny_column 
-having sum
-(short_column) = 1;
+group by tiny_column 
+having sum(short_column) = 1;
 ```
 
 ```plain text
@@ -210,8 +204,7 @@ having sum
 ```
 
 ```sql
-select 
-tiny_column, sum(short_column) 
+select tiny_column, sum(short_column) 
 from small_table 
 group by tiny_column 
 having tiny_column > 1;
