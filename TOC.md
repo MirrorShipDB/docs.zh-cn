@@ -43,7 +43,7 @@
   + [Lateral Join](/using_dorisdb/Lateral_join.md)
 + 参考手册
   + SQL参考
-    + [用户账户管理](/reference/Account_reference.md)
+    + 用户账户管理
       + [ALTER USER](./sql-reference/sql-statements/account-management/ALTER%20USER.md)
       + [CREATE ROLE](./sql-reference/sql-statements/account-management/CREATE%20ROLE.md)
       + [CREATE USER](./sql-reference/sql-statements/account-management/CREATE%20USER.md)
