@@ -12,19 +12,19 @@
 
 ## example
 
-```text
+```Plain text
 mysql> select bitmap_to_array(bitmap_from_string("1, 7"));
 +----------------------------------------------+
-| bitmap_to_array(bitmap_from_string('1, 7')) |
+| bitmap_to_array(bitmap_from_string('1, 7'))  |
 +----------------------------------------------+
-| [1,7] |
+| [1,7]                                        |
 +----------------------------------------------+
 
 mysql> select bitmap_to_array(NULL);
 +-----------------------+
 | bitmap_to_array(NULL) |
 +-----------------------+
-| NULL |
+| NULL                  |
 +-----------------------+
 ```
 
