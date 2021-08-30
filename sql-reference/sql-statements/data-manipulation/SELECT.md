@@ -43,7 +43,7 @@ table_or_subquery1 CROSS JOIN table_or_subquery2
 [ WHERE where_clauses ]
 ```
 
-### Self-Join
+#### Self-Join
 
 DorisDB支持self-joins，即自己和自己join。例如同一张表的不同列进行join。
 
@@ -57,7 +57,7 @@ DorisDB支持self-joins，即自己和自己join。例如同一张表的不同�
 SELECT lhs.id, rhs.parent, lhs.c1, rhs.c2 FROM tree_data lhs, tree_data rhs WHERE lhs.id = rhs.parent;
 ```
 
-### 笛卡尔积(Cross Join)
+#### 笛卡尔积(Cross Join)
 
 Cross join会产生大量的结果，须慎用cross join,
 
@@ -69,7 +69,7 @@ SELECT * FROM t1, t2;
 SELECT * FROM t1 CROSS JOIN t2;
 ```
 
-### Inner join
+#### Inner join
 
 Inner join 是大家最熟知，最常用的join。返回的结果来自相近的2张表所请求的列，join 的条件为两个表的列包含有相同的值。
 
@@ -87,7 +87,7 @@ SELECT t1.id, c1, c2 FROM t1 JOIN t2 ON t1.id = t2.id;
 SELECT t1.id, c1, c2 FROM t1 INNER JOIN t2 ON t1.id = t2.id;
 ```
 
-### Outer join
+#### Outer join
 
 Outer join返回左表或者右表或者两者所有的行。如果在另一张表中没有匹配的数据，则将其设置为NULL。例如：
 
@@ -99,7 +99,7 @@ SELECT * FROM t1 RIGHT OUTER JOIN t2 ON t1.id = t2.id;
 SELECT * FROM t1 FULL OUTER JOIN t2 ON t1.id = t2.id;
 ```
 
-### 等值和不等值join
+#### 等值和不等值join
 
 通常情况下，用户使用等值join居多，等值join要求join条件的操作符是等号。
 
@@ -113,7 +113,7 @@ SELECT t1.id, c1, c2 FROM t1 INNER JOIN t2 ON t1.id = t2.id;
 SELECT t1.id, c1, c2 FROM t1 INNER JOIN t2 ON t1.id > t2.id;
 ```
 
-### Semi join
+#### Semi join
 
 Left semi join只返回左表中能匹配右表数据的行，不管能匹配右表多少行数据，
 
@@ -125,7 +125,7 @@ Left semi join只返回左表中能匹配右表数据的行，不管能匹配右
 SELECT t1.c1, t1.c2, t1.c2 FROM t1 LEFT SEMI JOIN t2 ON t1.id = t2.id;
 ```
 
-### Anti join
+#### Anti join
 
 Left anti join只返回左表中不能匹配右表的行。
 
@@ -436,7 +436,7 @@ select count(distinct tiny_column, int_column), count(distinct varchar_column) f
 
 子查询按相关性分为不相关子查询和相关子查询。
 
-### 不相关子查询
+#### 不相关子查询
 
 不相关子查询支持[NOT] IN和EXISTS。
 
@@ -450,7 +450,7 @@ SELECT x FROM t1 WHERE x [NOT] IN (SELECT y FROM t2);
 SELECT x FROM t1 WHERE EXISTS (SELECT y FROM t2 WHERE y = 1);
 ```
 
-### 相关子查询
+#### 相关子查询
 
 相关子查询支持[NOT] IN和[NOT] EXISTS。
 
@@ -516,13 +516,9 @@ select * from t2) union all select * from t1;
 
 SQL操作符是一系列用于比较的函数，这些操作符广泛的用于select 语句的where从句中。
 
-**算数操作符**：
+#### 算数操作符：算术操作符通常出现在包含左操作数，操作符，右操作数（大部分情况下）组成的表达式中
 
-算术操作符通常出现在包含左操作数，操作符，右操作数（大部分情况下）组成的表达式中。
-
-**+和-**：
-
-可以作为单元或2元操作符。当其作为单元操作符时，如+1, -2.5 或者-col_name， 表达的意思是该值乘以+1或者-1。
+**+和-**：可以作为单元或2元操作符。当其作为单元操作符时，如+1, -2.5 或者-col_name， 表达的意思是该值乘以+1或者-1。
 
 因此单元操作符+返回的是未发生变化的值，单元操作符-改变了该值的符号位。
 
@@ -532,22 +528,17 @@ SQL操作符是一系列用于比较的函数，这些操作符广泛的用于se
 
 +或者-作为2元操作符时，例如2+2，3+1.5 或者col1 + col2，表达的含义是左值相应的加或者减去右值。左值和右值必须都是数字类型。
 
-***和/**：
+***和/**：分别代表着乘法和除法。两侧的操作数必须都是数据类型。当两个数相乘时.
 
- 分别代表着乘法和除法。两侧的操作数必须都是数据类型。当两个数相乘时.
 类型较小的操作数在需要的情况下类型可能会提升（比如SMALLINT提升到INT或者BIGINT 等），表达式的结果被提升到下一个较大的类型，
 
 比如TINYINT 乘以INT 产生的结果的类型会是BIGINT）。当两个数相乘时，为了避免精度丢失，操作数和表达式结果都会被解释成DOUBLE 类型。
 
 如果用户想把表达式结果转换成其他类型，需要用CAST 函数转换。
 
-**%**：
+**%**：取模操作符。返回左操作数除以右操作数的余数。左操作数和右操作数都必须是整型。
 
-取模操作符。返回左操作数除以右操作数的余数。左操作数和右操作数都必须是整型。
-
-**&，|和^**：
-
-按位操作符返回对两个操作数进行按位与，按位或，按位异或操作的结果。两个操作数都要求是一种整型类型。
+**&，|和^**：按位操作符返回对两个操作数进行按位与，按位或，按位异或操作的结果。两个操作数都要求是一种整型类型。
 
 如果按位操作符的两个操作数的类型不一致，则类型小的操作数会被提升到类型较大的操作数，然后再做相应的按位操作。
 
@@ -557,7 +548,7 @@ SQL操作符是一系列用于比较的函数，这些操作符广泛的用于se
 
 用户可以通过数学函数章节了解我们支持哪些算术函数。
 
-### Between操作符
+#### Between操作符
 
 在where从句中，表达式可能同时与上界和下界比较。如果表达式大于等于下界，同时小于等于上界，比较的结果是true。语法定义如下：
 
@@ -577,7 +568,7 @@ expression BETWEEN lower_bound AND upper_bound
 select c1 from t1 where month between 1 and 6;
 ```
 
-比较操作符
+#### 比较操作符
 
 比较操作符用来判断列和列是否相等或者对列进行排序。=, !=, , >=可以适用所有数据类型。
 
@@ -595,7 +586,7 @@ In操作符会和VALUE集合进行比较，如果可以匹配该集合中任何�
  select * from small_table where tiny_column in (1,2);
 ```
 
-Like操作符
+#### Like操作符
 
 该操作符用于和字符串进行比较。"_"用来匹配单个字符，"%"用来匹配多个字符。参数必须要匹配完整的字符串。通常，把"%"放在字符串的尾部更加符合实际用法。
 
@@ -625,7 +616,7 @@ mysql> select varchar_column from small_table where varchar_column like 'm____';
 1 row in set (0.01 sec)
 ```
 
-### 逻辑操作符
+#### 逻辑操作符
 
 逻辑操作符返回一个BOOL值，逻辑操作符包括单元操作符和多元操作符，每个操作符处理的参数都是返回值为BOOL值的表达式。支持的操作符有：
 
@@ -685,7 +676,7 @@ mysql> select not true;
 1 row in set (0.01 sec)
 ```
 
-### 正则表达式操作符
+#### 正则表达式操作符
 
 判断是否匹配正则表达式。使用POSIX标准的正则表达式，"^"用来匹配字符串的首部，"$"用来匹配字符串的尾部，
 
