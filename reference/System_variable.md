@@ -2,33 +2,39 @@
 
 ## 变量设置与查看
 
-本节介绍DorisDB系统支持的变量（variables）。它们可以通过命令SHOW VARIABLES查看，能在系统全局范围内生效，或者仅在当前会话中生效。
+本节介绍DorisDB系统支持的变量（variables）。它们可以通过命令 `SHOW VARIABLES` 查看，能在系统全局范围内生效，或者仅在当前会话中生效。
 
-DorisDB 中的变量参考 MySQL 中的变量设置，但部分变量仅用于兼容 MySQL 客户端协议，并不产生其在 MySQL 数据库中的实际意义。
+DorisDB 中的变量参考 MySQL 中的变量设置，但**部分变量仅用于兼容 MySQL 客户端协议，并不产生其在 MySQL 数据库中的实际意义**。
 
 ### 查看
 
-可以通过 SHOW VARIABLES [LIKE 'xxx']; 查看所有或指定的变量。如：
+可以通过 `SHOW VARIABLES [LIKE 'xxx']`; 查看所有或指定的变量。如：
 
-`SHOW VARIABLES;`
+```SQL
+SHOW VARIABLES;
 
-`SHOW VARIABLES LIKE '%time_zone%';`
+SHOW VARIABLES LIKE '%time_zone%';
+```
 
 ### 设置
 
-变量一般可以设置为全局生效或仅当前会话生效。设置为全局生效后，后续新的会话连接中会使用新设置的值，而不影响当前会话；设置为仅当前会话生效时，变量仅对当前会话产生作用。
+变量一般可以设置为**全局**生效或**仅当前会话**生效。设置为全局生效后，**后续新的会话**连接中会使用新设置的值，而不影响当前会话；设置为仅当前会话生效时，变量仅对当前会话产生作用。
 
-通过 SET var_name=xxx; 语句设置的变量仅当前会话生效。如：
+通过 `SET var_name=xxx;` 语句设置的变量仅当前会话生效。如：
 
-`SET exec_mem_limit = 137438953472;`
+```SQL
+SET exec_mem_limit = 137438953472;
 
-`SET forward_to_master = true;`
+SET forward_to_master = true;
 
-`SET time_zone = "Asia/Shanghai";`
+SET time_zone = "Asia/Shanghai";
+```
 
-通过 SET GLOBAL var_name=xxx; 语句设置的变量全局生效。如：
+通过 `SET GLOBAL var_name=xxx;` 语句设置的变量全局生效。如：
 
-`SET GLOBAL exec_mem_limit = 137438953472;`
+ ```SQL
+SET GLOBAL exec_mem_limit = 137438953472;
+```
 
 > 注：只有 ADMIN 用户可以设置变量为全局生效。 全局生效的变量不影响当前会话，仅影响后续新的会话。
 
@@ -54,9 +60,13 @@ DorisDB 中的变量参考 MySQL 中的变量设置，但部分变量仅用于�
 
 此外，变量设置也支持常量表达式，如：
 
-`SET exec_mem_limit = 10 * 1024 * 1024 * 1024;`
+ ```SQL
+SET exec_mem_limit = 10 * 1024 * 1024 * 1024;
+```
 
-`SET forward_to_master = concat('tr', 'u', 'e');`
+ ```SQL
+SET forward_to_master = concat('tr', 'u', 'e');
+```
 
 ### 在查询语句中设置变量
 
@@ -106,7 +116,7 @@ SELECT /*+ SET_VAR(query_timeout = 1) */ sleep(3);
 
 * enable_insert_strict
 
-    用于设置通过 INSERT 语句进行数据导入时，是否开启 strict 模式。默认为 false，即不开启 strict 模式。关于该模式的介绍，可以参阅《数据导入》章节。
+    用于设置通过 INSERT 语句进行数据导入时，是否开启 strict 模式。默认为 false，即不开启 strict 模式。关于该模式的介绍，可以参阅《[数据导入](../loading/Loading_intro.md)》章节。
 
 * enable_spilling
 
@@ -122,7 +132,7 @@ SELECT /*+ SET_VAR(query_timeout = 1) */ sleep(3);
 
 * exec_mem_limit
 
-    用于设置单个查询计划实例所能使用的内存限制。默认为 2GB，单位为B/K/KB/M/MB/G/GB/T/TB/P/PB, 默认为B。
+    用于设置单个查询计划实例所能使用的内存限制。默认为 2GB，单位为：B/K/KB/M/MB/G/GB/T/TB/P/PB, 默认为B。
 
     一个查询计划可能有多个实例，一个 BE 节点可能执行一个或多个实例。所以该参数并不能准确限制一个查询在整个集群中的内存使用，也不能准确限制一个查询在单一 BE 节点上的内存使用。具体需要根据生成的查询计划判断。
 
@@ -138,29 +148,29 @@ SELECT /*+ SET_VAR(query_timeout = 1) */ sleep(3);
 
     用于设置是否将一些命令转发到 Master FE 节点执行。默认为 false，即不转发。DorisDB 中存在多个 FE 节点，其中一个为 Master 节点。通常用户可以连接任意 FE 节点进行全功能操作。但部分信息查看指令只有从 Master FE 节点才能获取详细信息。
 
-    如 SHOW BACKENDS; 命令，如果不转发到 Master FE 节点，则仅能看到节点是否存活等一些基本信息，而转发到 Master FE 则可以获取包括节点启动时间、最后一次心跳时间等更详细的信息。
+    如 `SHOW BACKENDS;` 命令，如果不转发到 Master FE 节点，则仅能看到节点是否存活等一些基本信息，而转发到 Master FE 则可以获取包括节点启动时间、最后一次心跳时间等更详细的信息。
 
     当前受该参数影响的命令如下：
 
-* SHOW FRONTENDS;
+  * SHOW FRONTENDS;
 
     转发到 Master 可以查看最后一次心跳信息。
 
-* SHOW BACKENDS;
+  * SHOW BACKENDS;
 
     转发到 Master 可以查看启动时间、最后一次心跳信息、磁盘容量信息。
 
-* SHOW BROKER;
+  * SHOW BROKER;
 
     转发到 Master 可以查看启动时间、最后一次心跳信息。
 
-* SHOW TABLET;
-* ADMIN SHOW REPLICA DISTRIBUTION;
-* ADMIN SHOW REPLICA STATUS;
+  * SHOW TABLET;
+  * ADMIN SHOW REPLICA DISTRIBUTION;
+  * ADMIN SHOW REPLICA STATUS;
 
     转发到 Master 可以查看 Master FE 元数据中存储的 tablet 信息。正常情况下，不同 FE 元数据中 tablet 信息应该是一致的。当出现问题时，可以通过这个方法比较当前 FE 和 Master FE 元数据的差异。
 
-* SHOW PROC;
+  * SHOW PROC;
 
     转发到 Master 可以查看 Master FE 元数据中存储的相关 PROC 的信息。主要用于元数据比对。
 
@@ -256,7 +266,7 @@ SELECT /*+ SET_VAR(query_timeout = 1) */ sleep(3);
 
 * query_timeout
 
-    用于设置查询超时，单位为秒。该变量会作用于当前连接中所有的查询语句，以及 INSERT 语句。默认为300秒，即 5 分钟。
+    用于设置查询超时，单位是「秒」。该变量会作用于当前连接中所有的查询语句，以及 INSERT 语句。默认为300秒，即 5 分钟。
 
 * resource_group
 
@@ -282,11 +292,11 @@ SELECT /*+ SET_VAR(query_timeout = 1) */ sleep(3);
 
     指定系统使用的存储引擎。DorisDB支持的引擎类型包括：
 
-* olap:DorisDB系统自有引擎。
-* mysql:使用MySQL外部表。
-* broker:通过Broker程序访问外部表。
-* elasticsearch 或者 es:使用Elasticsearch外部表。
-* hive:使用Hive外部表。
+  * olap：DorisDB系统自有引擎。
+  * mysql：使用MySQL外部表。
+  * broker：通过Broker程序访问外部表。
+  * elasticsearch 或者 es：使用Elasticsearch外部表。
+  * hive：使用Hive外部表。
 
 * system_time_zone
 
@@ -318,4 +328,4 @@ SELECT /*+ SET_VAR(query_timeout = 1) */ sleep(3);
 
 * wait_timeout
 
-    用于设置空闲连接的连接时长。当一个空闲连接在该时长内与 DorisDB 没有任何交互，则 DorisDB 会主动断开这个链接。默认为 8 小时，单位为秒。
+    用于设置空闲连接的连接时长。当一个空闲连接在该时长内与 DorisDB 没有任何交互，则 DorisDB 会主动断开这个链接。默认为 8 小时，单位是「秒」。

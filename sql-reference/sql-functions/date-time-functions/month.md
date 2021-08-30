@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`INT MONTH(DATETIME date)`
+```Haskell
+INT MONTH(DATETIME date)
+```
 
 返回时间类型中的月份信息，范围是1, 12
 

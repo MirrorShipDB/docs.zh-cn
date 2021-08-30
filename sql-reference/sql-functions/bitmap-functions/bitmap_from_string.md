@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`BITMAP BITMAP_FROM_STRING(VARCHAR input)`
+```Haskell
+BITMAP BITMAP_FROM_STRING(VARCHAR input)
+```
 
 将一个字符串转化为一个BITAMP，字符串是由逗号分隔的一组UINT32数字组成.
 比如"0, 1, 2"字符串会转化为一个Bitmap，其中的第0, 1, 2位被设置.

@@ -145,7 +145,7 @@ FinishTime: 2019-06-25 17:08:34
 
 * Path：远端存储上的导出路径。
 * CreateTime/StartTime/FinishTime：作业的创建时间、开始调度时间和结束时间。
-* Timeout：作业超时时间。单位是秒。该时间从 CreateTime 开始计算。
+* Timeout：作业超时时间。单位是「秒」。该时间从 CreateTime 开始计算。
 * ErrorMsg：如果作业出现错误，这里会显示错误原因。
 
 #### 取消作业

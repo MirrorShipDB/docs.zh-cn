@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`array_append(any_array, any_element)`
+```Haskell
+array_append(any_array, any_element)
+```
 
 在数组末尾添加一个新的元素
 

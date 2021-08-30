@@ -5,15 +5,17 @@
 
 ### Syntax
 
-`VARIANCE(expr)`
+```Haskell
+VARIANCE(expr)
+```
 
 返回expr表达式的方差
 
 ## example
 
 ```plain text
-MySQL > select variance(scan_rows) 
-from log_statis 
+MySQL > select variance(scan_rows)
+from log_statis
 group by datetime;
 +-----------------------+
 | variance(`scan_rows`) |
@@ -21,8 +23,8 @@ group by datetime;
 |    5.6183332881176211 |
 +-----------------------+
 
-MySQL > select var_pop(scan_rows) 
-from log_statis 
+MySQL > select var_pop(scan_rows)
+from log_statis
 group by datetime;
 +----------------------+
 | var_pop(`scan_rows`) |

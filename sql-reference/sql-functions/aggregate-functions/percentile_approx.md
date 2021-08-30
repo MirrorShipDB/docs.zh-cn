@@ -16,8 +16,8 @@ compression参数未指定或设置的值在[2048, 10000]范围外，以10000的
 ## example
 
 ```plain text
-MySQL > select `table`, percentile_approx(cost_time,0.99) 
-from log_statis 
+MySQL > select `table`, percentile_approx(cost_time,0.99)
+from log_statis
 group by `table`;
 +----------+--------------------------------------+
 | table    | percentile_approx(`cost_time`, 0.99) |
@@ -25,8 +25,8 @@ group by `table`;
 | test     |                                54.22 |
 +----------+--------------------------------------+
 
-MySQL > select `table`, percentile_approx(cost_time,0.99, 4096) 
-from log_statis 
+MySQL > select `table`, percentile_approx(cost_time,0.99, 4096)
+from log_statis
 group by `table`;
 +----------+----------------------------------------------+
 | table    | percentile_approx(`cost_time`, 0.99, 4096.0) |

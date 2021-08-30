@@ -30,13 +30,19 @@ Stream Load 通过 HTTP 协议提交和传输数据。这里通过 curl 命令�
 
 **语法：**
 
-`curl --location-trusted -u user:passwd [-H ""...] -T data.file -XPUT http://fe_host:http_port/api/{db}/{table}/_stream_load`
+~~~bash
+curl --location-trusted -u user:passwd [-H ""...] -T data.file -XPUT \
+    http://fe_host:http_port/api/{db}/{table}/_stream_load
+~~~
 
 Header中支持的属性见下文的导入任务参数说明，格式为: -H "key1:value1"。如果同时有多个任务参数，需要用多个 -H 来指示，类似于 \-H "key1:value1" -H "key2:value2"……
 
 **示例：**
 
-`curl --location-trusted -u root -T date -H "label:123" http://abc.com:8030/api/test/date/_stream_load`
+~~~bash
+curl --location-trusted -u root -T date -H "label:123" \
+    http://abc.com:8030/api/test/date/_stream_load
+~~~
 
 创建导入任务的详细语法可执行HELP STREAM LOAD查看，下面介绍该命令中部分参数的意义。
 
@@ -71,7 +77,7 @@ Stream Load 中所有与导入任务相关的参数均设置在 Header 中。下
 * **timeout**: 指定导入的超时时间。单位秒，默认是 600 秒。可设置范围为 1 秒 ~ 259200 秒。
 * **strict-mode**: 用户指定此次导入是否开启严格模式，默认为开启。关闭方式为：\-H "strict-mode: false"。
 * **timezone**: 指定本次导入所使用的时区。默认为东八区。该参数会影响所有导入涉及的和时区有关的函数结果。
-* **exec-mem-limit**: 导入内存限制。默认为 2GB。单位为字节。
+* **exec-mem-limit**: 导入内存限制。默认为 2GB。单位是「字节」。
 
 **返回结果：**
 
@@ -167,7 +173,10 @@ Stream Load的默认超时为300秒，按照DorisDB目前最大的导入限速�
 
 * step3：创建导入任务
 
-`curl --location-trusted -u user:password -T /home/store_sales -H "label:abc" [http://abc.com:8000/api/bj_sales/store_sales/_stream_load](http://abc.com:8000/api/bj_sales/store_sales/_stream_load)`
+~~~bash
+curl --location-trusted -u user:password -T /home/store_sales \
+    -H "label:abc" [http://abc.com:8000/api/bj_sales/store_sales/_stream_load](http://abc.com:8000/api/bj_sales/store_sales/_stream_load)
+~~~
 
 ### 代码集成示例
 

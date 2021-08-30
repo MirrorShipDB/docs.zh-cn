@@ -6,16 +6,16 @@ DorisDB提供了多种导入方式，用户可以根据数据量大小、导入�
 
 > 注意：建议先完整阅读本节，再根据所选导入方式查看详细内容。
 
-![数据导入概览](../assets/screenshot_1623910947283.png)
+![数据导入概览](../assets/4.1.1.png)
 根据不同的数据来源可以选择不同的导入方式：
 
-* 离线数据导入，如果数据源是Hive/HDFS，推荐采用[Broker Load导入](loading/BrokerLoad),  如果数据表很多导入比较麻烦可以考虑使用[Hive外表](using_doirsdb/External_table)直连查询，性能会比Broker load导入效果差，但是可以避免数据搬迁，如果单表的数据量特别大，或者需要做全局数据字典来精确去重可以考虑[Spark Load导入](loading/SparkLoad)。
-* 实时数据导入，日志数据和业务数据库的binlog同步到Kafka以后，优先推荐通过[Routine load](loading/RoutineLoad) 导入DorisDB，如果导入过程中有复杂的多表关联和ETL预处理可以使用Flink处理以后用stream load写入DorisDB，我们有标准的[Flink-connector](loading/Flink-dorisdb-connector.md)可以方便Flink任务使用
-* 程序写入DorisDB，推荐使用[Stream Load](loading/StreamLoad)，可以参考[例子](https://github.com/apache/incubator-doris/tree/master/samples/)中有java python shell的demo，
+* 离线数据导入，如果数据源是Hive/HDFS，推荐采用[Broker Load导入](BrokerLoad.md),  如果数据表很多导入比较麻烦可以考虑使用[Hive外表](../using_doirsdb/External_table)直连查询，性能会比Broker load导入效果差，但是可以避免数据搬迁，如果单表的数据量特别大，或者需要做全局数据字典来精确去重可以考虑[Spark Load导入](../loading/SparkLoad.md)。
+* 实时数据导入，日志数据和业务数据库的binlog同步到Kafka以后，优先推荐通过[Routine load](loading/RoutineLoad.md) 导入DorisDB，如果导入过程中有复杂的多表关联和ETL预处理可以使用Flink处理以后用stream load写入DorisDB，我们有标准的[Flink-connector](../loading/Flink-dorisdb-connector.md)可以方便Flink任务使用.
+* 程序写入DorisDB，推荐使用[Stream Load](loading/StreamLoad.md)，可以参考[例子](https://github.com/apache/incubator-doris/tree/master/samples/)中有java python shell的demo。
 * 文本文件导入推荐使用 Stream load
-* Mysql数据导入，推荐使用[Mysql外表](loading/External_table)，insert into new_table select * from external\_table 的方式导入
-* 其他数据源导入，推荐使用DataX导入，我们提供了[DataX-dorisdb-writer](loading/DataX-dorisdb-writer.md)
-* DorisDB内部导入，可以在DorisDB内部使用[insert into tablename select](loading/Insert_into)的方式导入，可以跟外部调度器配合实现简单的ETL处理。
+* Mysql数据导入，推荐使用[Mysql外表](../using_dorisdb/External_table.md)，insert into new_table select * from external\_table 的方式导入
+* 其他数据源导入，推荐使用DataX导入，我们提供了[DataX-dorisdb-writer](../loading/DataX-dorisdb-writer.md)
+* DorisDB内部导入，可以在DorisDB内部使用[insert into tablename select](../loading/Insert_into)的方式导入，可以跟外部调度器配合实现简单的ETL处理。
 
 ## 名词解释
 
@@ -27,13 +27,13 @@ DorisDB提供了多种导入方式，用户可以根据数据量大小、导入�
 * **Spark Load**：Spark导入，即通过外部资源如Spark对数据进行预处理生成中间文件，DorisDB读取中间文件导入。这是一种异步的导入方式，用户需要通过MySQL协议创建导入，并通过查看导入命令检查导入结果。
 * **FE**：Frontend，DorisDB系统的元数据和调度节点。在导入流程中主要负责导入执行计划的生成和导入任务的调度工作。
 * **BE**：Backend，DorisDB系统的计算和存储节点。在导入流程中主要负责数据的 ETL 和存储。
-* **Tablet**：DorisDB表的逻辑分片，一个表按照分区、分桶规则可以划分为多个分片（参考[数据分布](3.3数据分布.md)章节）。
+* **Tablet**：DorisDB表的逻辑分片，一个表按照分区、分桶规则可以划分为多个分片（参考[数据分布](../table_design/Data_distribution.md)章节）。
 
 ## 基本原理
 
 导入执行流程：
 
-![导入流程](../assets/4.1.2-1.png)
+![导入流程](../assets/4.1.2.png)
   
 一个导入作业主要分为5个阶段：
 

@@ -220,7 +220,7 @@ data_desc中的WHERE语句负责过滤已经完成transform的数据。被过滤
 
 * exec_mem_limit
 
-导入内存限制。单位为字节。默认是 2GB。
+导入内存限制。单位是「字节」。默认是 2GB。
 
 * strict_mode
 

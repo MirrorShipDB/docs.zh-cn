@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`APPROX_COUNT_DISTINCT(expr)`
+```Haskell
+APPROX_COUNT_DISTINCT(expr)
+```
 
 返回类似于 `COUNT(DISTINCT col)` 结果的近似值聚合函数。
 

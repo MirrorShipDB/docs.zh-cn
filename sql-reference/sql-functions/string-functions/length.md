@@ -4,9 +4,11 @@
 
 ### Syntax
 
-`INT length(VARCHAR str)`
+```Haskell
+INT length(VARCHAR str)
+```
 
-返回字符串的字节。
+返回字符串的**字节**长度。
 
 ## example
 

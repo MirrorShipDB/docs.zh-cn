@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`VARCHAR BITMAP_TO_STRING(BITMAP input)`
+```Haskell
+VARCHAR BITMAP_TO_STRING(BITMAP input)
+```
 
 将一个bitmap转化成一个逗号分隔的字符串，字符串中包含所有设置的BIT位。输入是null的话会返回null。
 

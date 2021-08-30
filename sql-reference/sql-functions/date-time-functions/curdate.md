@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`DATE CURDATE()`
+```Haskell
+DATE CURDATE()
+```
 
 获取当前的日期，以DATE类型返回
 

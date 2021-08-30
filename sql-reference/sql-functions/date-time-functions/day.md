@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`INT DAY(DATETIME date)`
+```Haskell
+INT DAY(DATETIME date)
+```
 
 获得日期中的天信息，返回值范围从1-31。
 

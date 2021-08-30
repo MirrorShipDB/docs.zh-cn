@@ -49,7 +49,7 @@ set exec_mem_limit  = 137438953472;
 ALTER DATABASE db_name SET DATA QUOTA quota;
 ```
 
-这里quota 单位为B/K/KB/M/MB/G/GB/T/TB/P/PB
+这里quota 单位为：B/K/KB/M/MB/G/GB/T/TB/P/PB
 例如
 
 ```sql
