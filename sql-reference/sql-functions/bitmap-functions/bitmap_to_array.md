@@ -8,7 +8,7 @@
  ARRAY<BIGINT> BITMAP_TO_ARRAY (BITMAP)
 ```
 
-将 BIMTAP 转化为ARRAY<BIGINT>，将一个BIMTAP中的所有值组合成一个ARRAY<BIGINT>
+将 BIMTAP 转化为Bigint数组，将一个BIMTAP中的所有值组合成一个bigint数组
 
 ## example
 
