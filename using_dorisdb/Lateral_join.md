@@ -6,13 +6,19 @@
 
 ## 使用说明
 
-Lateral 关键字。我们可以将 Lateral 如下加载 join 的后面：
+使用lateral join 需要打开新版优化器：
+
+~~~SQL
+set global enable_cbo = true;
+~~~
+
+Lateral 关键字语法说明：
 
 ~~~SQL
 from table_reference join [lateral] table_reference
 ~~~
 
-Unnest关键字。unnest是一种 table function，可以把数组类型转化成table的多行，配合 Lateral Join 就能实现我们常见的各种行展开逻辑。
+Unnest关键字，是一种 table function，可以把数组类型转化成table的多行，配合 Lateral Join 就能实现我们常见的各种行展开逻辑。
 
 ~~~SQL
 SELECT student, score
