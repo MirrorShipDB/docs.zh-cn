@@ -4,15 +4,15 @@
 
 为了方便用户快速的了解DorisDB的性能指标，这里我们提供了一个标准的Star schema benchmark的测试方法和工具仅供参考。
 
-Star schema benchmark（以下简称SSB）是学术界和工业界广泛使用的一个星型模型测试集（来源[论文](https://www.cs.umb.edu/~xuedchen/research/publications/StarSchemaB.PDF)），通过这个测试集合也可以容易的和其他OLAP产品进行性能对比。
+Star schema benchmark（以下简称SSB）是学术界和工业界广泛使用的一个星型模型测试集，通过这个测试集合也可以容易的和其他OLAP产品进行性能对比。
 
 ## 测试准备
 
 ### 环境准备
 
 * 硬件环境准备，DorisDB对机器没有严格要求，建议大于8C 32G，磁盘是SSD/SATA均可，网络建议万兆网卡。
-* 集群部署参考 [集群部署](8.1集群部署.md)
-* 系统参数参考 [配置参数](8.3配置参数.md)
+* 集群部署参考 [集群部署](../administration/Deployment.md)
+* 系统参数参考 [配置参数](../administration/Configuration.md)
 * 下载ssb-poc工具集
 
 ### SSB SQL
@@ -150,7 +150,7 @@ make && make install
 
 所有相关工具安装到output目录
 
-#### 9.3.1.2 生成数据
+#### 生成数据
 
 ~~~shell
 bin/gen-ssb.sh 100 data_dir
@@ -160,22 +160,23 @@ bin/gen-ssb.sh 100 data_dir
 
 建表中有三个注意事项，这几个选择会比较大的影响到测试结果：
 
-* 1. Bucket的数量选择和分桶键的选择
+1. Bucket的数量选择和分桶键的选择
 
-Bucket的数量是对性能影响比较大的因素之一，首先我们希望选择合理的分桶键（DISTRIBUTED BY HASH(key))，来保证数据在各个bucket中尽可能均衡，如果碰到数据倾斜严重的数据可以使用多列作为分桶键，或者采用MD5 hash以后作为分桶键，具体可以参考[分桶键选择](3.3数据分布.md)，这里我们都统一使用唯一的key列。
+    Bucket的数量是对性能影响比较大的因素之一，首先我们希望选择合理的分桶键（DISTRIBUTED BY HASH(key))，来保证数据在各个bucket中尽可能均衡，如果碰到数据倾斜严重的数据可以使用多列作为分桶键，或者采用MD5 hash以后作为分桶键，具体可以参考[分桶键选择](../table_design/Data_distribution.md#3-分桶列如何选择)，这里我们都统一使用唯一的key列。
 
-* 2. 建表的数据类型
+2. 建表的数据类型
 
-数据类型的选择对性能测试的结果是有一定影响的，比如Decimal/String的运算一般比int/bigint要慢，所以在实际场景中我们应该尽可能准确的使用数据类型，从而达到最好的效果，比如可以使用Int/Bigint的字段就尽量避免使用String，如果是日期类型也多使用Date/Datetime以及相对应的时间日期函数，而不是用string和相关字符串操作函数来处理，针对SSB的数据集合，为了体现各个数据类型的效果，我们在多表Join的测试中都采用了Int/Bigint来处理，在lineorder\_flat这个打平的宽表中，我们采用了Decimal/date等类型方便。
+    数据类型的选择对性能测试的结果是有一定影响的，比如Decimal|String的运算一般比int|bigint要慢，所以在实际场景中我们应该尽可能准确的使用数据类型，从而达到最好的效果，比如可以使用Int|Bigint的字段就尽量避免使用String，如果是日期类型也多使用Date|Datetime以及相对应的时间日期函数，而不是用string和相关字符串操作函数来处理，针对SSB的数据集合，为了体现各个数据类型的效果，我们在多表Join的测试中都采用了Int|Bigint来处理，在lineorder_flat这个打平的宽表中，我们采用了Decimal|date等类型方便。
 
-如果需要做和其他系统的对比，可以参考Kylin和Clickhouse的官方文档中推荐的SSB建表方式，对建表语句进行微调。
+      >如果需要做和其他系统的对比，可以参考Kylin和Clickhouse的官方文档中推荐的SSB建表方式，对建表语句进行微调。
+      >
+      >[Kylin的建表方式](https://github.com/Kyligence/ssb-kylin/blob/master/hive/1_create_basic.sql)
+      >
+      >[Clickhouse的建表方式](https://clickhouse.tech/docs/en/getting-started/example-datasets/star-schema/)
 
-* [Kylin的建表方式](https://github.com/Kyligence/ssb-kylin/blob/master/hive/1_create_basic.sql)
-* [Clickhouse的建表方式](https://clickhouse.tech/docs/en/getting-started/example-datasets/star-schema/)
+3. 字段是否可以为空
 
-* 3. 字段是否可以为空
-
-DorisDB的建表这里都采取的NOT NULL关键字，因为在SSB生成的标准数据集合中并没有空字段，但是对于实际的业务
+    DorisDB的建表这里都采取的NOT NULL关键字，因为在SSB生成的标准数据集合中并没有空字段，但是对于实际的业务
 
 针对我们三台BE的环境我们采取的建表方式如下：
 

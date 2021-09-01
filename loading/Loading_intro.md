@@ -6,16 +6,16 @@ DorisDB提供了多种导入方式，用户可以根据数据量大小、导入�
 
 > 注意：建议先完整阅读本节，再根据所选导入方式查看详细内容。
 
-![数据导入概览](../assets/screenshot_1623910947283.png)
+![数据导入概览](../assets/4.1.1.png)
 根据不同的数据来源可以选择不同的导入方式：
 
-* 离线数据导入，如果数据源是Hive/HDFS，推荐采用[Broker Load导入](loading/BrokerLoad),  如果数据表很多导入比较麻烦可以考虑使用[Hive外表](using_doirsdb/External_table)直连查询，性能会比Broker load导入效果差，但是可以避免数据搬迁，如果单表的数据量特别大，或者需要做全局数据字典来精确去重可以考虑[Spark Load导入](loading/SparkLoad)。
-* 实时数据导入，日志数据和业务数据库的binlog同步到Kafka以后，优先推荐通过[Routine load](loading/RoutineLoad) 导入DorisDB，如果导入过程中有复杂的多表关联和ETL预处理可以使用Flink处理以后用stream load写入DorisDB，我们有标准的[Flink-connector](loading/Flink-dorisdb-connector.md)可以方便Flink任务使用
-* 程序写入DorisDB，推荐使用[Stream Load](loading/StreamLoad)，可以参考[例子](https://github.com/apache/incubator-doris/tree/master/samples/)中有java python shell的demo，
+* 离线数据导入，如果数据源是Hive/HDFS，推荐采用[Broker Load导入](BrokerLoad.md),  如果数据表很多导入比较麻烦可以考虑使用[Hive外表](../using_doirsdb/External_table)直连查询，性能会比Broker load导入效果差，但是可以避免数据搬迁，如果单表的数据量特别大，或者需要做全局数据字典来精确去重可以考虑[Spark Load导入](../loading/SparkLoad.md)。
+* 实时数据导入，日志数据和业务数据库的binlog同步到Kafka以后，优先推荐通过[Routine load](loading/RoutineLoad.md) 导入DorisDB，如果导入过程中有复杂的多表关联和ETL预处理可以使用Flink处理以后用stream load写入DorisDB，我们有标准的[Flink-connector](../loading/Flink-dorisdb-connector.md)可以方便Flink任务使用.
+* 程序写入DorisDB，推荐使用[Stream Load](loading/StreamLoad.md)，可以参考[例子](https://github.com/apache/incubator-doris/tree/master/samples/)中有java python shell的demo。
 * 文本文件导入推荐使用 Stream load
-* Mysql数据导入，推荐使用[Mysql外表](loading/External_table)，insert into new_table select * from external\_table 的方式导入
-* 其他数据源导入，推荐使用DataX导入，我们提供了[DataX-dorisdb-writer](loading/DataX-dorisdb-writer.md)
-* DorisDB内部导入，可以在DorisDB内部使用[insert into tablename select](loading/Insert_into)的方式导入，可以跟外部调度器配合实现简单的ETL处理。
+* Mysql数据导入，推荐使用[Mysql外表](../using_dorisdb/External_table.md)，insert into new_table select * from external\_table 的方式导入
+* 其他数据源导入，推荐使用DataX导入，我们提供了[DataX-dorisdb-writer](../loading/DataX-dorisdb-writer.md)
+* DorisDB内部导入，可以在DorisDB内部使用[insert into tablename select](../loading/Insert_into)的方式导入，可以跟外部调度器配合实现简单的ETL处理。
 
 ## 名词解释
 
@@ -27,13 +27,13 @@ DorisDB提供了多种导入方式，用户可以根据数据量大小、导入�
 * **Spark Load**：Spark导入，即通过外部资源如Spark对数据进行预处理生成中间文件，DorisDB读取中间文件导入。这是一种异步的导入方式，用户需要通过MySQL协议创建导入，并通过查看导入命令检查导入结果。
 * **FE**：Frontend，DorisDB系统的元数据和调度节点。在导入流程中主要负责导入执行计划的生成和导入任务的调度工作。
 * **BE**：Backend，DorisDB系统的计算和存储节点。在导入流程中主要负责数据的 ETL 和存储。
-* **Tablet**：DorisDB表的逻辑分片，一个表按照分区、分桶规则可以划分为多个分片（参考[数据分布](3.3数据分布.md)章节）。
+* **Tablet**：DorisDB表的逻辑分片，一个表按照分区、分桶规则可以划分为多个分片（参考[数据分布](../table_design/Data_distribution.md)章节）。
 
 ## 基本原理
 
 导入执行流程：
 
-![导入流程](../assets/4.1.2-1.png)
+![导入流程](../assets/4.1.2.png)
   
 一个导入作业主要分为5个阶段：
 
@@ -41,7 +41,7 @@ DorisDB提供了多种导入方式，用户可以根据数据量大小、导入�
 
 非必须。该阶段是指用户提交导入作业后，等待FE调度执行。
 
-Broker Load和将来的Spark Load包括该步骤。
+Broker Load和Spark Load包括该步骤。
 
 2.**ETL**
 
@@ -137,20 +137,24 @@ DorisDB目前的导入方式分为两种：同步和异步。
 ### 适用场景
 
 1. **HDFS导入**
-源数据存储在HDFS中，数据量为几十GB到上百GB时，可采用Broker Load方法向DorisDB导入数据。此时要求部署的Broker进程可以访问HDFS数据源。导入数据的作业异步执行，用户可通过`SHOW LOAD`命令查看导入结果。
 
-源数据存储在HDSF中，数据量达到TB级别时，可采用Spark Load方法向DorisDB导入数据。此时要求部署的Spark进程可以访问HDFS数据源。导入数据的作业异步执行，用户可通过`SHOW LOAD`命令查看导入结果。
+    源数据存储在HDFS中，数据量为几十GB到上百GB时，可采用Broker Load方法向DorisDB导入数据。此时要求部署的Broker进程可以访问HDFS数据源。导入数据的作业异步执行，用户可通过`SHOW LOAD`命令查看导入结果。
 
-对于其它外部数据源，只要Broker或Spark进程能读取对应数据源，也可采用Broker Load或Spark Load方法导入数据。
+    源数据存储在HDSF中，数据量达到TB级别时，可采用Spark Load方法向DorisDB导入数据。此时要求部署的Spark进程可以访问HDFS数据源。导入数据的作业异步执行，用户可通过`SHOW LOAD`命令查看导入结果。
+
+    对于其它外部数据源，只要Broker或Spark进程能读取对应数据源，也可采用Broker Load或Spark Load方法导入数据。
+
 2. **本地文件导入**
 
-数据存储在本地文件中，数据量小于10GB，可采用Stream Load方法将数据快速导入DorisDB系统。采用HTTP协议创建导入作业，作业同步执行，用户可通过HTTP请求的返回值判断导入是否成功。
+    数据存储在本地文件中，数据量小于10GB，可采用Stream Load方法将数据快速导入DorisDB系统。采用HTTP协议创建导入作业，作业同步执行，用户可通过HTTP请求的返回值判断导入是否成功。
+
 3. **Kafka导入**
 
-数据来自于Kafka等流式数据源，需要向DorisDB系统导入实时数据时，可采用Routine Load方法。用户通过MySQL协议创建例行导入作业，DorisDB持续不断地从Kafka中读取并导入数据。
+    数据来自于Kafka等流式数据源，需要向DorisDB系统导入实时数据时，可采用Routine Load方法。用户通过MySQL协议创建例行导入作业，DorisDB持续不断地从Kafka中读取并导入数据。
+
 4. **Insert Into导入**
 
-手工测试及临时数据处理时可以使用Insert Into方法向DorisDB表中写入数据。其中，INSERT INTO tbl SELECT ...;语句是从 DorisDB 的表中读取数据并导入到另一张表；INSERT INTO tbl VALUES(...);语句向指定表里插入单条数据。
+    手工测试及临时数据处理时可以使用`Insert Into`方法向DorisDB表中写入数据。其中，`INSERT INTO tbl SELECT ...;`语句是从 DorisDB 的表中读取数据并导入到另一张表；`INSERT INTO tbl VALUES(...);`语句向指定表里插入单条数据。
 
 ## 内存限制
 
@@ -172,19 +176,19 @@ DorisDB目前的导入方式分为两种：同步和异步。
 
 * max\_load\_timeout\_second和min\_load\_timeout\_second
 
-设置导入超时时间的最大、最小取值范围，均以秒为单位。默认的最大超时时间为3天，最小超时时间为1秒。用户自定义的导入超时时间不可超过这个范围。该参数通用于所有类型的导入任务。
+    设置导入超时时间的最大、最小取值范围，均以秒为单位。默认的最大超时时间为3天，最小超时时间为1秒。用户自定义的导入超时时间不可超过这个范围。该参数通用于所有类型的导入任务。
 
 * desired\_max\_waiting\_jobs
 
-等待队列可以容纳的最多导入任务数目，默认值为100。如FE中处于PENDING状态（即等待执行）的导入任务数目达到该值，则新的导入请求会被拒绝。此配置仅对异步执行的导入有效，如处于等待状态的异步导入任务数达到限额，则后续创建导入的请求会被拒绝。
+    等待队列可以容纳的最多导入任务数目，默认值为100。如FE中处于PENDING状态（即等待执行）的导入任务数目达到该值，则新的导入请求会被拒绝。此配置仅对异步执行的导入有效，如处于等待状态的异步导入任务数达到限额，则后续创建导入的请求会被拒绝。
 
 * max\_running\_txn\_num\_per\_db
 
-每个数据库中正在运行的导入任务的最大个数（不区分导入类型、统一计数），默认值为100。当数据库中正在运行的导入任务超过最大值时，后续的导入不会被执行。如果是同步作业，则作业会被拒绝；如果是异步作业，则作业会在队列中等待。
+    每个数据库中正在运行的导入任务的最大个数（不区分导入类型、统一计数），默认值为100。当数据库中正在运行的导入任务超过最大值时，后续的导入不会被执行。如果是同步作业，则作业会被拒绝；如果是异步作业，则作业会在队列中等待。
 
 * label\_keep\_max\_second
 
-导入任务记录的保留时间。已经完成的（ FINISHED or CANCELLED ）导入任务记录会在DorisDB系统中保留一段时间，时间长短则由此参数决定。参数默认值时间为3天。该参数通用于所有类型的导入任务。
+    导入任务记录的保留时间。已经完成的（ FINISHED or CANCELLED ）导入任务记录会在DorisDB系统中保留一段时间，时间长短则由此参数决定。参数默认值时间为3天。该参数通用于所有类型的导入任务。
 
 ### **BE 配置**
 
@@ -192,26 +196,27 @@ DorisDB目前的导入方式分为两种：同步和异步。
 
 * push\_write\_mbytes\_per\_sec
 
-BE上单个Tablet的写入速度限制。默认是10，即10MB/s。根据Schema以及系统的不同，通常BE对单个Tablet的最大写入速度大约在10-30MB/s之间。可以适当调整这个参数来控制导入速度。
+    BE上单个Tablet的写入速度限制。默认是10，即10MB/s。根据Schema以及系统的不同，通常BE对单个Tablet的最大写入速度大约在10-30MB/s之间。可以适当调整这个参数来控制导入速度。
 
 * write\_buffer\_size
 
-导入数据在 BE 上会先写入到一个内存块，当这个内存块达到阈值后才会写回磁盘。默认大小是 100MB。过小的阈值可能导致 BE 上存在大量的小文件。可以适当提高这个阈值减少文件数量。但过大的阈值可能导致RPC超时，见下面的配置说明。
+    导入数据在 BE 上会先写入到一个内存块，当这个内存块达到阈值后才会写回磁盘。默认大小是 100MB。过小的阈值可能导致 BE 上存在大量的小文件。可以适当提高这个阈值减少文件数量。但过大的阈值可能导致RPC超时，见下面的配置说明。
 
 * tablet\_writer\_rpc\_timeout\_sec
 
-导入过程中，发送一个 Batch（1024行）的RPC超时时间。默认为600秒。因为该RPC可能涉及多个分片内存块的写盘操作，所以可能会因为写盘导致RPC超时，可以适当调整这个超时时间来减少超时错误（如 send batch fail 错误）。同时，如果调大write\_buffer\_size配置，也需要适当调大这个参数。
+    导入过程中，发送一个 Batch（1024行）的RPC超时时间。默认为600秒。因为该RPC可能涉及多个分片内存块的写盘操作，所以可能会因为写盘导致RPC超时，可以适当调整这个超时时间来减少超时错误（如 send batch fail 错误）。同时，如果调大write\_buffer\_size配置，也需要适当调大这个参数。
 
 * streaming\_load\_rpc\_max\_alive\_time\_sec
 
-在导入过程中，DorisDB会为每个Tablet开启一个Writer，用于接收数据并写入。这个参数指定了Writer的等待超时时间。默认为600秒。如果在参数指定时间内Writer没有收到任何数据，则Writer会被自动销毁。当系统处理速度较慢时，Writer可能长时间接收不到下一批数据，导致导入报错：TabletWriter add batch with unknown id。此时可适当增大这个配置。
+    在导入过程中，DorisDB会为每个Tablet开启一个Writer，用于接收数据并写入。这个参数指定了Writer的等待超时时间。默认为600秒。如果在参数指定时间内Writer没有收到任何数据，则Writer会被自动销毁。当系统处理速度较慢时，Writer可能长时间接收不到下一批数据，导致导入报错：TabletWriter add batch with unknown id。此时可适当增大这个配置。
 
 * load\_process\_max\_memory\_limit\_bytes和load\_process\_max\_memory\_limit\_percent
 
-这两个参数分别是最大内存和最大内存百分比，限制了单个BE上可用于导入任务的内存上限。系统会在两个参数中取较小者，作为最终的BE导入任务内存使用上限。
+    这两个参数分别是最大内存和最大内存百分比，限制了单个BE上可用于导入任务的内存上限。系统会在两个参数中取较小者，作为最终的BE导入任务内存使用上限。
 
-* load\_process\_max\_memory\_limit\_percent：表示对BE总内存限制的百分比。默认为80。（总内存限制 mem\_limit 默认为 80%，表示对物理内存的百分比）。即假设物理内存为 M，则默认导入内存限制为 M \* 80% \* 80%。
-* load\_process\_max\_memory\_limit\_bytes：默认为100GB。
+  * load\_process\_max\_memory\_limit\_percent：表示对BE总内存限制的百分比。默认为80。（总内存限制 mem\_limit 默认为 80%，表示对物理内存的百分比）。即假设物理内存为 M，则默认导入内存限制为 M \* 80% \* 80%。
+  
+  * load\_process\_max\_memory\_limit\_bytes：默认为100GB。
 
 ## 注意事项
 
@@ -221,7 +226,7 @@ BE上单个Tablet的写入速度限制。默认是10，即10MB/s。根据Schema�
 2. 确定导入方式的协议：如果选择了Broker Load导入方式，则外部系统需要能使用MySQL协议定期提交和查看导入作业。
 3. 确定导入方式的类型：导入方式分为同步或异步。如果是异步导入方式，外部系统在提交创建导入后，必须调用查看导入命令，根据查看导入命令的结果来判断导入是否成功。
 4. 制定Label生成策略：Label生成策略需满足对每一批次数据唯一且固定的原则。
-5. 保证Excatly-Once：外部系统需要保证数据导入的At-Least-Once，DorisDB的Label机制可以保证数据导入的At-Most-Once。这样整体上就可以保证数据导入的Exactly-Once。
+5. 保证Exactly-Once：外部系统需要保证数据导入的At-Least-Once，DorisDB的Label机制可以保证数据导入的At-Most-Once。这样整体上就可以保证数据导入的Exactly-Once。
 
 ## 常见问题
 

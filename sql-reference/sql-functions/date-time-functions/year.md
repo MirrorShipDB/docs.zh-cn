@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`INT YEAR(DATETIME date)`
+```Haskell
+INT YEAR(DATETIME date)
+```
 
 返回date类型的year部分，范围从1000-9999
 

@@ -13,8 +13,8 @@
 
 ```plain text
 
-MySQL > select count(*) 
-from log_statis 
+MySQL > select count(*)
+from log_statis
 group by datetime;
 +----------+
 | count(*) |
@@ -23,8 +23,8 @@ group by datetime;
 +----------+
 
 
-MySQL > select count(datetime) 
-from log_statis 
+MySQL > select count(datetime)
+from log_statis
 group by datetime;
 +-------------------+
 | count(`datetime`) |
@@ -32,8 +32,8 @@ group by datetime;
 |         28521682  |
 +-------------------+
 
-MySQL > select count(distinct datetime) 
-from log_statis 
+MySQL > select count(distinct datetime)
+from log_statis
 group by datetime;
 +----------------------------+
 | count(DISTINCT `datetime`) |

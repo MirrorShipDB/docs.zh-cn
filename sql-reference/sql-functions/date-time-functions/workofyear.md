@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`INT WEEKOFYEAR(DATETIME date)`
+```Haskell
+INT WEEKOFYEAR(DATETIME date)
+```
 
 获得一年中的第几周
 

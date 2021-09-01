@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`VARCHAR reverse(VARCHAR str)`
+```Haskell
+VARCHAR reverse(VARCHAR str)
+```
 
 将字符串反转，返回的字符串的顺序和源字符串的顺序相反。
 
@@ -21,9 +23,9 @@ MySQL > SELECT REVERSE('hello');
 
 MySQL > SELECT REVERSE('你好');
 +------------------+
-| REVERSE('你好')   |
+| REVERSE('你好')  |
 +------------------+
-| 好你              |
+| 好你             |
 +------------------+
 1 row in set (0.00 sec)
 ```

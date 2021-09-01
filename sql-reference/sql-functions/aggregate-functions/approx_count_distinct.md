@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`APPROX_COUNT_DISTINCT(expr)`
+```Haskell
+APPROX_COUNT_DISTINCT(expr)
+```
 
 返回类似于 `COUNT(DISTINCT col)` 结果的近似值聚合函数。
 
@@ -14,11 +16,11 @@
 
 ```plain text
 MySQL > select approx_count_distsinct(query_id) from log_statis group by datetime;
-+-----------------+
++-----------------------------------+
 | approx_count_distinct(`query_id`) |
-+-----------------+
-| 17721           |
-+-----------------+
++-----------------------------------+
+| 17721                             |
++-----------------------------------+
 ```
 
 ## keyword

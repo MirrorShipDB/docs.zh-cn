@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`array_length(any_array)`
+```Haskell
+array_length(any_array)
+```
 
 返回数组中元素个数，结果类型是INT，如果参数是NULL，结果也是NULL.
 

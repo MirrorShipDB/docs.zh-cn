@@ -2,7 +2,7 @@
 
 DorisWriter 插件实现了写入数据到 DorisDB 的目的表的功能。在底层实现上， DorisWriter 通过Stream load以csv或 json 格式导入数据至DorisDB。内部将`reader`读取的数据进行缓存后批量导入至DorisDB，以提高写入性能。总体数据流是 `source -> Reader -> DataX channel -> Writer -> DorisDB`。
 
-> [点击下载插件](http://dorisdb-release.oss-cn-zhangjiakou.aliyuncs.com/doriswriter.tar.gz?Expires=1985109490&OSSAccessKeyId=LTAI4GFYjbX9e7QmFnAAvkt8&Signature=IazN0HPfcA0gelD6mIDBME2Brpw%3D)
+[点击下载插件](http://dorisdb-release.cdn.dorisdb.com/doriswriter.tar.gz?Expires=1990135845&OSSAccessKeyId=LTAI4GFYjbX9e7QmFnAAvkt8&Signature=wxTRzVOf1Tx8Di8PIBzTHEf5mwU%3D)
 
 请前往`https://github.com/alibaba/DataX`下载DataX完整包，然后将doriswriter插件放至 `datax/plugin/writer/` 目录下即可。
 
@@ -81,9 +81,9 @@ DorisWriter 插件实现了写入数据到 DorisDB 的目的表的功能。在�
 
   * 描述：DorisDB 数据库的用户名
 
-    * 必选：是
+  * 必选：是
 
-    * 默认值：无
+  * 默认值：无
 
 * **password**
 
@@ -122,9 +122,7 @@ DorisWriter 插件实现了写入数据到 DorisDB 的目的表的功能。在�
   * 描述：目的表**需要写入数据**的字段，字段之间用英文逗号分隔。例如: "column": ["id","name","age"]。
     >**column 配置项必须指定，不能留空！**
   >
-    >注意：我们强烈不推荐你配置为空，因为当你目的表字段个数、类型等有改动时，你的任务可能运行不正确或者失败
-  >
-    > 必须和 reader 中的 querySQL 或 column 保持顺序一样
+    >注意：我们强烈不推荐你配置为空，因为当你目的表字段个数、类型等有改动时，你的任务可能运行不正确或者失败，必须和 reader 中的 querySQL 或 column 保持顺序一样
 
   * 必选：是
 

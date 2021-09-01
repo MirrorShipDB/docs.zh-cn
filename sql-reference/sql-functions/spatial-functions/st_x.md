@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`DOUBLE ST_X(POINT point)`
+```Haskell
+DOUBLE ST_X(POINT point)
+```
 
 当point是一个合法的POINT类型时，返回对应的X坐标值
 

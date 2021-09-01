@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`VARCHAR MONTHNAME(DATE)`
+```Haskell
+VARCHAR MONTHNAME(DATE)
+```
 
 返回日期对应的月份名字
 

@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`VARCHAR ltrim(VARCHAR str)`
+```Haskell
+VARCHAR ltrim(VARCHAR str)
+```
 
 将参数 str 中从开始部分连续出现的空格去掉
 

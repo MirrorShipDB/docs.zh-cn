@@ -4,7 +4,9 @@
 
 ### Syntax
 
-`DATETIME CURRENT_TIMESTAMP()`
+```Haskell
+DATETIME CURRENT_TIMESTAMP()
+```
 
 获得当前的时间，以Datetime类型返回
 
