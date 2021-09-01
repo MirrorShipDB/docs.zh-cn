@@ -1,21 +1,22 @@
 # 导入
 
-为了更好地满足各种不同的业务场景，DorisDB支持多种数据模型，DorisDB中存储的数据需要按照特定的模型进行组织（参考[表设计](table_design/Table_design.md)章节）。数据导入功能是将原始数据按照相应的模型进行清洗转换并加载到DorisDB中，方便查询使用。
+为了更好地满足各种不同的业务场景，DorisDB支持多种数据模型，DorisDB中存储的数据需要按照特定的模型进行组织（参考[表设计](../table_design/Table_design.md)章节）。数据导入功能是将原始数据按照相应的模型进行清洗转换并加载到DorisDB中，方便查询使用。
 
 DorisDB提供了多种导入方式，用户可以根据数据量大小、导入频率等要求选择最适合自己业务需求的导入方式。本节介绍数据导入的基本概念、基本原理、系统配置、不同导入方式的适用场景，以及一些最佳实践案例和常见问题。
 
 > 注意：建议先完整阅读本节，再根据所选导入方式查看详细内容。
 
 ![数据导入概览](../assets/4.1.1.png)
+
 根据不同的数据来源可以选择不同的导入方式：
 
-* 离线数据导入，如果数据源是Hive/HDFS，推荐采用[Broker Load导入](BrokerLoad.md),  如果数据表很多导入比较麻烦可以考虑使用[Hive外表](../using_doirsdb/External_table)直连查询，性能会比Broker load导入效果差，但是可以避免数据搬迁，如果单表的数据量特别大，或者需要做全局数据字典来精确去重可以考虑[Spark Load导入](../loading/SparkLoad.md)。
-* 实时数据导入，日志数据和业务数据库的binlog同步到Kafka以后，优先推荐通过[Routine load](loading/RoutineLoad.md) 导入DorisDB，如果导入过程中有复杂的多表关联和ETL预处理可以使用Flink处理以后用stream load写入DorisDB，我们有标准的[Flink-connector](../loading/Flink-dorisdb-connector.md)可以方便Flink任务使用.
-* 程序写入DorisDB，推荐使用[Stream Load](loading/StreamLoad.md)，可以参考[例子](https://github.com/apache/incubator-doris/tree/master/samples/)中有java python shell的demo。
+* 离线数据导入，如果数据源是Hive/HDFS，推荐采用[Broker Load导入](BrokerLoad.md),  如果数据表很多导入比较麻烦可以考虑使用[Hive外表](../using_dorisdb/External_table.md)直连查询，性能会比Broker load导入效果差，但是可以避免数据搬迁，如果单表的数据量特别大，或者需要做全局数据字典来精确去重可以考虑[Spark Load导入](../loading/SparkLoad.md)。
+* 实时数据导入，日志数据和业务数据库的binlog同步到Kafka以后，优先推荐通过[Routine load](RoutineLoad.md) 导入DorisDB，如果导入过程中有复杂的多表关联和ETL预处理可以使用Flink处理以后用stream load写入DorisDB，我们有标准的[Flink-connector](Flink-dorisdb-connector.md)可以方便Flink任务使用.
+* 程序写入DorisDB，推荐使用[Stream Load](StreamLoad.md)，可以参考[例子](https://github.com/apache/incubator-doris/tree/master/samples/)中有java python shell的demo。
 * 文本文件导入推荐使用 Stream load
 * Mysql数据导入，推荐使用[Mysql外表](../using_dorisdb/External_table.md)，insert into new_table select * from external\_table 的方式导入
-* 其他数据源导入，推荐使用DataX导入，我们提供了[DataX-dorisdb-writer](../loading/DataX-dorisdb-writer.md)
-* DorisDB内部导入，可以在DorisDB内部使用[insert into tablename select](../loading/Insert_into)的方式导入，可以跟外部调度器配合实现简单的ETL处理。
+* 其他数据源导入，推荐使用DataX导入，我们提供了[DataX-dorisdb-writer](DataX-dorisdb-writer.md)
+* DorisDB内部导入，可以在DorisDB内部使用[insert into tablename select](InsertInto.md)的方式导入，可以跟外部调度器配合实现简单的ETL处理。
 
 ## 名词解释
 
