@@ -1,6 +1,6 @@
 # Routine Load
 
-Routine Load 是一种例行导入方式，DorisDB通过这种方式支持从Kafka持续不断的导入数据，并且支持通过SQL控制导入任务的暂停、重启、停止。本节主要介绍该功能的基本原理和使用方式。
+Routine Load 是一种例行导入方式，StarRocks通过这种方式支持从Kafka持续不断的导入数据，并且支持通过SQL控制导入任务的暂停、重启、停止。本节主要介绍该功能的基本原理和使用方式。
 
 ---
 
@@ -70,7 +70,7 @@ PROPERTIES
 FROM KAFKA
 (
     "kafka_broker_list"= "localhost:9092",
-    "kafka_topic" = "doris-load"
+    "kafka_topic" = "starrocks-load"
 );
 ~~~
 
@@ -83,7 +83,7 @@ FROM KAFKA
 * **COLUMN子句** ：选填。用于指定源数据中列和表中列的映射关系。
 
   * 映射列：如目标表有三列 col1, col2, col3 ，源数据有4列，其中第1、2、4列分别对应col2, col1, col3，则书写如下：COLUMNS (col2, col1, temp, col3), ，其中 temp 列为不存在的一列，用于跳过源数据中的第三列。
-  * 衍生列：除了直接读取源数据的列内容之外，DorisDB还提供对数据列的加工操作。假设目标表后加入了第四列 col4 ，其结果由 col1 + col2 产生，则可以书写如下：COLUMNS (col2, col1, temp, col3, col4 = col1 + col2),。
+  * 衍生列：除了直接读取源数据的列内容之外，StarRocks还提供对数据列的加工操作。假设目标表后加入了第四列 col4 ，其结果由 col1 + col2 产生，则可以书写如下：COLUMNS (col2, col1, temp, col3, col4 = col1 + col2),。
 
 * **WHERE子句**：选填。用于指定过滤条件，可以过滤掉不需要的行。过滤条件可以指定映射列或衍生列。例如只导入 k1 大于 100 并且 k2 等于 1000 的行，则书写如下：WHERE k1 > 100 and k2 = 1000
 * **PARTITION子句**：选填。指定导入目标表的哪些 partition 中，如果不指定，则会自动导入到对应的 partition 中。
@@ -123,7 +123,7 @@ FROM KAFKA
     SHOW ROUTINE LOAD FOR [database.][job_name];
     ~~~
 
-> 注意： DorisDB 只能查看当前正在运行中的任务，已结束和未开始的任务无法查看。
+> 注意： StarRocks 只能查看当前正在运行中的任务，已结束和未开始的任务无法查看。
 
 查看任务状态的具体命令和示例可以通过 `HELP SHOW ROUTINE LOAD;` 命令查看。
 
@@ -158,7 +158,7 @@ MySQL [load_test]> SHOW ROUTINE LOAD\G;
 
   JobProperties: {"partitions":"*","columnToColumnExpr":"event_time,channel,user,is_anonymous,is_minor,is_new,is_robot,is_unpatrolled,delta,added,deleted","maxBatchIntervalS":"10","whereExpr":"*","maxBatchSizeBytes":"104857600","columnSeparator":"','","maxErrorNum":"1000","currentTaskConcurrentNum":"1","maxBatchRows":"200000"}
 
-DataSourceProperties: {"topic":"doris-load","currentKafkaPartitions":"0","brokerList":"localhost:9092"}
+DataSourceProperties: {"topic":"starrocks-load","currentKafkaPartitions":"0","brokerList":"localhost:9092"}
 
  CustomProperties: {}
 
@@ -218,7 +218,7 @@ MySQL [load_test]> SHOW ROUTINE LOAD\G;
       DataSourceType: KAFKA
       CurrentTaskNum: 0
        JobProperties: {"partitions":"*","columnToColumnExpr":"event_time,channel,user,is_anonymous,is_minor,is_new,is_robot,is_unpatrolled,delta,added,deleted","maxBatchIntervalS":"10","whereExpr":"*","maxBatchSizeBytes":"104857600","columnSeparator":"','","maxErrorNum":"1000","currentTaskConcurrentNum":"1","maxBatchRows":"200000"}
-DataSourceProperties: {"topic":"doris-load","currentKafkaPartitions":"0","brokerList":"localhost:9092"}
+DataSourceProperties: {"topic":"starrocks-load","currentKafkaPartitions":"0","brokerList":"localhost:9092"}
     CustomProperties: {}
       Statistic: {"receivedBytes":162767220,"errorRows":132,"committedTaskNum":13,"loadedRows":2589972,"loadRowsRate":115000,"abortedTaskNum":7,"totalRows":2590104,"unselectedRows":0,"receivedBytesRate":7279000,"taskExecuteTimeMs":22359}
       Progress: {"0":"13824771"}
@@ -258,7 +258,7 @@ MySQL [load_test]> SHOW ROUTINE LOAD\G;
       DataSourceType: KAFKA
       CurrentTaskNum: 0
        JobProperties: {"partitions":"*","columnToColumnExpr":"event_time,channel,user,is_anonymous,is_minor,is_new,is_robot,is_unpatrolled,delta,added,deleted","maxBatchIntervalS":"10","whereExpr":"*","maxBatchSizeBytes":"104857600","columnSeparator":"','","maxErrorNum":"1000","currentTaskConcurrentNum":"1","maxBatchRows":"200000"}
-DataSourceProperties: {"topic":"doris-load","currentKafkaPartitions":"0","brokerList":"localhost:9092"}
+DataSourceProperties: {"topic":"starrocks-load","currentKafkaPartitions":"0","brokerList":"localhost:9092"}
     CustomProperties: {}
       Statistic: {"receivedBytes":162767220,"errorRows":132,"committedTaskNum":13,"loadedRows":2589972,"loadRowsRate":115000,"abortedTaskNum":7,"totalRows":2590104,"unselectedRows":0,"receivedBytesRate":7279000,"taskExecuteTimeMs":22359}
       Progress: {"0":"13824771"}
@@ -282,7 +282,7 @@ MySQL [load_test]> SHOW ROUTINE LOAD\G;
       DataSourceType: KAFKA
       CurrentTaskNum: 1
        JobProperties: {"partitions":"*","columnToColumnExpr":"event_time,channel,user,is_anonymous,is_minor,is_new,is_robot,is_unpatrolled,delta,added,deleted","maxBatchIntervalS":"10","whereExpr":"*","maxBatchSizeBytes":"104857600","columnSeparator":"','","maxErrorNum":"1000","currentTaskConcurrentNum":"1","maxBatchRows":"200000"}
-DataSourceProperties: {"topic":"doris-load","currentKafkaPartitions":"0","brokerList":"localhost:9092"}
+DataSourceProperties: {"topic":"starrocks-load","currentKafkaPartitions":"0","brokerList":"localhost:9092"}
     CustomProperties: {}
       Statistic: {"receivedBytes":175337712,"errorRows":142,"committedTaskNum":14,"loadedRows":2789962,"loadRowsRate":118000,"abortedTaskNum":7,"totalRows":2790104,"unselectedRows":0,"receivedBytesRate":7422000,"taskExecuteTimeMs":23623}
       Progress: {"0":"14024771"}
@@ -323,7 +323,7 @@ MySQL [load_test]> SHOW ALL ROUTINE LOAD\G;
       DataSourceType: KAFKA
       CurrentTaskNum: 0
        JobProperties: {"partitions":"*","columnToColumnExpr":"event_time,channel,user,is_anonymous,is_minor,is_new,is_robot,is_unpatrolled,delta,added,deleted","maxBatchIntervalS":"10","whereExpr":"*","maxBatchSizeBytes":"104857600","columnSeparator":"','","maxErrorNum":"1000","currentTaskConcurrentNum":"1","maxBatchRows":"200000"}
-DataSourceProperties: {"topic":"doris-load","currentKafkaPartitions":"0","brokerList":"localhost:9092"}
+DataSourceProperties: {"topic":"starrocks-load","currentKafkaPartitions":"0","brokerList":"localhost:9092"}
     CustomProperties: {}
       Statistic: {"receivedBytes":325534440,"errorRows":264,"committedTaskNum":26,"loadedRows":5179944,"loadRowsRate":109000,"abortedTaskNum":18,"totalRows":5180208,"unselectedRows":0,"receivedBytesRate":6900000,"taskExecuteTimeMs":47173}
       Progress: {"0":"16414875"}
@@ -345,4 +345,4 @@ ReasonOfStateChanged:
     可能原因：
 
   * 导入时指定了未来的offset。
-  * 还没来得及导入，Kafka已经将该offset的数据清理。需要根据DorisDB的导入速度设置合理的log清理参数log.retention.hours、log.retention.bytes等。
+  * 还没来得及导入，Kafka已经将该offset的数据清理。需要根据StarRocks的导入速度设置合理的log清理参数log.retention.hours、log.retention.bytes等。

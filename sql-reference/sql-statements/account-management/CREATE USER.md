@@ -20,11 +20,11 @@ auth_option: {
 }
 ```
 
-1. CREATE USER 命令用于创建一个 Doris 用户。在 Doris 中，一个 user_identity 唯一标识一个用户。
+1. CREATE USER 命令用于创建一个 StarRocks 用户。在 StarRocks 中，一个 user_identity 唯一标识一个用户。
 
-2. user_identity 由两部分组成，user_name 和 host，其中 user_name 为用户名。host 标识用户端连接所在的主机地址。host 部分可以使用 % 进行模糊匹配。如果不指定 host，默认为 '%'，即表示该用户可以从任意 host 连接到 Doris。
+2. user_identity 由两部分组成，user_name 和 host，其中 user_name 为用户名。host 标识用户端连接所在的主机地址。host 部分可以使用 % 进行模糊匹配。如果不指定 host，默认为 '%'，即表示该用户可以从任意 host 连接到 StarRocks。
 
-3. host 部分也可指定为 domain，语法为：'user_name'@['domain']，即使用中括号包围，则 Doris 会认为这个是一个 domain，并尝试解析其 ip 地址。目前仅支持百度内部的 BNS 解析。
+3. host 部分也可指定为 domain，语法为：'user_name'@['domain']，即使用中括号包围，则 StarRocks 会认为这个是一个 domain，并尝试解析其 ip 地址。目前仅支持百度内部的 BNS 解析。
 
 4. auth_option指定用户的认证方式，目前支持mysql_native_password和authentication_ldap_simple
 

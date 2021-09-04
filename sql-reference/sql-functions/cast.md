@@ -31,7 +31,7 @@ cast (input as type)
         http://host:port/api/test/bigint/_stream_load
     ```
 
-    > 注：在导入中，由于原始类型均为String，将值为浮点的原始数据做 cast的时候数据会被转换成 NULL ，比如 12.0 。DorisDB 目前不会对原始数据做截断。
+    > 注：在导入中，由于原始类型均为String，将值为浮点的原始数据做 cast的时候数据会被转换成 NULL ，比如 12.0 。StarRocks 目前不会对原始数据做截断。
 
     如果想强制将这种类型的原始数据 cast to int 的话。请看下面写法：
 

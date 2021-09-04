@@ -1,10 +1,10 @@
 # 监控报警
 
-DorisDB提供两种监控报警的方案，第一种是使用内置的DorisManager，其自带的Agent从各个Host采集监控信息上报到Center Service然后做可视化展示，也提供了邮件和Webhook的方式发送报警通知。但是如果用户为了二次开发需求，需要自己搭建部署监控服务，也可以使用开源的Prometheus+Grafana的方案，DorisDB提供了兼容Prometheus的信息采集接口，可以通过直接链接BE/FE的HTTP端口来获取集群的监控信息。
+StarRocks提供两种监控报警的方案，第一种是使用内置的StarRocksManager，其自带的Agent从各个Host采集监控信息上报到Center Service然后做可视化展示，也提供了邮件和Webhook的方式发送报警通知。但是如果用户为了二次开发需求，需要自己搭建部署监控服务，也可以使用开源的Prometheus+Grafana的方案，StarRocks提供了兼容Prometheus的信息采集接口，可以通过直接链接BE/FE的HTTP端口来获取集群的监控信息。
 
-## 使用DorisManager
+## 使用StarRocksManager
 
-DorisManager的监控可以分成**集群**和**节点**两个维度，在集群页面可以看到下列监控项：
+StarRocksManager的监控可以分成**集群**和**节点**两个维度，在集群页面可以看到下列监控项：
 
 * 集群性能监控
   * CPU使用率
@@ -198,11 +198,11 @@ e.g. schema change 等，本来操作就少，“失败就报警”就可以了�
 
 ## 使用Prometheus+Grafana
 
-DorisDB可使用[Prometheus](https://prometheus.io/)作为监控数据存储方案，使用[Grafana](https://grafana.com/)作为可视化组件。
+StarRocks可使用[Prometheus](https://prometheus.io/)作为监控数据存储方案，使用[Grafana](https://grafana.com/)作为可视化组件。
 
 ### 组件
 
->本文档仅提供基于Prometheus和Grafana实现的一种DorisDB可视化监控方案，原则上不维护和开发这些组件。更多详细的介绍和使用，请参考对应的官网文档。
+>本文档仅提供基于Prometheus和Grafana实现的一种StarRocks可视化监控方案，原则上不维护和开发这些组件。更多详细的介绍和使用，请参考对应的官网文档。
 
 #### Prometheus
 
@@ -231,7 +231,7 @@ wget https://github.com/prometheus/prometheus/releases/download/v2.29.1/promethe
 tar -xf prometheus-2.29.1.linux-amd64.tar.gz
 ```
 
-**2.** vi prometheus.yml，添加DorisDB监控相关的配置
+**2.** vi prometheus.yml，添加StarRocks监控相关的配置
 
 ```yml
 # my global config
@@ -242,7 +242,7 @@ global:
 
 scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-  - job_name: 'DorisDB_Cluster01' # 每一个集群称之为一个job，可以自定义名字作为DorisDB集群名
+  - job_name: 'StarRocks_Cluster01' # 每一个集群称之为一个job，可以自定义名字作为StarRocks集群名
     metrics_path: '/metrics'    # 指定获取监控项目的Restful Api
 
     static_configs:
@@ -253,7 +253,7 @@ scrape_configs:
       - targets: ['be_host1:http_port', 'be_host2:http_port', 'be_host3:http_port']
         labels:
           group: be # 这里配置了 be 的 group，该 group 中包含了 3 个 Backends
-  - job_name: 'DorisDB_Cluster02' # 可以在Prometheus中监控多个DorisDB集群
+  - job_name: 'StarRocks_Cluster02' # 可以在Prometheus中监控多个StarRocks集群
     metrics_path: '/metrics'
 
     static_configs:
@@ -279,7 +279,7 @@ nohup ./prometheus \
 
 **4.** 访问 Prometheus
 
-Prometheus 可以通过 web 页面进行简单的访问。通过浏览器打开 9090 端口，即可访问 Prometheus 的页面。点击导航栏中，`Status -> Targets`，可以看到所有分组 Job 的监控主机节点。正常情况下，所有节点都应为 UP，表示数据采集正常。如果节点状态不为 UP，可以先访问 DorisDB 的 metrics (<http://fe_host:fe_http_port/metrics>或<http://be_host:be_http_port/metrics>)接口检查是否可以访问，或查询 Prometheus 相关文档尝试解决。
+Prometheus 可以通过 web 页面进行简单的访问。通过浏览器打开 9090 端口，即可访问 Prometheus 的页面。点击导航栏中，`Status -> Targets`，可以看到所有分组 Job 的监控主机节点。正常情况下，所有节点都应为 UP，表示数据采集正常。如果节点状态不为 UP，可以先访问 StarRocks 的 metrics (<http://fe_host:fe_http_port/metrics>或<http://be_host:be_http_port/metrics>)接口检查是否可以访问，或查询 Prometheus 相关文档尝试解决。
 
 ![8.10.2-6](../assets/8.10.2-6.png)
 
@@ -329,7 +329,7 @@ Data Source配置简介
 
 ![8.10.2-2](../assets/8.10.2-2.png)
 
-* Name: 数据源的名称，自定义，比如 dorisdb_monitor
+* Name: 数据源的名称，自定义，比如 starrocksdb_monitor
 * URL: Prometheus 的 web 地址，如 <http://prometheus_host:9090>
 * Access: 选择 Server 方式，即通过 Grafana 进程所在服务器，访问 Prometheus。
 其余选项默认即可。
@@ -338,15 +338,15 @@ Data Source配置简介
 
 **2.** 添加Dashboard
 
-[Dashboard模版下载](http://dorisdb-thirdparty.oss-cn-zhangjiakou.aliyuncs.com/DorisDB-Overview.json?Expires=4783479921&OSSAccessKeyId=LTAI4GFYjbX9e7QmFnAAvkt8&Signature=w4YeV2FrzopmPuVF7axMOxtxZik%3D)，Dashboard模版会不定期更新。欢迎提供更优的Dashboard。
+[Dashboard模版下载](http://starrocksdb-thirdparty.oss-cn-zhangjiakou.aliyuncs.com/StarRocks-Overview.json?Expires=4783479921&OSSAccessKeyId=LTAI4GFYjbX9e7QmFnAAvkt8&Signature=w4YeV2FrzopmPuVF7axMOxtxZik%3D)，Dashboard模版会不定期更新。欢迎提供更优的Dashboard。
 
-确认数据源可用后，点击左边导航栏的 + 号，开始添加 Dashboard。这里我们使用上文下载的 DorisDB 的 Dashboard 模板。点击 `左边的导航栏 + 号 -> Import -> Upload Json File`，将下载的 json 文件导入。
-导入后，可以命名 Dashboard，默认是 DorisDB Overview。同时，需要选择数据源，这里选择之前创建的 dorisdb_monitor。
-点击 Import，即完成导入。之后，可以看到 DorisDB 的 Dashboard 展示。
+确认数据源可用后，点击左边导航栏的 + 号，开始添加 Dashboard。这里我们使用上文下载的 StarRocks 的 Dashboard 模板。点击 `左边的导航栏 + 号 -> Import -> Upload Json File`，将下载的 json 文件导入。
+导入后，可以命名 Dashboard，默认是 StarRocks Overview。同时，需要选择数据源，这里选择之前创建的 starrocksdb_monitor。
+点击 Import，即完成导入。之后，可以看到 StarRocks 的 Dashboard 展示。
 
 #### Dashboard说明
 
-这里我们简要介绍 DorisDB Dashboard。Dashboard 的内容可能会随版本升级，不断更新，请参考上文Dashboard模版。
+这里我们简要介绍 StarRocks Dashboard。Dashboard 的内容可能会随版本升级，不断更新，请参考上文Dashboard模版。
 
 **1.** 顶栏
 
@@ -354,7 +354,7 @@ Data Source配置简介
 
 左上角为 Dashboard 名称。
 右上角显示当前监控时间范围，可以下拉选择不同的时间范围，还可以指定定时刷新页面间隔。
-cluster_name: 即 Prometheus 配置文件中的各个 job_name，代表一个 DorisDB 集群。选择不同的 cluster，下方的图表将展示对应集群的监控信息。
+cluster_name: 即 Prometheus 配置文件中的各个 job_name，代表一个 StarRocks 集群。选择不同的 cluster，下方的图表将展示对应集群的监控信息。
 
 * fe_master: 对应集群的 Master Frontend 节点。
 * fe_instance: 对应集群的所有 Frontend 节点。选择不同的 Frontend，下方的图表将展示对应 Frontend 的监控信息。
@@ -367,7 +367,7 @@ cluster_name: 即 Prometheus 配置文件中的各个 job_name，代表一个 Do
 
 Grafana 中，Row 的概念，即一组图表的集合。如上图中的 Overview、Cluster Overview 即两个不同的 Row。可以通过点击 Row，对 Row 进行折叠。当前 Dashboard 有如下 Rows（持续更新中）：
 
-* Overview: 所有 DorisDB 集群的汇总展示。
+* Overview: 所有 StarRocks 集群的汇总展示。
 * Cluster Overview: 选定集群的汇总展示。
 * Query Statistic: 选定集群的查询相关监控。
 * Jobs: 导入任务相关监控。

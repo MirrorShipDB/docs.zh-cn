@@ -52,7 +52,7 @@
 
 ### Note
 
-  doris 支持类似PostgreSQL 语法, 语法实例如下
+  starrocks 支持类似PostgreSQL 语法, 语法实例如下
 
   ```sql
   SELECT a, b, SUM( c ) FROM tab1 GROUP BY GROUPING SETS ( (a, b), (a), (b), ( ) );

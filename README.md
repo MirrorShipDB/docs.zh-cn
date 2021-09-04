@@ -1,4 +1,4 @@
-# DorisDB
+# StarRocks
 
 中文文档仓库
 

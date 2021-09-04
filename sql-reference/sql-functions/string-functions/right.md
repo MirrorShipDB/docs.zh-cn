@@ -13,11 +13,11 @@ VARCHAR right(VARCHAR str)
 ## example
 
 ```Plain Text
-MySQL > select right("Hello doris",5);
+MySQL > select right("Hello starrocks",5);
 +-------------------------+
-| right('Hello doris', 5) |
+| right('Hello starrocks', 5) |
 +-------------------------+
-| doris                   |
+| starrocks                   |
 +-------------------------+
 ```
 

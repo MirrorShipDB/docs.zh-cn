@@ -1,6 +1,6 @@
 # Spark Load
 
-Spark Load 通过外部的 Spark 资源实现对导入数据的预处理，提高 DorisDB 大数据量的导入性能并且节省 Doris 集群的计算资源。主要用于**初次迁移**、**大数据量导入** DorisDB 的场景（数据量可到TB级别）。
+Spark Load 通过外部的 Spark 资源实现对导入数据的预处理，提高 StarRocks 大数据量的导入性能并且节省 StarRocks 集群的计算资源。主要用于**初次迁移**、**大数据量导入** StarRocks 的场景（数据量可到TB级别）。
 
 Spark Load 是一种**异步**导入方式，用户需要通过 MySQL 协议创建 Spark 类型导入任务，并可以通过 SHOW LOAD 查看导入结果。
 
@@ -9,7 +9,7 @@ Spark Load 是一种**异步**导入方式，用户需要通过 MySQL 协议创�
 ## 名词解释
 
 * **Spark ETL**：在导入流程中主要负责数据的 ETL 工作，包括全局字典构建（BITMAP类型）、分区、排序、聚合等。
-* **Broker**：Broker 为一个独立的无状态进程。封装了文件系统接口，提供 DorisDB 读取远端存储系统中文件的能力。
+* **Broker**：Broker 为一个独立的无状态进程。封装了文件系统接口，提供 StarRocks 读取远端存储系统中文件的能力。
 * **全局字典**：保存了数据从原始值到编码值映射的数据结构，原始值可以是任意数据类型，而编码后的值为整型；全局字典主要应用于精确去重预计算的场景。
 
 ---
@@ -24,7 +24,7 @@ Spark Load 任务的执行主要分为以下几个阶段：
 2. FE 调度提交 ETL 任务到 Spark 集群执行。
 3. Spark 集群执行 ETL 完成对导入数据的预处理。包括全局字典构建（BITMAP类型）、分区、排序、聚合等。
 4. ETL 任务完成后，FE 获取预处理过的每个分片的数据路径，并调度相关的 BE 执行 Push 任务。
-5. BE 通过 Broker 读取数据，转化为 DorisDB 存储格式。
+5. BE 通过 Broker 读取数据，转化为 StarRocks 存储格式。
 6. FE 调度生效版本，完成导入任务。
 
 下图展示了 Spark Load 的主要流程：
@@ -37,9 +37,9 @@ Spark Load 任务的执行主要分为以下几个阶段：
 
 ### 适用场景
 
-目前DorisDB中BITMAP列是使用类库Roaringbitmap实现的，而Roaringbitmap的输入数据类型只能是整型，因此如果要在导入流程中实现对于BITMAP列的预计算，那么就需要将输入数据的类型转换成整型。
+目前StarRocks中BITMAP列是使用类库Roaringbitmap实现的，而Roaringbitmap的输入数据类型只能是整型，因此如果要在导入流程中实现对于BITMAP列的预计算，那么就需要将输入数据的类型转换成整型。
 
-在DorisDB现有的导入流程中，全局字典的数据结构是基于Hive表实现的，保存了原始值到编码值的映射。
+在StarRocks现有的导入流程中，全局字典的数据结构是基于Hive表实现的，保存了原始值到编码值的映射。
 
 ### 构建流程
 
@@ -48,7 +48,7 @@ Spark Load 任务的执行主要分为以下几个阶段：
 3. 新建一张全局字典表，记为dict-table；一列为原始值，一列为编码后的值。
 4. 将distinct-value-table与dict-table做left join，计算出新增的去重值集合，然后对这个集合使用窗口函数进行编码，此时去重列原始值就多了一列编码后的值，最后将这两列的数据写回dict-table。
 5. 将dict-table与hive-table做join，完成hive-table中原始值替换成整型编码值的工作。
-6. hive-table会被下一步数据预处理的流程所读取，经过计算后导入到DorisDB中。
+6. hive-table会被下一步数据预处理的流程所读取，经过计算后导入到StarRocks中。
 
 ---
 
@@ -58,10 +58,10 @@ Spark Load 任务的执行主要分为以下几个阶段：
 
 1. 从数据源读取数据，上游数据源可以是HDFS文件，也可以是Hive表。
 2. 对读取到的数据完成字段映射、表达式计算，并根据分区信息生成分桶字段bucket-id。
-3. 根据DorisDB表的Rollup元数据生成RollupTree。
+3. 根据StarRocks表的Rollup元数据生成RollupTree。
 4. 遍历RollupTree，进行分层的聚合操作，下一个层级的Rollup可以由上一个层的Rollup计算得来。
 5. 每次完成聚合计算后，会对数据根据bucket-id进行分桶然后写入HDFS中。
-6. 后续Broker会拉取HDFS中的文件然后导入DorisDB BE节点中。
+6. 后续Broker会拉取HDFS中的文件然后导入StarRocks BE节点中。
 
 ---
 
@@ -69,7 +69,7 @@ Spark Load 任务的执行主要分为以下几个阶段：
 
 ### 配置 ETL 集群
 
-Spark作为一种外部计算资源在DorisDB中用来完成ETL工作，未来可能还有其他的外部资源会加入到DorisDB中使用，如Spark/GPU用于查询，HDFS/S3用于外部存储，MapReduce用于ETL等，因此我们引入Resource Management来管理DorisDB使用的这些外部资源。
+Spark作为一种外部计算资源在StarRocks中用来完成ETL工作，未来可能还有其他的外部资源会加入到StarRocks中使用，如Spark/GPU用于查询，HDFS/S3用于外部存储，MapReduce用于ETL等，因此我们引入Resource Management来管理StarRocks使用的这些外部资源。
 
 提交 Spark 导入任务之前，需要配置执行 ETL 任务的 Spark 集群。操作语法：
 
@@ -99,7 +99,7 @@ REVOKE USAGE_PRIV ON RESOURCE resource_name FROM user_identityREVOKE USAGE_PRIV 
 
 * 创建资源
 
-resource-name 为 DorisDB 中配置的 Spark 资源的名字。
+resource-name 为 StarRocks 中配置的 Spark 资源的名字。
 
 PROPERTIES 是 Spark 资源相关参数，如下：
 
@@ -118,7 +118,7 @@ PROPERTIES 是 Spark 资源相关参数，如下：
   * `spark.hadoop.yarn.resourcemanager.hostname.rm-id`: 对于每个 rm-id，指定 resource manager 对应的主机名。
   * `spark.hadoop.yarn.resourcemanager.address.rm-id`: 对于每个rm-id，指定 host:port 以供客户端提交作业。
   * 其他参数为可选，参考 [Spark Configuration](http://spark.apache.org/docs/latest/configuration.html)
-  * **working_dir**: ETL 使用的目录。spark作为ETL资源使用时必填。例如：hdfs://host:port/tmp/doris。
+  * **working_dir**: ETL 使用的目录。spark作为ETL资源使用时必填。例如：hdfs://host:port/tmp/starrocks。
   * **broker**: broker 名字。spark作为ETL资源使用时必填。需要使用`ALTER SYSTEM ADD BROKER` 命令提前完成配置。
   * `broker.property_key`: broker读取ETL生成的中间文件时需要指定的认证信息等。
 
@@ -138,7 +138,7 @@ PROPERTIES
     "spark.yarn.queue" = "queue0",
     "spark.hadoop.yarn.resourcemanager.address" = "127.0.0.1:9999",
     "spark.hadoop.fs.defaultFS" = "hdfs://127.0.0.1:10000",
-    "working_dir" = "hdfs://127.0.0.1:10000/tmp/doris",
+    "working_dir" = "hdfs://127.0.0.1:10000/tmp/starrocks",
     "broker" = "broker0",
     "broker.username" = "user0",
     "broker.password" = "password0"
@@ -156,7 +156,7 @@ PROPERTIES
     "spark.hadoop.yarn.resourcemanager.hostname.rm1" = "host1",
     "spark.hadoop.yarn.resourcemanager.hostname.rm2" = "host2",
     "spark.hadoop.fs.defaultFS" = "hdfs://127.0.0.1:10000",
-    "working_dir" = "hdfs://127.0.0.1:10000/tmp/doris",
+    "working_dir" = "hdfs://127.0.0.1:10000/tmp/starrocks",
     "broker" = "broker1"
 );
 ~~~
@@ -334,7 +334,7 @@ properties
 );
  ~~~
 
-* step 3: 提交load命令，要求导入的 DorisDB 表中的列必须在 hive 外部表中存在。
+* step 3: 提交load命令，要求导入的 StarRocks 表中的列必须在 hive 外部表中存在。
 
 ~~~sql
 LOAD LABEL db1.label1
@@ -373,8 +373,8 @@ PROPERTIES
 
 * **Spark资源参数**
   
-Spark资源需要提前配置到 DorisDB系统中并且赋予用户USAGE-PRIV权限后才能使用 Spark Load。
-当用户有临时性的需求，比如增加任务使用的资源而修改 Spark configs，可以在这里设置，设置仅对本次任务生效，并不影响 DorisDB 集群中已有的配置。
+Spark资源需要提前配置到 StarRocks系统中并且赋予用户USAGE-PRIV权限后才能使用 Spark Load。
+当用户有临时性的需求，比如增加任务使用的资源而修改 Spark configs，可以在这里设置，设置仅对本次任务生效，并不影响 StarRocks 集群中已有的配置。
 
  ~~~sql
 WITH RESOURCE 'spark0'
@@ -390,7 +390,7 @@ WITH RESOURCE 'spark0'
 
 * **导入流程构建全局字典**
   
-适用于DorisDB表聚合列的数据类型为bitmap类型。 在load命令中指定需要构建全局字典的字段即可，格式为：`DorisDB字段名称=bitmap_dict(hive表字段名称)`需要注意的是目前**只有在上游数据源为hive表**时才支持全局字典的构建。
+适用于StarRocks表聚合列的数据类型为bitmap类型。 在load命令中指定需要构建全局字典的字段即可，格式为：`StarRocks字段名称=bitmap_dict(hive表字段名称)`需要注意的是目前**只有在上游数据源为hive表**时才支持全局字典的构建。
 
 ## 查看导入任务
 
@@ -483,7 +483,7 @@ LoadFinishTime: 2019-07-27 11:50:16
 
 使用 Spark Load 最适合的场景是原始数据在文件系统（HDFS）中，数据量在几十GB到TB级别。小数据量还是建议使用Stream Load或者Broker Load。
 
-* 完整spark load导入示例，参考github上的demo: [sparkLoad2DorisDB](https://github.com/DorisDB/demo/blob/master/docs/cn/03_sparkLoad2DorisDB.md)
+* 完整spark load导入示例，参考github上的demo: [sparkLoad2StarRocks](https://github.com/StarRocks/demo/blob/master/docs/cn/03_sparkLoad2StarRocks.md)
 
 ---
 

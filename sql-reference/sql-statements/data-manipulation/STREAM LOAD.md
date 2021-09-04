@@ -69,7 +69,7 @@ strip_outer_array: 布尔类型，为true表示json数据以数组对象开始�
 {"k1" : 1, "v1" : 2},
 {"k1" : 3, "v1" : 4}
 ]
-当strip_outer_array为true，最后导入到doris中会生成两行数据。
+当strip_outer_array为true，最后导入到starrocks中会生成两行数据。
 
 json_root: json_root为合法的jsonpath字符串，用于指定json document的根节点，默认值为""。
 

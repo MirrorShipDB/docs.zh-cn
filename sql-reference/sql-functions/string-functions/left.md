@@ -13,9 +13,9 @@ VARCHAR left(VARCHAR str)
 ## example
 
 ```Plain Text
-MySQL > select left("Hello doris",5);
+MySQL > select left("Hello starrocks",5);
 +------------------------+
-| left('Hello doris', 5) |
+| left('Hello starrocks', 5) |
 +------------------------+
 | Hello                  |
 +------------------------+

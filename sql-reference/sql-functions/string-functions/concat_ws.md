@@ -17,7 +17,7 @@ MySQL > select concat_ws("or", "d", "is");
 +----------------------------+
 | concat_ws('or', 'd', 'is') |
 +----------------------------+
-| doris                      |
+| starrocks                      |
 +----------------------------+
 
 MySQL > select concat_ws(NULL, "d", "is");
@@ -31,7 +31,7 @@ MySQL > select concat_ws("or", "d", NULL,"is");
 +---------------------------------+
 | concat_ws("or", "d", NULL,"is") |
 +---------------------------------+
-| doris                           |
+| starrocks                           |
 +---------------------------------+
 ```
 

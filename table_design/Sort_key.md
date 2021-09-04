@@ -2,7 +2,7 @@
 
 ## 排序列的原理
 
-DorisDB中为加速查询，在内部组织并存储数据时，会把表中数据按照指定的列进行排序，这部分用于排序的列（可以是一个或多个列），可以称之为Sort Key。**明细模型**中Sort Key就是指定的用于排序的列（即 DUPLICATE KEY 指定的列），**聚合模型**中Sort Key列就是用于聚合的列（即 AGGREGATE KEY 指定的列），**更新模型**中Sort Key就是指定的满足唯一性约束的列（即 UNIQUE KEY 指定的列）。下图中的建表语句中Sort Key都为 (site\_id、city\_code)。
+StarRocks中为加速查询，在内部组织并存储数据时，会把表中数据按照指定的列进行排序，这部分用于排序的列（可以是一个或多个列），可以称之为Sort Key。**明细模型**中Sort Key就是指定的用于排序的列（即 DUPLICATE KEY 指定的列），**聚合模型**中Sort Key列就是用于聚合的列（即 AGGREGATE KEY 指定的列），**更新模型**中Sort Key就是指定的满足唯一性约束的列（即 UNIQUE KEY 指定的列）。下图中的建表语句中Sort Key都为 (site\_id、city\_code)。
 
 ~~~SQL
 CREATE TABLE site_access_duplicate
@@ -78,7 +78,7 @@ DISTRIBUTED BY HASH(site_id) BUCKETS 10;
 3. 如果查询只包含city\_code一列，那么需要扫描所有的数据行，排序的效果相当于大打折扣，如：  
     select sum(pv) from site\_access\_duplicate where city\_code = 2;
 
-在第一个case中，为了定位到数据行的位置，需进行二分查找，以找到指定区间。假设数据行非常多，直接对site\_id, city\_code进行二分查找，需要把两列数据都加载到内存中，这会消耗大量内存空间。为优化这个细节，DorisDB在Sort Key的基础上引入稀疏的shortkey index，Sort Index的内容会比数据量少1024倍，因此会全量缓存在内存中，实际查找的过程中可以有效加速查询。当Sort Key列数非常多时，会占用大量内存, 为了避免这种情况, 对shortkey index索引项做了限制:
+在第一个case中，为了定位到数据行的位置，需进行二分查找，以找到指定区间。假设数据行非常多，直接对site\_id, city\_code进行二分查找，需要把两列数据都加载到内存中，这会消耗大量内存空间。为优化这个细节，StarRocks在Sort Key的基础上引入稀疏的shortkey index，Sort Index的内容会比数据量少1024倍，因此会全量缓存在内存中，实际查找的过程中可以有效加速查询。当Sort Key列数非常多时，会占用大量内存, 为了避免这种情况, 对shortkey index索引项做了限制:
 
 * shortkey 的列只能是排序键的前缀;
 * shortkey 列数不超过3;
@@ -102,7 +102,7 @@ DISTRIBUTED BY HASH(site_id) BUCKETS 10;
 
 ### 3.4.3 注意事项
 
-由于DorisDB的shortkey索引大小固定（只有36字节），所以不会存在内存膨胀的问题。需要注意的是：
+由于StarRocks的shortkey索引大小固定（只有36字节），所以不会存在内存膨胀的问题。需要注意的是：
 
 1. 排序列中包含的列必须是从第一列开始，并且连续的。
 2. 排序列的顺序是由create table语句中的列顺序决定的。

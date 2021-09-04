@@ -1,16 +1,16 @@
 # 目录
 
-+ [DorisDB介绍](/introduction/DorisDB_intro.md)
++ [StarRocks介绍](/introduction/StarRocks_intro.md)
 + 快速开始
-  + [DorisDB基本概念](/quick_start/Concepts.md)
-  + [DorisDB系统架构](/quick_start/Architecture.md)
-  + [DorisDB手动部署](/quick_start/Deploy.md)
+  + [StarRocks基本概念](/quick_start/Concepts.md)
+  + [StarRocks系统架构](/quick_start/Architecture.md)
+  + [StarRocks手动部署](/quick_start/Deploy.md)
   + [数据流和控制流](/quick_start/Data_flow_and_control_flow.md)
   + [数据导入和查询](/quick_start/Import_and_query.md)
   + [测试常见问题](/quick_start/Test_faq.md)
   + [下一步](/quick_start/Next_step.md)
 + 表设计
-  + [理解DorisDB表设计](/table_design/DorisDB_table_design.md)
+  + [理解StarRocks表设计](/table_design/StarRocks_table_design.md)
   + [数据模型介绍](/table_design/Data_model.md)
   + [数据分布](/table_design/Data_distribution.md)
   + [排序键和shortkey index](/table_design/Sort_key.md)
@@ -26,21 +26,21 @@
   + [Insert Into导入](/loading/InsertInto.md)
   + [导入过程中完成数据转换](/loading/Etl_in_loading.md)
   + [Json数据导入](/loading/Json_loading.md)
-  + [flink-connector-dorisdb](/loading/Flink-dorisdb-connector.md)
-  + [DataX-dorisdb-writer](/loading/DataX-dorisdb-writer.md)
+  + [flink-connector-starrocksdb](/loading/Flink-starrocksdb-connector.md)
+  + [DataX-starrocksdb-writer](/loading/DataX-starrocksdb-writer.md)
 + 数据提取
   + [Export数据导出](/unloading/Export.md)
   + [Spark-connector](/unloading/Spark_connector.md)
-+ 使用DorisDB
-  + [用Bitmap实现精确去重](/using_dorisdb/Using_bitmap.md)
-  + [用HLL实现近似去重](/using_dorisdb/Using_HLL.md)
-  + [物化视图](/using_dorisdb/Materialized_view.md)
-  + [Colocation Join](/using_dorisdb/Colocation_join.md)
-  + [外部表](/using_dorisdb/External_table.md)
-  + [数组](/using_dorisdb/Array.md)
-  + [窗口函数](/using_dorisdb/Window_function.md)
-  + [CBO优化器](/using_dorisdb/Cost_based_optimizer.md)
-  + [Lateral Join](/using_dorisdb/Lateral_join.md)
++ 使用StarRocks
+  + [用Bitmap实现精确去重](/using_starrocksdb/Using_bitmap.md)
+  + [用HLL实现近似去重](/using_starrocksdb/Using_HLL.md)
+  + [物化视图](/using_starrocksdb/Materialized_view.md)
+  + [Colocation Join](/using_starrocksdb/Colocation_join.md)
+  + [外部表](/using_starrocksdb/External_table.md)
+  + [数组](/using_starrocksdb/Array.md)
+  + [窗口函数](/using_starrocksdb/Window_function.md)
+  + [CBO优化器](/using_starrocksdb/Cost_based_optimizer.md)
+  + [Lateral Join](/using_starrocksdb/Lateral_join.md)
 + 参考手册
   + SQL参考
     + 用户账户管理

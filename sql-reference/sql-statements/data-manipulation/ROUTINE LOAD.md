@@ -2,7 +2,7 @@
 
 ## description
 
-例行导入（Routine Load）功能，支持用户提交一个常驻的导入任务，通过不断的从指定的数据源读取数据，将数据导入到 DorisDB 中。
+例行导入（Routine Load）功能，支持用户提交一个常驻的导入任务，通过不断的从指定的数据源读取数据，将数据导入到 StarRocksDB 中。
 目前仅支持通过无认证或者 SSL 认证方式，从 Kakfa 导入文本格式（CSV）的数据。
 
 语法：
@@ -63,7 +63,7 @@ FROM data_source
 
             ```plain text
             以 col_name = expr 的形式表示的列，我们称为衍生列。即支持通过 expr 计算得出目的表中对应列的值。
-            衍生列通常排列在映射列之后，虽然这不是强制的规定，但是 Doris 总是先解析映射列，再解析衍生列。
+            衍生列通常排列在映射列之后，虽然这不是强制的规定，但是 StarRocks 总是先解析映射列，再解析衍生列。
             接上一个示例，假设目的表还有第4列 v2，v2 由 k1 和 k2 的和产生。则可以书写如下：
 
             COLUMNS (k2, k1, xxx, v1, v2 = k1 + k2);
@@ -294,7 +294,7 @@ FROM data_source
     ```sql
     CREATE ROUTINE LOAD example_db.test1 ON example_tbl
     COLUMNS(k1, k2, k3, v1, v2, v3 = k1 * 100),
-    WHERE k1 > 100 and k2 like "%doris%"
+    WHERE k1 > 100 and k2 like "%starrocks%"
     PROPERTIES
     (
     "desired_concurrent_number"="3",
@@ -315,7 +315,7 @@ FROM data_source
     ```sql
     CREATE ROUTINE LOAD example_db.test1 ON example_tbl
     COLUMNS(k1, k2, k3, v1, v2, v3 = k1 * 100),
-    WHERE k1 > 100 and k2 like "%doris%"
+    WHERE k1 > 100 and k2 like "%starrocks%"
     PROPERTIES
     (
     "desired_concurrent_number"="3",

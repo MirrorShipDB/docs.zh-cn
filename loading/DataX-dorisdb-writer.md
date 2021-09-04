@@ -1,10 +1,10 @@
 # 介绍
 
-DorisWriter 插件实现了写入数据到 DorisDB 的目的表的功能。在底层实现上， DorisWriter 通过Stream load以csv或 json 格式导入数据至DorisDB。内部将`reader`读取的数据进行缓存后批量导入至DorisDB，以提高写入性能。总体数据流是 `source -> Reader -> DataX channel -> Writer -> DorisDB`。
+StarRocksWriter 插件实现了写入数据到 StarRocks 的目的表的功能。在底层实现上， StarRocksWriter 通过Stream load以csv或 json 格式导入数据至StarRocks。内部将`reader`读取的数据进行缓存后批量导入至StarRocks，以提高写入性能。总体数据流是 `source -> Reader -> DataX channel -> Writer -> StarRocks`。
 
-[点击下载插件](http://dorisdb-release.cdn.dorisdb.com/doriswriter.tar.gz?Expires=1990135845&OSSAccessKeyId=LTAI4GFYjbX9e7QmFnAAvkt8&Signature=wxTRzVOf1Tx8Di8PIBzTHEf5mwU%3D)
+[点击下载插件](http://starrocksdb-release.cdn.starrocksdb.com/starrockswriter.tar.gz?Expires=1990135845&OSSAccessKeyId=LTAI4GFYjbX9e7QmFnAAvkt8&Signature=wxTRzVOf1Tx8Di8PIBzTHEf5mwU%3D)
 
-请前往`https://github.com/alibaba/DataX`下载DataX完整包，然后将doriswriter插件放至 `datax/plugin/writer/` 目录下即可。
+请前往`https://github.com/alibaba/DataX`下载DataX完整包，然后将starrockswriter插件放至 `datax/plugin/writer/` 目录下即可。
 
 测试时可以使用如下命令:
  `python datax.py --jvm="-Xms6G -Xmx6G" --loglevel=debug job.json`
@@ -13,7 +13,7 @@ DorisWriter 插件实现了写入数据到 DorisDB 的目的表的功能。在�
 
 ### 配置样例
 
-这里是一份从MySQL读取数据后导入至DorisDB的配置文件。
+这里是一份从MySQL读取数据后导入至StarRocks的配置文件。
 
 ```json
 {
@@ -52,7 +52,7 @@ DorisWriter 插件实现了写入数据到 DorisDB 的目的表的功能。在�
                     }
                 },
                "writer": {
-                    "name": "doriswriter",
+                    "name": "starrockswriter",
                     "parameter": {
                         "username": "xxxx",
                         "password": "xxxx",
@@ -73,13 +73,13 @@ DorisWriter 插件实现了写入数据到 DorisDB 的目的表的功能。在�
 
 ```
 
-## doriswriter 参数说明
+## starrockswriter 参数说明
 
-**mysqlreader** 的配置，请参照 DataX 的说明 [mysqlreader](https://github.com/DorisDB/DataX/blob/master/mysqlreader/doc/mysqlreader.md)。
+**mysqlreader** 的配置，请参照 DataX 的说明 [mysqlreader](https://github.com/StarRocks/DataX/blob/master/mysqlreader/doc/mysqlreader.md)。
 
 * **username**
 
-  * 描述：DorisDB 数据库的用户名
+  * 描述：StarRocks 数据库的用户名
 
   * 必选：是
 
@@ -87,7 +87,7 @@ DorisWriter 插件实现了写入数据到 DorisDB 的目的表的功能。在�
 
 * **password**
 
-  * 描述：DorisDB 数据库的密码
+  * 描述：StarRocks 数据库的密码
 
   * 必选：是
 
@@ -95,7 +95,7 @@ DorisWriter 插件实现了写入数据到 DorisDB 的目的表的功能。在�
 
 * **database**
 
-  * 描述：DorisDB 表的数据库名称。
+  * 描述：StarRocks 表的数据库名称。
 
   * 必选：是
 
@@ -103,7 +103,7 @@ DorisWriter 插件实现了写入数据到 DorisDB 的目的表的功能。在�
 
 * **table**
 
-  * 描述：DorisDB 表的表名称。
+  * 描述：StarRocks 表的表名称。
 
   * 必选：是
 
@@ -111,7 +111,7 @@ DorisWriter 插件实现了写入数据到 DorisDB 的目的表的功能。在�
 
 * **loadUrl**
 
-  * 描述：DorisDB FE的地址用于Stream load，可以为多个FE地址，形如`fe_ip:fe_http_port`。
+  * 描述：StarRocks FE的地址用于Stream load，可以为多个FE地址，形如`fe_ip:fe_http_port`。
 
   * 必选：是
 
@@ -168,7 +168,7 @@ DorisWriter 插件实现了写入数据到 DorisDB 的目的表的功能。在�
 ```json
 "loadProps": {
     "column_separator": "\\x01",
-    "row_delimiter": "\\x02" // 此参数自 DorisDB-1.15.0 开始支持
+    "row_delimiter": "\\x02" // 此参数自 StarRocks-1.15.0 开始支持
 }
 ```
 
@@ -181,7 +181,7 @@ DorisWriter 插件实现了写入数据到 DorisDB 的目的表的功能。在�
 }
 ```
 
-> 这里的 `json` 格式是针对 writer 给 DorisDB 导入数据时采用 json 格式。
+> 这里的 `json` 格式是针对 writer 给 StarRocks 导入数据时采用 json 格式。
 
 ## 关于时区
 

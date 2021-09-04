@@ -2,9 +2,9 @@
 
 ## 变量设置与查看
 
-本节介绍DorisDB系统支持的变量（variables）。它们可以通过命令 `SHOW VARIABLES` 查看，能在系统全局范围内生效，或者仅在当前会话中生效。
+本节介绍StarRocks系统支持的变量（variables）。它们可以通过命令 `SHOW VARIABLES` 查看，能在系统全局范围内生效，或者仅在当前会话中生效。
 
-DorisDB 中的变量参考 MySQL 中的变量设置，但**部分变量仅用于兼容 MySQL 客户端协议，并不产生其在 MySQL 数据库中的实际意义**。
+StarRocks 中的变量参考 MySQL 中的变量设置，但**部分变量仅用于兼容 MySQL 客户端协议，并不产生其在 MySQL 数据库中的实际意义**。
 
 ### 查看
 
@@ -120,7 +120,7 @@ SELECT /*+ SET_VAR(query_timeout = 1) */ sleep(3);
 
 * enable_spilling
 
-    用于设置是否开启大数据量落盘排序。默认为 false，即关闭该功能。当用户未指定 ORDER BY 子句的 LIMIT 条件，同时设置 enable_spilling 为 true 时，才会开启落盘排序。该功能启用后，会使用 BE 数据目录下 doris-scratch/ 目录存放临时的落盘数据，并在查询结束后清空临时数据。
+    用于设置是否开启大数据量落盘排序。默认为 false，即关闭该功能。当用户未指定 ORDER BY 子句的 LIMIT 条件，同时设置 enable_spilling 为 true 时，才会开启落盘排序。该功能启用后，会使用 BE 数据目录下 starrocks-scratch/ 目录存放临时的落盘数据，并在查询结束后清空临时数据。
 
     该功能主要用于使用有限的内存进行大数据量的排序操作。
 
@@ -146,7 +146,7 @@ SELECT /*+ SET_VAR(query_timeout = 1) */ sleep(3);
 
 * forward_to_master
 
-    用于设置是否将一些命令转发到 Master FE 节点执行。默认为 false，即不转发。DorisDB 中存在多个 FE 节点，其中一个为 Master 节点。通常用户可以连接任意 FE 节点进行全功能操作。但部分信息查看指令只有从 Master FE 节点才能获取详细信息。
+    用于设置是否将一些命令转发到 Master FE 节点执行。默认为 false，即不转发。StarRocks 中存在多个 FE 节点，其中一个为 Master 节点。通常用户可以连接任意 FE 节点进行全功能操作。但部分信息查看指令只有从 Master FE 节点才能获取详细信息。
 
     如 `SHOW BACKENDS;` 命令，如果不转发到 Master FE 节点，则仅能看到节点是否存活等一些基本信息，而转发到 Master FE 则可以获取包括节点启动时间、最后一次心跳时间等更详细的信息。
 
@@ -198,7 +198,7 @@ SELECT /*+ SET_VAR(query_timeout = 1) */ sleep(3);
 
 * license
 
-    显示 DorisDB 的 License。无其他作用。
+    显示 StarRocks 的 License。无其他作用。
 
 * load_mem_limit
 
@@ -210,7 +210,7 @@ SELECT /*+ SET_VAR(query_timeout = 1) */ sleep(3);
 
 * lower_case_table_names
 
-    用于兼容 MySQL 客户端，无实际作用。DorisDB 中的表名是大小写敏感的。
+    用于兼容 MySQL 客户端，无实际作用。StarRocks 中的表名是大小写敏感的。
 
 * max_allowed_packet
 
@@ -222,7 +222,7 @@ SELECT /*+ SET_VAR(query_timeout = 1) */ sleep(3);
 
 * max_scan_key_num
 
-    该变量的具体含义请参阅 BE 配置项中 doris_max_scan_key_num 的说明。该变量默认置为 -1，表示使用 be.conf 中的配置值。如果设置大于 0，则当前会话中的查询会使用该变量值，而忽略 be.conf 中的配置值。
+    该变量的具体含义请参阅 BE 配置项中 starrocks_max_scan_key_num 的说明。该变量默认置为 -1，表示使用 be.conf 中的配置值。如果设置大于 0，则当前会话中的查询会使用该变量值，而忽略 be.conf 中的配置值。
 
 * net_buffer_length
 
@@ -290,9 +290,9 @@ SELECT /*+ SET_VAR(query_timeout = 1) */ sleep(3);
 
 * storage_engine
 
-    指定系统使用的存储引擎。DorisDB支持的引擎类型包括：
+    指定系统使用的存储引擎。StarRocks支持的引擎类型包括：
 
-  * olap：DorisDB系统自有引擎。
+  * olap：StarRocks系统自有引擎。
   * mysql：使用MySQL外部表。
   * broker：通过Broker程序访问外部表。
   * elasticsearch 或者 es：使用Elasticsearch外部表。
@@ -324,8 +324,8 @@ SELECT /*+ SET_VAR(query_timeout = 1) */ sleep(3);
 
 * version_comment
 
-    用于显示 DorisDB 的版本。不可更改。
+    用于显示 StarRocks 的版本。不可更改。
 
 * wait_timeout
 
-    用于设置空闲连接的连接时长。当一个空闲连接在该时长内与 DorisDB 没有任何交互，则 DorisDB 会主动断开这个链接。默认为 8 小时，单位是「秒」。
+    用于设置空闲连接的连接时长。当一个空闲连接在该时长内与 StarRocks 没有任何交互，则 StarRocks 会主动断开这个链接。默认为 8 小时，单位是「秒」。

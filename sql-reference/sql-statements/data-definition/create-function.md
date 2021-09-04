@@ -56,7 +56,7 @@ properties: 用于设定此函数相关属性，能够设置的属性包括：
 
     ```sql
     CREATE FUNCTION my_add(INT, INT) RETURNS INT PROPERTIES (
-    "symbol" = "_ZN9doris_udf6AddUdfEPNS_15FunctionContextERKNS_6IntValES4_",
+    "symbol" = "_ZN9starrocks_udf6AddUdfEPNS_15FunctionContextERKNS_6IntValES4_",
     "object_file" = "http://host:port/libmyadd.so"
     );
     ```
@@ -65,9 +65,9 @@ properties: 用于设定此函数相关属性，能够设置的属性包括：
 
     ```sql
     CREATE FUNCTION my_add(INT, INT) RETURNS INT PROPERTIES (
-    "symbol" = "_ZN9doris_udf6AddUdfEPNS_15FunctionContextERKNS_6IntValES4_",
-    "prepare_fn" = "_ZN9doris_udf14AddUdf_prepareEPNS_15FunctionContextENS0_18FunctionStateScopeE",
-    "close_fn" = "_ZN9doris_udf12AddUdf_closeEPNS_15FunctionContextENS0_18FunctionStateScopeE",
+    "symbol" = "_ZN9starrocks_udf6AddUdfEPNS_15FunctionContextERKNS_6IntValES4_",
+    "prepare_fn" = "_ZN9starrocks_udf14AddUdf_prepareEPNS_15FunctionContextENS0_18FunctionStateScopeE",
+    "close_fn" = "_ZN9starrocks_udf12AddUdf_closeEPNS_15FunctionContextENS0_18FunctionStateScopeE",
     "object_file" = "http://host:port/libmyadd.so"
     );
     ```
@@ -76,10 +76,10 @@ properties: 用于设定此函数相关属性，能够设置的属性包括：
 
     ```sql
     CREATE AGGREGATE FUNCTION my_count (BIGINT) RETURNS BIGINT PROPERTIES (
-    "init_fn"="_ZN9doris_udf9CountInitEPNS_15FunctionContextEPNS_9BigIntValE",
-    "update_fn"="_ZN9doris_udf11CountUpdateEPNS_15FunctionContextERKNS_6IntValEPNS_9BigIntValE",
-    "merge_fn"="_ZN9doris_udf10CountMergeEPNS_15FunctionContextERKNS_9BigIntValEPS2_",
-    "finalize_fn"="_ZN9doris_udf13CountFinalizeEPNS_15FunctionContextERKNS_9BigIntValE",
+    "init_fn"="_ZN9starrocks_udf9CountInitEPNS_15FunctionContextEPNS_9BigIntValE",
+    "update_fn"="_ZN9starrocks_udf11CountUpdateEPNS_15FunctionContextERKNS_6IntValEPNS_9BigIntValE",
+    "merge_fn"="_ZN9starrocks_udf10CountMergeEPNS_15FunctionContextERKNS_9BigIntValEPS2_",
+    "finalize_fn"="_ZN9starrocks_udf13CountFinalizeEPNS_15FunctionContextERKNS_9BigIntValE",
     "object_file"="http://host:port/libudasample.so"
     );
     ```
@@ -88,7 +88,7 @@ properties: 用于设定此函数相关属性，能够设置的属性包括：
 
     ```sql
     CREATE FUNCTION strconcat(varchar, ...) RETURNS varchar properties (
-    "symbol" = "_ZN9doris_udf6StrConcatUdfEPNS_15FunctionContextERKNS_6IntValES4_",
+    "symbol" = "_ZN9starrocks_udf6StrConcatUdfEPNS_15FunctionContextERKNS_6IntValES4_",
     "object_file" = "http://host:port/libmyStrConcat.so"
     );
     ```

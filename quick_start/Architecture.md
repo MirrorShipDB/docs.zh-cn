@@ -1,4 +1,4 @@
-# DorisDB的系统架构
+# StarRocks的系统架构
 
 ## 系统架构图
 
@@ -6,7 +6,7 @@
 
 ## 组件介绍
 
-DorisDB集群由FE和BE构成, 可以使用MySQL客户端访问DorisDB集群。
+StarRocks集群由FE和BE构成, 可以使用MySQL客户端访问StarRocks集群。
 
 ### FE
 
@@ -31,4 +31,4 @@ FE接收MySQL客户端的连接, 解析并执行SQL语句。
 ### 其他组件
 
 * 管理平台, 在后面会专门的章节介绍。
-* Hdfs Broker:  用于从Hdfs中导入数据到DorisDB集群，见[数据导入](../loading/Loading_intro.md)章节。
+* Hdfs Broker:  用于从Hdfs中导入数据到StarRocks集群，见[数据导入](../loading/Loading_intro.md)章节。

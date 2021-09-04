@@ -1,8 +1,8 @@
 # BrokerLoad
 
-DorisDB支持从Apache HDFS、Amazon S3等外部存储系统导入数据，支持CSV、ORCFile、Parquet等文件格式。数据量在几十GB到上百GB 级别。
+StarRocks支持从Apache HDFS、Amazon S3等外部存储系统导入数据，支持CSV、ORCFile、Parquet等文件格式。数据量在几十GB到上百GB 级别。
 
-在Broker Load模式下，通过部署的Broker程序，DorisDB可读取对应数据源（如HDFS, S3）上的数据，利用自身的计算资源对数据进行预处理和导入。这是一种**异步**的导入方式，用户需要通过MySQL协议创建导入，并通过查看导入命令检查导入结果。
+在Broker Load模式下，通过部署的Broker程序，StarRocks可读取对应数据源（如HDFS, S3）上的数据，利用自身的计算资源对数据进行预处理和导入。这是一种**异步**的导入方式，用户需要通过MySQL协议创建导入，并通过查看导入命令检查导入结果。
 
 本节主要介绍Broker导入的基本原理、使用示例、最佳实践，及常见问题。
 
@@ -10,9 +10,9 @@ DorisDB支持从Apache HDFS、Amazon S3等外部存储系统导入数据，支�
 
 ## 名词解释
 
-* Broker:  Broker 为一个独立的无状态进程，封装了文件系统接口，为 DorisDB 提供读取远端存储系统中文件的能力。
+* Broker:  Broker 为一个独立的无状态进程，封装了文件系统接口，为 StarRocks 提供读取远端存储系统中文件的能力。
 
-* Plan:  导入执行计划，BE会执行导入执行计划将数据导入到DorisDB系统中。
+* Plan:  导入执行计划，BE会执行导入执行计划将数据导入到StarRocks系统中。
 
 ---
 
@@ -144,7 +144,7 @@ Broker load支持一次导入任务涉及多张表，每个Broker load导入任�
 
 * negative
 
-data_desc中还可以设置数据取反导入。这个功能适用的场景是当数据表中聚合列的类型都为SUM类型时，如果希望撤销某一批导入的数据，可以通过negative参数导入同一批数据，DorisDB 会自动为这一批数据在聚合列上数据取反，以达到消除同一批数据的功能。
+data_desc中还可以设置数据取反导入。这个功能适用的场景是当数据表中聚合列的类型都为SUM类型时，如果希望撤销某一批导入的数据，可以通过negative参数导入同一批数据，StarRocks 会自动为这一批数据在聚合列上数据取反，以达到消除同一批数据的功能。
 
 * partition
 
@@ -200,7 +200,7 @@ data_desc中的WHERE语句负责过滤已经完成transform的数据。被过滤
 
 例如对于1GB的待导入数据文件，待导入表包含2个Rollup表，当前的导入并发数为3。则 timeout 的最小值为 (1 \* 1024 \* 3 ) / (10 \* 3) = 102 秒
 
-由于每个 DorisDB 集群的机器环境不同且集群并发的查询任务也不同，所以 DorisDB 集群的最慢导入速度需要用户自己根据历史的导入任务速度进行推测。
+由于每个 StarRocks 集群的机器环境不同且集群并发的查询任务也不同，所以 StarRocks 集群的最慢导入速度需要用户自己根据历史的导入任务速度进行推测。
 
 * max_filter_ratio
 
@@ -333,7 +333,7 @@ LoadFinishTime: 2019-07-27 11:50:16
 
 * Q：导入报错：LOAD-RUN-FAIL; msg:Invalid Column Name:xxx
 
-    A：如果是Parquet或者ORC格式的数据，需要保持文件头的列名与DorisDB表中的列名一致，如 :
+    A：如果是Parquet或者ORC格式的数据，需要保持文件头的列名与StarRocks表中的列名一致，如 :
 
     ~~~sql
     (tmp_c1,tmp_c2)
@@ -344,7 +344,7 @@ LoadFinishTime: 2019-07-27 11:50:16
     )
     ~~~
 
-表示将Parquet或ORC文件中以(tmp_c1, tmp_c2)为列名的列，映射到DorisDB表中的(id, name)列。如果没有设置set, 则以column中的列作为映射。
+表示将Parquet或ORC文件中以(tmp_c1, tmp_c2)为列名的列，映射到StarRocks表中的(id, name)列。如果没有设置set, 则以column中的列作为映射。
 
 > 注意：如果使用某些Hive版本直接生成的ORC文件，ORC文件中的表头并非Hive meta数据，而是`（_col0, _col1, _col2, ...）`, 可能导致Invalid Column Name错误，那么则需要使用set进行映射。
 

@@ -2,7 +2,7 @@
 
 ## description
 
-Broker load 通过随 Doris 集群一同部署的 broker 进行，访问对应数据源的数据，进行数据导入。
+Broker load 通过随 StarRocks 集群一同部署的 broker 进行，访问对应数据源的数据，进行数据导入。
 
 可以通过 show broker 命令查看已经部署的 broker。
 
@@ -303,7 +303,7 @@ WITH BROKER broker_name
     WITH BROKER my_hdfs_broker
     (
     "hadoop.security.authentication" = "kerberos",
-    "kerberos_principal"="doris@YOUR.COM",
+    "kerberos_principal"="starrocks@YOUR.COM",
     "kerberos_keytab"="/home/palo/palo.keytab"
     )
     ````
@@ -322,7 +322,7 @@ WITH BROKER broker_name
     WITH BROKER my_hdfs_broker
     (
     "hadoop.security.authentication"="kerberos",
-    "kerberos_principal"="doris@YOUR.COM",
+    "kerberos_principal"="starrocks@YOUR.COM",
     "kerberos_keytab_content"="BQIAAABEAAEACUJBSURVLkNPTQAEcGFsbw"
     )
     ```

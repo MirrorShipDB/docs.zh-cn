@@ -1,13 +1,13 @@
 # 背景介绍
 
-用户在使用DorisDB进行精确去重分析时，通常会有两种方式：
+用户在使用StarRocks进行精确去重分析时，通常会有两种方式：
 
 * 基于明细去重：即传统的count distinct 方式，好处是可以保留明细数据。提高了分析的灵活性。缺点则是需要消耗极大的计算和存储资源，对大规模数据集和查询延迟敏感的去重场景支持不够友好。
-* 基于预计算去重：这种方式也是DorisDB推荐的方式。在某些场景中，用户可能不关心明细数据，仅仅希望知道去重后的结果。这种场景可采用预计算的方式进行去重分析，本质上是利用空间换时间，也是MOLAP聚合模型的核心思路。就是将计算提前到数据导入的过程中，减少存储成本和查询时的现场计算成本。并且可以使用RollUp表降维的方式，进一步减少现场计算的数据集大小。
+* 基于预计算去重：这种方式也是StarRocks推荐的方式。在某些场景中，用户可能不关心明细数据，仅仅希望知道去重后的结果。这种场景可采用预计算的方式进行去重分析，本质上是利用空间换时间，也是MOLAP聚合模型的核心思路。就是将计算提前到数据导入的过程中，减少存储成本和查询时的现场计算成本。并且可以使用RollUp表降维的方式，进一步减少现场计算的数据集大小。
 
 ## 传统Count distinct计算
 
-DorisDB 是基于MPP 架构实现的，在使用count distinct做精准去重时，可以保留明细数据，灵活性较高。但是，由于在查询执行的过程中需要进行多次数据shuffle（不同节点间传输数据，计算去重），会导致性能随着数据量增大而直线下降。
+StarRocks 是基于MPP 架构实现的，在使用count distinct做精准去重时，可以保留明细数据，灵活性较高。但是，由于在查询执行的过程中需要进行多次数据shuffle（不同节点间传输数据，计算去重），会导致性能随着数据量增大而直线下降。
 
 如以下场景。存在表（dt, page, user_id)，需要通过明细数据计算UV。
 
@@ -31,7 +31,7 @@ DorisDB 是基于MPP 架构实现的，在使用count distinct做精准去重时
  select page, count(distinct user_id) as uv from table group by page;
 ```
 
-对于上图计算 PV 的 SQL，DorisDB 在计算时，会按照下图进行计算，先根据 page 列和 user_id 列 group by,最后再 count。
+对于上图计算 PV 的 SQL，StarRocks 在计算时，会按照下图进行计算，先根据 page 列和 user_id 列 group by,最后再 count。
 
 ![alter](../assets/6.1.2-2.png)
 
@@ -45,7 +45,7 @@ DorisDB 是基于MPP 架构实现的，在使用count distinct做精准去重时
 
 ## 使用bitmap去重的优势
 
-1. 空间优势:  用bitmap的一个bit位表示对应下标是否存在, 具有极大的空间优势;  比如对int32去重, 使用普通bitmap所需的存储空间只占传统去重的1/32.  DorisDB中的Bitmap采用Roaring Bitmap的优化实现, 对于稀疏的bitmap, 存储空间会进一步显著降低.
+1. 空间优势:  用bitmap的一个bit位表示对应下标是否存在, 具有极大的空间优势;  比如对int32去重, 使用普通bitmap所需的存储空间只占传统去重的1/32.  StarRocks中的Bitmap采用Roaring Bitmap的优化实现, 对于稀疏的bitmap, 存储空间会进一步显著降低.
 2. 时间优势:  bitmap的去重涉及的计算包括对给定下标的bit置位, 统计bitmap的置位个数, 分别为O(1)操作和O(n)操作, 并且后者可使用clz, ctz等指令高效计算. 此外, bitmap去重在MPP执行引擎中还可以并行加速处理, 每个计算节点各自计算本地子bitmap,  使用bitor操作将这些子bitmap合并成最终的bitmap, bitor操作比基于sort和基于hash的去重效率要高, 无条件依赖和数据依赖, 可向量化执行。
 
 Roaring Bitmap实现，细节可以参考：[具体论文和实现](https://github.com/RoaringBitmap/RoaringBitmap)
@@ -55,7 +55,7 @@ Roaring Bitmap实现，细节可以参考：[具体论文和实现](https://gith
 1. 首先, 用户需要注意bitmap index和bitmap去重二者都是用bitmap技术, 但引入动机和解决的问题完全不同, 前者用于低基数的枚举型列的等值条件过滤, 后者用于计算一组数据行的指标列的不重复元素的个数.
 2. 目前Bitmap列只能存在于用聚合表, 明细表和更新不支持BITMAP列.
 3. 创建表时指定指标列的数据类型为BITMAP,  聚合函数为BITMAP_UNION。
-4. 当在Bitmap类型列上使用count distinct时，DorisDB会自动转化为BITMAP_UNION_COUNT计算。
+4. 当在Bitmap类型列上使用count distinct时，StarRocks会自动转化为BITMAP_UNION_COUNT计算。
 
 具体操作函数参见 [Bitmap函数](../sql-reference/sql-functions/bitmap-functions/bitmap_and.md)。
 
@@ -99,7 +99,7 @@ cat <<<'DONE' | \
     curl --location-trusted -u root: -H "label:label_1600960288796" \
         -H "column_separator:," \
         -H "columns:page_id,visit_date,visit_users, visit_users=to_bitmap(visit_users)" -T - \
-        http://DorisDB_be0:8040/api/db0/page_uv/_stream_load
+        http://StarRocks_be0:8040/api/db0/page_uv/_stream_load
 1,2020-06-23 01:30:30,130
 1,2020-06-23 01:30:30,230
 1,2020-06-23 01:30:30,120

@@ -1,16 +1,16 @@
 # Insert Into loading
 
 Insert Into 语句的使用方式和 MySQL 等数据库中 Insert Into 语句的使用方式类似。
-但在 DorisDB 中，所有的数据写入都是 ***一个独立的导入作业*** ，所以这里将 Insert Into 也作为一种导入方式介绍。
+但在 StarRocks 中，所有的数据写入都是 ***一个独立的导入作业*** ，所以这里将 Insert Into 也作为一种导入方式介绍。
 
 ---
 
 ## 使用场景
 
 * Insert Into 导入命令会同步返回导入流程的运行结果。
-* 仅导入几条测试数据，验证一下 DorisDB 系统的功能。此时适合使用 INSERT INTO VALUS 的语法。
-* 用户希望将已经在 DorisDB 表中的数据进行 ETL 转换并导入到一个新的 DorisDB 表中，此时适合使用 INSERT INTO SELECT 语法。
-* 用户可以创建一种外部表，如 MySQL 外部表映射一张 MySQL 系统中的表。然后通过 INSERT INTO SELECT 语法将外部表中的数据导入到 DorisDB 表中存储。
+* 仅导入几条测试数据，验证一下 StarRocks 系统的功能。此时适合使用 INSERT INTO VALUS 的语法。
+* 用户希望将已经在 StarRocks 表中的数据进行 ETL 转换并导入到一个新的 StarRocks 表中，此时适合使用 INSERT INTO SELECT 语法。
+* 用户可以创建一种外部表，如 MySQL 外部表映射一张 MySQL 系统中的表。然后通过 INSERT INTO SELECT 语法将外部表中的数据导入到 StarRocks 表中存储。
 
 ---
 
@@ -36,10 +36,10 @@ INSERT INTO table_name
 * column_name: 指定的目的列，必须是 table_name 中存在的列。导入表的目标列，可以以任意的顺序存在。如果没有指定目标列，那么默认值是这张表的所有列。如果导入表中的某个列不在目标列中，那么这个列需要有默认值，否则 Insert Into 会失败。如果查询语句的结果列类型与目标列的类型不一致，那么会调用隐式类型转化，如果不能进行转化，那么 Insert Into 语句会报语法解析错误。
 * expression：需要赋值给某个列的对应表达式。
 * default：让对应列使用默认值。
-* query：一个普通查询，查询的结果会写入到目标中。查询语句支持任意 DorisDB 支持的 SQL 查询语法。
+* query：一个普通查询，查询的结果会写入到目标中。查询语句支持任意 StarRocks 支持的 SQL 查询语法。
 * values：用户可以通过 VALUES 语法插入一条或者多条数据。
 
-> * **注意**：VALUES 方式仅适用于导入几条数据作为 DEMO 的情况，完全不适用于任何测试和生产环境。DorisDB 系统本身也不适合单条数据导入的场景。建议使用 INSERT INTO SELECT 的方式进行批量导入。
+> * **注意**：VALUES 方式仅适用于导入几条数据作为 DEMO 的情况，完全不适用于任何测试和生产环境。StarRocks 系统本身也不适合单条数据导入的场景。建议使用 INSERT INTO SELECT 的方式进行批量导入。
 
 ### 导入结果
 
@@ -163,4 +163,4 @@ Query OK, 18203 rows affected (0.40 sec)
 ## 注意事项
 
 * 当前执行 INSERT 语句时，对于有不符合目标表格式的数据，默认的行为是过滤，比如字符串超长等。但是对于要求数据不能够被过滤的业务场景，可以通过设置会话变量 enable_insert_strict 为 true 来确保当有数据被过滤掉的时候，INSERT 不会成功执行。
-* 因为DorisDB的insert复用导入数据的逻辑，所以每一次insert语句都会产生一个新的数据版本。频繁小批量导入操作会产生过多的数据版本，而过多的小版本会影响查询的性能。所以并不建议频繁的使用insert语法导入数据或作为生产环境的日常例行导入任务。如果有流式导入或者小批量导入任务的需求，可以使用Stream Load或者Routine Load的方式进行导入。
+* 因为StarRocks的insert复用导入数据的逻辑，所以每一次insert语句都会产生一个新的数据版本。频繁小批量导入操作会产生过多的数据版本，而过多的小版本会影响查询的性能。所以并不建议频繁的使用insert语法导入数据或作为生产环境的日常例行导入任务。如果有流式导入或者小批量导入任务的需求，可以使用Stream Load或者Routine Load的方式进行导入。

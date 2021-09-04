@@ -28,7 +28,7 @@ HyperLogLog是一种近似的去重算法，能够使用极少的存储空间计
 
 HLL为了使结果更加精确, 用修正因子和估算结果相乘, 得出最终结果.
 
-为了方面读者的理解, 我们参考文章[https://gist.github.com/avibryant/8275649,](https://gist.github.com/avibryant/8275649) 用DorisDB的SQL语句实现HLL去重算法:
+为了方面读者的理解, 我们参考文章[https://gist.github.com/avibryant/8275649,](https://gist.github.com/avibryant/8275649) 用StarRocks的SQL语句实现HLL去重算法:
 
 ~~~sql
 SELECT floor((0.721 * 1024 * 1024) / (sum(pow(2, m * -1)) + 1024 - count(*))) AS estimate
@@ -55,7 +55,7 @@ FROM(select(murmur_hash3_32(c2) & 1023) AS bucket,
 
 1. 使用HyperLogLog去重, 需要在建表语句中, 将目标的指标列的类型设置为HLL,  聚合函数设置为HLL_UNION.
 2. 目前, 只有聚合表支持HLL类型的指标列.
-3. 当在HLL类型列上使用count distinct时，DorisDB会自动转化为HLL_UNION_AGG计算。
+3. 当在HLL类型列上使用count distinct时，StarRocks会自动转化为HLL_UNION_AGG计算。
 
 具体函数语法参见 [HLL_UNION_AGG](../sql-reference/sql-functions/aggregate-functions/hll_union_agg.md)。
 
@@ -79,7 +79,7 @@ DISTRIBUTED BY HASH(ID) BUCKETS 32;
 ~~~bash
 curl --location-trusted -u root: -H "label:label_1600997542287" \
     -H "column_separator:," \
-    -H "columns:dt,id,user_id, uv=hll_hash(user_id)" -T /root/test.csv http://doris_be0:8040/api/db0/test/_stream_load
+    -H "columns:dt,id,user_id, uv=hll_hash(user_id)" -T /root/test.csv http://starrocks_be0:8040/api/db0/test/_stream_load
 {
     "TxnId": 2504748,
     "Label": "label_1600997542287",

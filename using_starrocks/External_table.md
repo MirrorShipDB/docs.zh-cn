@@ -1,16 +1,16 @@
 # 外部表
 
-DorisDB 支持以外部表的形式，接入其他数据源。外部表指的是保存在其他数据源中的数据表。目前 DorisDB 已支持的第三方数据源包括 MySQL、HDFS、ElasticSearch、Hive。对这几种种数据源，**现阶段只支持读取，还不支持写入**。
+StarRocks 支持以外部表的形式，接入其他数据源。外部表指的是保存在其他数据源中的数据表。目前 StarRocks 已支持的第三方数据源包括 MySQL、HDFS、ElasticSearch、Hive。对这几种种数据源，**现阶段只支持读取，还不支持写入**。
 
 <br>
 
 ## MySQL外部表
 
-星型模型中，数据一般划分为维度表和事实表。维度表数据量少，但会涉及 UPDATE 操作。目前 DorisDB 中还不直接支持 UPDATE 操作（可以通过 Unique 数据模型实现），在一些场景下，可以把维度表存储在 MySQL 中，查询时直接读取维度表。
+星型模型中，数据一般划分为维度表和事实表。维度表数据量少，但会涉及 UPDATE 操作。目前 StarRocks 中还不直接支持 UPDATE 操作（可以通过 Unique 数据模型实现），在一些场景下，可以把维度表存储在 MySQL 中，查询时直接读取维度表。
 
 <br>
 
-在使用MySQL的数据之前，需在DorisDB创建外部表，与之相映射。DorisDB中创建MySQL外部表时需要指定MySQL的相关连接信息，如下图。
+在使用MySQL的数据之前，需在StarRocks创建外部表，与之相映射。StarRocks中创建MySQL外部表时需要指定MySQL的相关连接信息，如下图。
 
 ~~~sql
 CREATE EXTERNAL TABLE mysql_external_table
@@ -46,7 +46,7 @@ PROPERTIES
 
 ## HDFS外部表
 
-与访问MySQL类似，DorisDB访问HDFS文件之前，也需提前建立好与之相对应的外部表，如下图。
+与访问MySQL类似，StarRocks访问HDFS文件之前，也需提前建立好与之相对应的外部表，如下图。
 
 ~~~sql
 CREATE EXTERNAL TABLE hdfs_external_table (
@@ -76,13 +76,13 @@ BROKER PROPERTIES (
 * **column_separator**：列分隔符
 * **line_delimiter**：行分隔符
 
-DorisDB不能直接访问HDFS文件，需要通过Broker进行访问。所以，建表时除了需要指定HDFS文件的相关信息之外，还需要指定Broker的相关信息。关于Broker的相关介绍，可以参见[Broker导入](../loading/BrokerLoad.md)。
+StarRocks不能直接访问HDFS文件，需要通过Broker进行访问。所以，建表时除了需要指定HDFS文件的相关信息之外，还需要指定Broker的相关信息。关于Broker的相关介绍，可以参见[Broker导入](../loading/BrokerLoad.md)。
 
 <br>
 
 ## ElasticSearch外部表
 
-DorisDB与ElasticSearch都是目前流行的分析系统，DorisDB强于大规模分布式计算，ElasticSearch擅长全文检索。DorisDB支持ElasticSearch访问的目的，就在于将这两种能力结合，提供更完善的一个OLAP解决方案。
+StarRocks与ElasticSearch都是目前流行的分析系统，StarRocks强于大规模分布式计算，ElasticSearch擅长全文检索。StarRocks支持ElasticSearch访问的目的，就在于将这两种能力结合，提供更完善的一个OLAP解决方案。
 
 ### 建表示例
 
@@ -109,10 +109,10 @@ PROPERTIES (
 
 参数说明：
 
-* **host**：ES集群连接地址，可指定一个或多个，DorisDB通过这个地址获取到ES版本号、index的shard分布信息
+* **host**：ES集群连接地址，可指定一个或多个，StarRocks通过这个地址获取到ES版本号、index的shard分布信息
 * **user**：开启**basic认证**的ES集群的用户名，需要确保该用户有访问 /*cluster/state/*nodes/http 等路径权限和对index的读权限
 * **password**：对应用户的密码信息
-* **index**：DorisDB中的表对应的ES的index名字，可以是alias
+* **index**：StarRocks中的表对应的ES的index名字，可以是alias
 * **type**：指定index的type，默认是**doc**
 * **transport**：内部保留，默认为**http**
 
@@ -120,7 +120,7 @@ PROPERTIES (
 
 ### 谓词下推
 
-DorisDB支持对ElasticSearch表进行谓词下推，把过滤条件推给ElasticSearch进行执行，让执行尽量靠近存储，提高查询性能。目前支持哪些下推的算子如下表：
+StarRocks支持对ElasticSearch表进行谓词下推，把过滤条件推给ElasticSearch进行执行，让执行尽量靠近存储，提高查询性能。目前支持哪些下推的算子如下表：
 
 |   SQL syntax  |   ES syntax  |
 | :---: | :---: |
@@ -146,7 +146,7 @@ DorisDB支持对ElasticSearch表进行谓词下推，把过滤条件推给Elasti
 ~~~sql
 select * from es_table where esquery(k4, '{
     "match": {
-       "k4": "DorisDB on elasticsearch"
+       "k4": "StarRocks on elasticsearch"
     }
 }');
 ~~~
@@ -208,7 +208,7 @@ select * from es_table where esquery(k4, ' {
 
 * ES在5.x之前和之后的数据扫描方式不同，目前**只支持5.x之后的版本**；
 * 支持使用HTTP Basic认证方式的ES集群；
-* 一些通过DorisDB的查询会比直接请求ES会慢很多，比如count相关的query等。这是因为ES内部会直接读取满足条件的文档个数相关的元数据，不需要对真实的数据进行过滤操作，使得count的速度非常快。
+* 一些通过StarRocks的查询会比直接请求ES会慢很多，比如count相关的query等。这是因为ES内部会直接读取满足条件的文档个数相关的元数据，不需要对真实的数据进行过滤操作，使得count的速度非常快。
 
 <br>
 
@@ -216,7 +216,7 @@ select * from es_table where esquery(k4, ' {
 
 ### 创建Hive资源
 
-一个Hive资源对应一个Hive集群，管理DorisDB使用的Hive集群相关配置，如Hive meta store地址等。创建Hive外表的时候需要指定使用哪个Hive资源。
+一个Hive资源对应一个Hive集群，管理StarRocks使用的Hive集群相关配置，如Hive meta store地址等。创建Hive外表的时候需要指定使用哪个Hive资源。
 
 ~~~sql
 -- 创建一个名为hive0的Hive资源
@@ -226,7 +226,7 @@ PROPERTIES (
   "hive.metastore.uris" = "thrift://10.10.44.98:9083"
 );
 
--- 查看DorisDB中创建的资源
+-- 查看StarRocks中创建的资源
 SHOW RESOURCES;
 
 -- 删除名为hive0的资源
@@ -285,14 +285,14 @@ PROPERTIES (
   * 列名需要与Hive表一一对应。
   * 列的顺序**不需要**与Hive表一致。
   * 可以只选择Hive表中的**部分列**，但**分区列**必须要全部包含。
-  * 外表的分区列无需通过partition by语句指定，需要与普通列一样定义到描述列表中。不需要指定分区信息，DorisDB会自动从Hive同步。
+  * 外表的分区列无需通过partition by语句指定，需要与普通列一样定义到描述列表中。不需要指定分区信息，StarRocks会自动从Hive同步。
   * ENGINE指定为HIVE。
 * PROPERTIES属性：
   * **hive.resource**：指定使用的Hive资源。
   * **database**：指定Hive中的数据库。
   * **table**：指定Hive中的表，**不支持view**。
 * 支持的列类型对应关系如下表：
-    |  Hive列类型   | DorisDB列类型    | 描述 |
+    |  Hive列类型   | StarRocks列类型    | 描述 |
     | --- | --- | ---|
     |   INT/INTEGER  | INT    |
     |   BIGINT  | BIGINT    |
@@ -305,7 +305,7 @@ PROPERTIES (
 
     说明：
 
-  * Hive表Schema变更**不会自动同步**，需要在DorisDB中重建Hive外表。
+  * Hive表Schema变更**不会自动同步**，需要在StarRocks中重建Hive外表。
   * 当前Hive的存储格式仅支持Parquet和ORC类型
   * 压缩格式支持snappy，lz4
 

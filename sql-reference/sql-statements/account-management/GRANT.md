@@ -10,7 +10,7 @@ GRANT privilege_list ON db_name[.tbl_name] TO user_identity [ROLE role_name]
 
 GRANT privilege_list ON RESOURCE resource_name TO user_identity [ROLE role_name]
 
-privilege_list 是需要赋予的权限列表，以逗号分隔。当前 Doris 支持如下权限：
+privilege_list 是需要赋予的权限列表，以逗号分隔。当前 StarRocks 支持如下权限：
 
 ```plain text
 NODE_PRIV：集群节点操作权限，包括节点上下线等操作，只有 root 用户有该权限，不可赋予其他用户。

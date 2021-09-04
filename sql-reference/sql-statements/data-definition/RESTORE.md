@@ -36,7 +36,7 @@ PROPERTIES ("key"="value", ...);
 
     * "timeout" = "3600"：任务超时时间，默认为一天。单位秒。
 
-    * "meta_version" = 40：使用指定的 meta_version 来读取之前备份的元数据。注意，该参数作为临时方案，仅用于恢复老版本 Doris 备份的数据。最新版本的备份数据中已经包含 meta version，无需再指定。
+    * "meta_version" = 40：使用指定的 meta_version 来读取之前备份的元数据。注意，该参数作为临时方案，仅用于恢复老版本 StarRocks 备份的数据。最新版本的备份数据中已经包含 meta version，无需再指定。
 
 ## example
 

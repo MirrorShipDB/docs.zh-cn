@@ -2,7 +2,7 @@
 
 ## FE扩缩容
 
-DorisDB 有两种 FE 节点：Follower 和 Observer。Follower参与选举投票和写入，Observer只用来同步日志，扩展读性能。
+StarRocks 有两种 FE 节点：Follower 和 Observer。Follower参与选举投票和写入，Observer只用来同步日志，扩展读性能。
 
 FE扩缩容时要注意：
 
@@ -32,7 +32,7 @@ alter system drop observer "fe_host:edit_log_port";
 
 ## BE扩缩容
 
-BE 扩缩容后，DorisDB 会自动根据负载情况，进行数据均衡，期间不影响使用。
+BE 扩缩容后，StarRocks 会自动根据负载情况，进行数据均衡，期间不影响使用。
 
 ### BE扩容
 

@@ -1,15 +1,15 @@
 # 手动部署
 
-手动部署可以让用户快速体验DorisDB, 积累DorisDB的系统运维经验.  生产环境部署, 请使用管理平台和自动部署.
+手动部署可以让用户快速体验StarRocks, 积累StarRocks的系统运维经验.  生产环境部署, 请使用管理平台和自动部署.
 
 ## 获取二进制产品包
 
-请您联系DorisDB的技术支持或者销售人员获取最新稳定版的DorisDB二进制产品包.
+请您联系StarRocks的技术支持或者销售人员获取最新稳定版的StarRocks二进制产品包.
 
-比如您获得的产品包为dorisdb-1.0.0.tar.gz, 解压(tar -xzvf dorisdb-1.0.0.tar.gz)后内容如下:
+比如您获得的产品包为starrocksdb-1.0.0.tar.gz, 解压(tar -xzvf starrocksdb-1.0.0.tar.gz)后内容如下:
 
 ```Plain Text
-DorisDB-XX-1.0.0
+StarRocks-XX-1.0.0
 
 ├── be  # BE目录
 
@@ -25,7 +25,7 @@ DorisDB-XX-1.0.0
 
 │   ├── lib
 
-│   │   ├── dorisdb_be  # BE可执行文件
+│   │   ├── starrocksdb_be  # BE可执行文件
 
 │   │   └── meta_tool
 
@@ -45,7 +45,7 @@ DorisDB-XX-1.0.0
 
 │   ├── lib
 
-│   │   ├── dorisdb-fe.jar  # FE jar包
+│   │   ├── starrocksdb-fe.jar  # FE jar包
 
 │   │   └── *.jar           # FE 依赖的jar包
 
@@ -61,33 +61,33 @@ DorisDB-XX-1.0.0
 * Linux (Centos 7+)
 * Java 1.8+
 
-CPU需要支持AVX2指令集， cat /proc/cpuinfo |grep avx2有结果输出表明CPU支持，如果没有支持，建议更换机器，DorisDB使用向量化技术需要一定的指令集支持才能发挥效果。
+CPU需要支持AVX2指令集， cat /proc/cpuinfo |grep avx2有结果输出表明CPU支持，如果没有支持，建议更换机器，StarRocks使用向量化技术需要一定的指令集支持才能发挥效果。
 
-将DorisDB的二进制产品包分发到目标主机的部署路径并解压，可以考虑使用新建的DorisDB用户来管理。
+将StarRocks的二进制产品包分发到目标主机的部署路径并解压，可以考虑使用新建的StarRocks用户来管理。
 
 ## 部署FE
 
 ### FE的基本配置
 
-FE的配置文件为DorisDB-XX-1.0.0/fe/conf/fe.conf, 默认配置已经足以启动集群, 有经验的用户可以查看手册的系统配置章节, 为生产环境定制配置，为了让用户更好的理解集群的工作原理, 此处只列出基础配置.
+FE的配置文件为StarRocks-XX-1.0.0/fe/conf/fe.conf, 默认配置已经足以启动集群, 有经验的用户可以查看手册的系统配置章节, 为生产环境定制配置，为了让用户更好的理解集群的工作原理, 此处只列出基础配置.
 
 ### FE单实例部署
 
-cd DorisDB-XX-1.0.0/fe
+cd StarRocks-XX-1.0.0/fe
 
 第一步: 定制配置文件conf/fe.conf：
 
 ```bash
-JAVA_OPTS = "-Xmx4096m -XX:+UseMembar -XX:SurvivorRatio=8 -XX:MaxTenuringThreshold=7 -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSClassUnloadingEnabled -XX:-CMSParallelRemarkEnabled -XX:CMSInitiatingOccupancyFraction=80 -XX:SoftRefLRUPolicyMSPerMB=0 -Xloggc:$DORIS_HOME/log/fe.gc.log"
+JAVA_OPTS = "-Xmx4096m -XX:+UseMembar -XX:SurvivorRatio=8 -XX:MaxTenuringThreshold=7 -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSClassUnloadingEnabled -XX:-CMSParallelRemarkEnabled -XX:CMSInitiatingOccupancyFraction=80 -XX:SoftRefLRUPolicyMSPerMB=0 -Xloggc:$STARROCKS_HOME/log/fe.gc.log"
 ```
 
-可以根据FE内存大小调整 -Xmx4096m，为了避免GC建议16G以上，DorisDB的元数据都在内存中保存。
+可以根据FE内存大小调整 -Xmx4096m，为了避免GC建议16G以上，StarRocks的元数据都在内存中保存。
 <br>
 
 第二步: 创建元数据目录:
 
 ```bash
-mkdir -p doris-meta
+mkdir -p starrocks-meta
 ```
 
 <br>
@@ -117,8 +117,8 @@ bin/start_fe.sh --daemon
 ```
 
 * 如果FE启动失败，可能是由于端口号被占用，修改配置文件conf/fe.conf中的端口号http_port。
-* 使用jps命令查看java进程确认"DorisDbFe"存在.
-* 使用浏览器访问8030端口, 打开DorisDB的WebUI, 用户名为root, 密码为空.
+* 使用jps命令查看java进程确认"StarRocksDbFe"存在.
+* 使用浏览器访问8030端口, 打开StarRocks的WebUI, 用户名为root, 密码为空.
 
 ### 使用MySQL客户端访问FE
 
@@ -149,7 +149,7 @@ Name: 172.16.139.24_9010_1594200991015
 
 IP: 172.16.139.24
 
-HostName: doris-sandbox01
+HostName: starrocks-sandbox01
 
 EditLogPort: 9010
 
@@ -220,7 +220,7 @@ mysql> ALTER SYSTEM ADD OBSERVER "host:port";
 
 host为机器的IP，如果机器存在多个IP，需要选取priority\_networks里的IP，例如priority\_networks=192.168.1.0/24 可以设置使用192.168.1.x 这个子网进行通信。port为edit\_log\_port，默认为9010。
 
-> DorisDB的FE和BE因为安全考虑都只会监听一个IP来进行通信，如果一台机器有多块网卡，可能DorisDB无法自动找到正确的IP，例如 ifconfig 命令能看到  eth0 ip为 192.168.1.1, docker0:  172.17.0.1 ，我们可以设置 192.168.1.0/24 这一个子网来指定使用eth0作为通信的IP，这里采用是[CIDR](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing)的表示方法来指定IP所在子网范围，这样可以在所有的BE，FE上使用相同的配置。
+> StarRocks的FE和BE因为安全考虑都只会监听一个IP来进行通信，如果一台机器有多块网卡，可能StarRocks无法自动找到正确的IP，例如 ifconfig 命令能看到  eth0 ip为 192.168.1.1, docker0:  172.17.0.1 ，我们可以设置 192.168.1.0/24 这一个子网来指定使用eth0作为通信的IP，这里采用是[CIDR](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing)的表示方法来指定IP所在子网范围，这样可以在所有的BE，FE上使用相同的配置。
 > priority\_networks 是 FE 和 BE 相同的配置项，写在 fe.conf 和 be.conf 中。该配置项用于在 FE 或 BE 启动时，告诉进程应该绑定哪个IP。示例如下：
 > `priority_networks=10.1.3.0/24`
 
@@ -261,7 +261,7 @@ Name: 172.26.108.172_9010_1584965098874
 
 IP: 172.26.108.172
 
-HostName: doris-sandbox01
+HostName: starrocks-sandbox01
 
 ......
 
@@ -281,7 +281,7 @@ Name: 172.26.108.174_9010_1584965098874
 
 IP: 172.26.108.174
 
-HostName: doris-sandbox02
+HostName: starrocks-sandbox02
 
 ......
 
@@ -301,7 +301,7 @@ Name: 172.26.108.175_9010_1584965098874
 
 IP: 172.26.108.175
 
-HostName: doris-sandbox03
+HostName: starrocks-sandbox03
 
 ......
 
@@ -326,14 +326,14 @@ Alive: true
 
 ### BE的基本配置
 
-BE的配置文件为DorisDB-XX-1.0.0/be/conf/be.conf, 默认配置已经足以启动集群, 不建议初尝用户修改配置, 有经验的用户可以查看手册的系统配置章节, 为生产环境定制配置. 为了让用户更好的理解集群的工作原理, 此处只列出基础配置.
+BE的配置文件为StarRocks-XX-1.0.0/be/conf/be.conf, 默认配置已经足以启动集群, 不建议初尝用户修改配置, 有经验的用户可以查看手册的系统配置章节, 为生产环境定制配置. 为了让用户更好的理解集群的工作原理, 此处只列出基础配置.
 
 ### BE部署
 
-用户可使用下面命令添加BE到DorisDB集群, 一般至少部署3个BE实例, 每个实例的添加步骤相同.
+用户可使用下面命令添加BE到StarRocks集群, 一般至少部署3个BE实例, 每个实例的添加步骤相同.
 
 ```shell
-cd DorisDB-XX-1.0.0/be
+cd StarRocks-XX-1.0.0/be
 ```
 
 第一步: 创建数据目录：
@@ -382,7 +382,7 @@ Cluster: default\_cluster
 
 IP: 172.16.139.24
 
-HostName: doris-sandbox01
+HostName: starrocks-sandbox01
 
 HeartbeatPort: 9050
 
@@ -503,17 +503,17 @@ cumulative_compaction_check_interval_seconds = 2
 
 * **并行度**
 
-在客户端执行命令，修改DorisDB的并行度(类似clickhouse set max_threads= 8)。并行度可以设置为当前机器CPU核数的一半。
+在客户端执行命令，修改StarRocks的并行度(类似clickhouse set max_threads= 8)。并行度可以设置为当前机器CPU核数的一半。
 
 ```sql
 set global parallel_fragment_exec_instance_num =  8;
 ```
 
-## 使用MySQL客户端访问DorisDB
+## 使用MySQL客户端访问StarRocks
 
 ### Root用户登录
 
-使用MySQL客户端连接某一个FE实例的query_port(9030), DorisDB内置root用户，密码默认为空：
+使用MySQL客户端连接某一个FE实例的query_port(9030), StarRocks内置root用户，密码默认为空：
 
 ```shell
 mysql -h fe_host -P9030 -u root
@@ -539,7 +539,7 @@ mysql > create user 'test' identified by '123456';
 
 ### 创建数据库
 
-DorisDB中root账户才有权建立数据库，使用root用户登录，建立example\_db数据库:
+StarRocks中root账户才有权建立数据库，使用root用户登录，建立example\_db数据库:
 
 ```sql
 mysql > create database example_db;
@@ -573,7 +573,7 @@ mysql > grant all on example_db to test;
 
 <br>
 
-退出root账户，使用test登录DorisDB集群：
+退出root账户，使用test登录StarRocks集群：
 
 ```sql
 mysql > exit
@@ -583,7 +583,7 @@ mysql -h 127.0.0.1 -P9030 -utest -p123456
 
 ### 建表
 
-DorisDB支持支持单分区和复合分区两种建表方式。
+StarRocks支持支持单分区和复合分区两种建表方式。
 
 <br>
 
@@ -610,7 +610,7 @@ DorisDB支持支持单分区和复合分区两种建表方式。
 * siteid：类型是INT（4字节）, 默认值为10
 * cidy_code：类型是SMALLINT（2字节）
 * username：类型是VARCHAR, 最大长度为32, 默认值为空字符串
-* pv：类型是BIGINT（8字节）, 默认值是0; 这是一个指标列, DorisDB内部会对指标列做聚合操作, 这个列的聚合方法是求和（SUM）。这里采用了聚合模型，除此之外DorisDB还支持明细模型和更新模型，具体参考[数据模型介绍](../table_design/Data_model.md)。
+* pv：类型是BIGINT（8字节）, 默认值是0; 这是一个指标列, StarRocks内部会对指标列做聚合操作, 这个列的聚合方法是求和（SUM）。这里采用了聚合模型，除此之外StarRocks还支持明细模型和更新模型，具体参考[数据模型介绍](../table_design/Data_model.md)。
 
 建表语句如下:
 
@@ -636,7 +636,7 @@ PROPERTIES("replication_num" = "1");
 * siteid：类型是INT（4字节）, 默认值为10
 * cidy_code：类型是SMALLINT（2字节）
 * username：类型是VARCHAR, 最大长度为32, 默认值为空字符串
-* pv：类型是BIGINT（8字节）, 默认值是0; 这是一个指标列, DorisDB 内部会对指标列做聚合操作, 这个列的聚合方法是求和（SUM）
+* pv：类型是BIGINT（8字节）, 默认值是0; 这是一个指标列, StarRocks 内部会对指标列做聚合操作, 这个列的聚合方法是求和（SUM）
 
 我们使用event_day列作为分区列，建立3个分区: p1, p2, p3
 

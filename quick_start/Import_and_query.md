@@ -2,39 +2,39 @@
 
 ## 本地文件导入
 
-为适配不同的数据导入需求，DorisDB 系统提供了5种不同的导入方式，以支持不同的数据源（如HDFS、Kafka、本地文件等），或者按不同的方式（异步或同步）导入数据。
+为适配不同的数据导入需求，StarRocks 系统提供了5种不同的导入方式，以支持不同的数据源（如HDFS、Kafka、本地文件等），或者按不同的方式（异步或同步）导入数据。
 
 ### Broker Load
 
-Broker Load 通过 Broker 进程访问并读取外部数据源，然后采用 MySQL 协议向 DorisDB 创建导入作业。
+Broker Load 通过 Broker 进程访问并读取外部数据源，然后采用 MySQL 协议向 StarRocks 创建导入作业。
 
 Broker Load适用于源数据在Broker进程可访问的存储系统（如HDFS）中，数据量为几十GB到上百GB。数据源有Hive等。
 
 ### Spark Load
 
-Spark Load 通过外部的 Spark 资源实现对导入数据的预处理，提高 DorisDB 大数据量的导入性能并且节省 DorisDB 集群的计算资源。
+Spark Load 通过外部的 Spark 资源实现对导入数据的预处理，提高 StarRocks 大数据量的导入性能并且节省 StarRocks 集群的计算资源。
 
-Spark Load适用于初次迁移大数据量（可到TB级别）到DorisDB的场景，且源数据在Spark可访问的存储系统（如HDFS）中。
+Spark Load适用于初次迁移大数据量（可到TB级别）到StarRocks的场景，且源数据在Spark可访问的存储系统（如HDFS）中。
 
 ### Stream Load
 
-Stream Load是一种同步执行的导入方式。用户通过 HTTP 协议发送请求将本地文件或数据流导入到 DorisDB中，并等待系统返回导入的结果状态，从而判断导入是否成功。
+Stream Load是一种同步执行的导入方式。用户通过 HTTP 协议发送请求将本地文件或数据流导入到 StarRocks中，并等待系统返回导入的结果状态，从而判断导入是否成功。
 
 Stream Load适用于导入本地文件，或通过程序导入数据流中的数据。数据源有Flink、CSV等。
 
 ### Routine Load
 
-Routine Load（例行导入）提供了一种自动从指定数据源进行数据导入的功能。用户通过 MySQL 协议提交例行导入作业，生成一个常驻线程，不间断的从数据源（如 Kafka）中读取数据并导入到 DorisDB 中。
+Routine Load（例行导入）提供了一种自动从指定数据源进行数据导入的功能。用户通过 MySQL 协议提交例行导入作业，生成一个常驻线程，不间断的从数据源（如 Kafka）中读取数据并导入到 StarRocks 中。
 
 ### Insert Into
 
-类似 MySQL 中的 Insert 语句，DorisDB 提供 INSERT INTO tbl SELECT ...; 的方式从 DorisDB 的表中读取数据并导入到另一张表。或者通过 INSERT INTO tbl VALUES(...); 插入单条数据。数据源有DataX/DTS、Kettle/Informatic、DorisDB本身。
+类似 MySQL 中的 Insert 语句，StarRocks 提供 INSERT INTO tbl SELECT ...; 的方式从 StarRocks 的表中读取数据并导入到另一张表。或者通过 INSERT INTO tbl VALUES(...); 插入单条数据。数据源有DataX/DTS、Kettle/Informatic、StarRocks本身。
 
 <br>
 
-DorisDB数据导入整体生态图如下。
+StarRocks数据导入整体生态图如下。
 
-![dorisdb_ecology](../assets/screenshot_1615530614737.png)
+![starrocksdb_ecology](../assets/screenshot_1615530614737.png)
 <br>
 
 具体导入方式详情请参考[数据导入](../loading/Loading_intro.md)。这里为了尽快导入测试数据，我们只介绍利用HTTP协议的Stream load方式导入。
@@ -152,7 +152,7 @@ mysql> select sum(pv) from table2 where siteid in (select siteid from table1 whe
 
 <br>
 
-如果在DorisManager的编辑器中执行查询语句，可以查看Profile，Profile是BE执行后的结果，包含了每一个步骤的耗时和数据处理量等数据，可以通过DorisManager的图形界面看到可视化的Profile执行树。在DorisManager中执行查询，点击查询历史，就可看在“执行详情”tab中看到Profile的详细文本信息，在“执行时间”tab中能看到图形化的展示。详情见[查询分析](../administration/Query_planning.md)。
+如果在StarRocksManager的编辑器中执行查询语句，可以查看Profile，Profile是BE执行后的结果，包含了每一个步骤的耗时和数据处理量等数据，可以通过StarRocksManager的图形界面看到可视化的Profile执行树。在StarRocksManager中执行查询，点击查询历史，就可看在“执行详情”tab中看到Profile的详细文本信息，在“执行时间”tab中能看到图形化的展示。详情见[查询分析](../administration/Query_planning.md)。
 
 ## Schema修改
 
@@ -234,7 +234,7 @@ CANCEL ALTER TABLE COLUMN FROM table1\G
 
 ### 创建Rollup
 
-Rollup是DorisDB使用的一种新型预计算加速技术，可以理解为基于基础表构建的一个物化索引结构。**物化**是因为其数据在物理上独立存储，而**索引**的意思是，Rollup可以调整列顺序以增加前缀索引的命中率，也可以减少key列以增加数据的聚合度。这里仅简单举例介绍，更多相关内容请参考相关章节。
+Rollup是StarRocks使用的一种新型预计算加速技术，可以理解为基于基础表构建的一个物化索引结构。**物化**是因为其数据在物理上独立存储，而**索引**的意思是，Rollup可以调整列顺序以增加前缀索引的命中率，也可以减少key列以增加数据的聚合度。这里仅简单举例介绍，更多相关内容请参考相关章节。
 
   <br>
 

@@ -2,7 +2,7 @@
 
 ## description
 
-该语句用于创建资源。仅 root 或 admin 用户可以创建资源。目前仅支持 Spark 外部资源。将来其他外部资源可能会加入到 Doris 中使用，如 Spark/GPU 用于查询，HDFS/S3 用于外部存储，MapReduce 用于 ETL 等。
+该语句用于创建资源。仅 root 或 admin 用户可以创建资源。目前仅支持 Spark 外部资源。将来其他外部资源可能会加入到 StarRocks 中使用，如 Spark/GPU 用于查询，HDFS/S3 用于外部存储，MapReduce 用于 ETL 等。
 
 语法：
 
@@ -33,7 +33,7 @@ PROPERTIES ("key"="value", ...);
     "spark.yarn.queue" = "queue0",
     "spark.hadoop.yarn.resourcemanager.address" = "127.0.0.1:9999",
     "spark.hadoop.fs.defaultFS" = "hdfs://127.0.0.1:10000",
-    "working_dir" = "hdfs://127.0.0.1:10000/tmp/doris",
+    "working_dir" = "hdfs://127.0.0.1:10000/tmp/starrocks",
     "broker" = "broker0",
     "broker.username" = "user0",
     "broker.password" = "password0"
@@ -53,7 +53,7 @@ PROPERTIES ("key"="value", ...);
     Spark 用于 ETL 时需要指定 working_dir 和 broker。说明如下：
 
     ```plain text
-    working_dir: ETL 使用的目录。spark作为ETL资源使用时必填。例如：hdfs://host:port/tmp/doris。
+    working_dir: ETL 使用的目录。spark作为ETL资源使用时必填。例如：hdfs://host:port/tmp/starrocks。
     broker: broker 名字。spark作为ETL资源使用时必填。需要使用`ALTER SYSTEM ADD BROKER` 命令提前完成配置。
     broker.property_key: broker读取ETL生成的中间文件时需要指定的认证信息等。
     ```

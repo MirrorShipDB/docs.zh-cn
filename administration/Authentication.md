@@ -1,6 +1,6 @@
 # 认证方式
 
-除“用户名+密码”认证方式外，DorisDB还支持LDAP用户。
+除“用户名+密码”认证方式外，StarRocks还支持LDAP用户。
 
 ## LDAP认证
 
@@ -25,14 +25,14 @@ CREATE USER zhangsan IDENTIFIED WITH authentication_ldap_simple AS 'uid=zhansan,
 CREATE USER zhangsan IDENTIFIED WITH authentication_ldap_simple
 ~~~
 
-不指定DN的用户，登录时DorisDB会去LDAP系统中检索该用户，如果有且仅有一个匹配结果，则认证成功果。这种情况下，需要在FE中添加额外的配置：
+不指定DN的用户，登录时StarRocks会去LDAP系统中检索该用户，如果有且仅有一个匹配结果，则认证成功果。这种情况下，需要在FE中添加额外的配置：
 
 * authentication\_ldap\_simple\_bind\_base\_dn：用户的base DN，指定用户的检索范围。
 * authentication\_ldap\_simple\_user\_search\_attr：LDAP对象中标识用户的属性名称，默认为uid。
 * authentication\_ldap\_simple\_bind\_root\_dn：检索用户时，使用的管理员账号DN。
 * authentication\_ldap\_simple\_bind\_root\_pwd：检索用户时，使用的管理员账号密码。
 
-LDAP认证需要客户端传递明文密码给DorisDB。三种典型客户端配置明文密码传递的方式如下。
+LDAP认证需要客户端传递明文密码给StarRocks。三种典型客户端配置明文密码传递的方式如下。
 
 * **mysql 命令行**
 

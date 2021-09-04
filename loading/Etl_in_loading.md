@@ -1,18 +1,18 @@
 # ETL when loading
 
-用户在向DorisDB表中导入数据时，有时候目标表中的内容与数据源中的内容**不完全一**样。比如：
+用户在向StarRocks表中导入数据时，有时候目标表中的内容与数据源中的内容**不完全一**样。比如：
 
 * 场景一：数据源中包含一些目标表中不需要的内容，可能是存在**多余的行**，也可能是**多余的列**。
-* 场景二：数据源中的内容并不能够直接导入到DorisDB中，可能**需要进行部分转化**工作后，才能够导入到DorisDB中。比如，原始文件中的数据是时间戳格式，目标表中的数据类型是Datetime，需要在数据导入时完成类型转化。
+* 场景二：数据源中的内容并不能够直接导入到StarRocks中，可能**需要进行部分转化**工作后，才能够导入到StarRocks中。比如，原始文件中的数据是时间戳格式，目标表中的数据类型是Datetime，需要在数据导入时完成类型转化。
 
-DorisDB能够在数据导入时完成数据转化的操作。这样在数据源与目标表中内容不一致的情况下，用户不需要外部的ETL工作，可以直接通过DorisDB提供的能力在导入时就完成数据转化。
+StarRocks能够在数据导入时完成数据转化的操作。这样在数据源与目标表中内容不一致的情况下，用户不需要外部的ETL工作，可以直接通过StarRocks提供的能力在导入时就完成数据转化。
 
-通过DorisDB提供的能力，用户可以在数据导入时实现以下目标：
+通过StarRocks提供的能力，用户可以在数据导入时实现以下目标：
 
 1. 选择需要导入的列。一方面通过此功能可以跳过不需要导入的列；另一方面当表中列的顺序与文件中字段顺序不一致时，可以通过此功能建立两者的字段映射，从而导入文件。
 2. 过滤不需要的行。在导入时可以通过指定表达式，从而跳过不需要导入的行，只导入必要的行内容。
-3. 导入时生成衍生列（即通过计算处理产生新的列）导入到DorisDB目标表中。
-4. 支持Hive分区路径命名方式，DorisDB能够从文件路径中获取分区列的内容。
+3. 导入时生成衍生列（即通过计算处理产生新的列）导入到StarRocks目标表中。
+4. 支持Hive分区路径命名方式，StarRocks能够从文件路径中获取分区列的内容。
 
 ---
 
@@ -56,7 +56,7 @@ CSV 格式的文件中的列，本来是没有命名的，通过 **columns**，�
 * 导入表中不存在的字段，会在导入过程中忽略掉
 * 导入表中存在，但 columns 中未指定的字段，会报错
 
-针对这个例子，字段"user_id, event_date, event_type"都能够在表中找到对应的字段，所以对应的内容都会被导入到 DorisDB 表中。而"user_gender"这个字段在表中并不存在，所以导入时会直接忽略掉这个字段。
+针对这个例子，字段"user_id, event_date, event_type"都能够在表中找到对应的字段，所以对应的内容都会被导入到 StarRocks 表中。而"user_gender"这个字段在表中并不存在，所以导入时会直接忽略掉这个字段。
 
 ### HDFS导入
 
@@ -64,7 +64,7 @@ CSV 格式的文件中的列，本来是没有命名的，通过 **columns**，�
 
 ~~~sql
 LOAD LABEL test.label_load (
-    DATA INFILE("hdfs://{HDFS_HOST}:{HDFS_PORT}/tmp/zc/doris/data/date=*/*")
+    DATA INFILE("hdfs://{HDFS_HOST}:{HDFS_PORT}/tmp/zc/starrocks/data/date=*/*")
     INTO TABLE `event`
     COLUMNS TERMINATED BY ","
     FORMAT AS "csv"
@@ -73,7 +73,7 @@ LOAD LABEL test.label_load (
 WITH BROKER hdfs;
 ~~~
 
-通过"(user_id, user_gender, event_date, event_type)"部分指定文件中的字段名字。DorisDB导入过程中的行为与本地文件导入行为一致。需要的字段会被导入到DorisDB中，不需要的字段会被忽略掉。
+通过"(user_id, user_gender, event_date, event_type)"部分指定文件中的字段名字。StarRocks导入过程中的行为与本地文件导入行为一致。需要的字段会被导入到StarRocks中，不需要的字段会被忽略掉。
 
 ### Kafka导入
 
@@ -90,7 +90,7 @@ FROM KAFKA (
 );
 ~~~
 
-通过"COLUMNS(user_id, user_gender, event_date, event_type)"字段指示Kafka流message所包含的字段名字。DorisDB导入过程中的行为与本地文件一致。需要的字段会被导入到DorisDB中，不需要的字段会被忽略掉。
+通过"COLUMNS(user_id, user_gender, event_date, event_type)"字段指示Kafka流message所包含的字段名字。StarRocks导入过程中的行为与本地文件一致。需要的字段会被导入到StarRocks中，不需要的字段会被忽略掉。
 
 ### 查询内容
 
@@ -146,11 +146,11 @@ curl --location-trusted -u root -H "column_separator:," \
 
 ### HDFS导入
 
-通过下面的命令，能够实现只将HDFS文件中event_type为1的数据导入到DorisDB中。具体方法是通过"WHERE event_type = 1"选项来过滤要导入的数据：
+通过下面的命令，能够实现只将HDFS文件中event_type为1的数据导入到StarRocks中。具体方法是通过"WHERE event_type = 1"选项来过滤要导入的数据：
 
 ~~~sql
 LOAD LABEL test.label_load (
-    DATA INFILE("hdfs://{HDFS_HOST}:{HDFS_PORT}/tmp/zc/doris/data/date=*/*")
+    DATA INFILE("hdfs://{HDFS_HOST}:{HDFS_PORT}/tmp/zc/starrocks/data/date=*/*")
     INTO TABLE `event`
     COLUMNS TERMINATED BY ","
     FORMAT AS "csv"
@@ -161,7 +161,7 @@ WITH BROKER hdfs;
 
 ### Kafka导入
 
-通过下面的命令，能够将Kafka中event_type为1的数据导入到DorisDB的表中。具体方法是通过指定"WHERE event_type = 1"来过滤要导入的数据：
+通过下面的命令，能够将Kafka中event_type为1的数据导入到StarRocks的表中。具体方法是通过指定"WHERE event_type = 1"来过滤要导入的数据：
 
 ~~~sql
 CREATE ROUTINE LOAD test.event_load ON event
@@ -214,7 +214,7 @@ DISTRIBUTED BY HASH(date) BUCKETS 1;
 
 ### 本地文件导入3
 
-通过下面的命令，能够在导入本地文件的同时，生成对应的衍生列。方法是指定HTTP请求中的`Header "columns:date, year=year(date), month=month(date), day=day(date)"`，让DorisDB在导入过程中根据文件内容计算生成对应的列。
+通过下面的命令，能够在导入本地文件的同时，生成对应的衍生列。方法是指定HTTP请求中的`Header "columns:date, year=year(date), month=month(date), day=day(date)"`，让StarRocks在导入过程中根据文件内容计算生成对应的列。
 
 ~~~bash
 curl --location-trusted -u root -H "column_separator:," \
@@ -234,7 +234,7 @@ curl --location-trusted -u root -H "column_separator:," \
 
 ~~~sql
 LOAD LABEL test.label_load (
-    DATA INFILE("hdfs://{HDFS_HOST}:{HDFS_PORT}/tmp/zc/doris/data/date=*/*")
+    DATA INFILE("hdfs://{HDFS_HOST}:{HDFS_PORT}/tmp/zc/starrocks/data/date=*/*")
     INTO TABLE `event`
     COLUMNS TERMINATED BY ","
     FORMAT AS "csv"
@@ -292,13 +292,13 @@ DISTRIBUTED BY HASH(user_id) BUCKETS 3;
 要导入的数据是Hive生成的数据，数据按照event_date进行分区，每个文件中只包含"event_type", "user_id"两列。具体的数据内容如下所示：
 
 ~~~text
-/tmp/doris/data/date=2020-05-20/data
+/tmp/starrocks/data/date=2020-05-20/data
 1,354
-/tmp/doris/data/date=2020-05-21/data
+/tmp/starrocks/data/date=2020-05-21/data
 2,465
-/tmp/doris/data/date=2020-05-22/data
+/tmp/starrocks/data/date=2020-05-22/data
 1,576
-/tmp/doris/data/date=2020-05-23/data
+/tmp/starrocks/data/date=2020-05-23/data
 2,687
 ~~~
 
@@ -308,7 +308,7 @@ DISTRIBUTED BY HASH(user_id) BUCKETS 3;
 
 ~~~SQL
 LOAD LABEL test.label_load (
-    DATA INFILE("hdfs://{HDFS_HOST}:{HDFS_PORT}/tmp/doris/data/date=*/*")
+    DATA INFILE("hdfs://{HDFS_HOST}:{HDFS_PORT}/tmp/starrocks/data/date=*/*")
     INTO TABLE `event`
     COLUMNS TERMINATED BY ","
     FORMAT AS "csv"

@@ -13,11 +13,11 @@ VARCHAR strright(VARCHAR str,INT len)
 ## example
 
 ```Plain Text
-MySQL > select strright("Hello doris",5);
+MySQL > select strright("Hello starrocks",5);
 +--------------------------+
-|strright('Hello doris', 5)|
+|strright('Hello starrocks', 5)|
 +--------------------------+
-| doris                    |
+| starrocks                    |
 +--------------------------+
 ```
 

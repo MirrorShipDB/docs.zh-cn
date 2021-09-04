@@ -2,7 +2,7 @@
 
 ## 集群启停
 
-DorisDB集群部署完成之后，紧接着就是启动集群，提供服务。启动服务之前需要保证配置文件满足要求。
+StarRocks集群部署完成之后，紧接着就是启动集群，提供服务。启动服务之前需要保证配置文件满足要求。
 
 ### FE启动
 
@@ -65,13 +65,13 @@ BE和FE启动完成之后，需要检查进程状态，以确定服务正常启�
 
 ### 集群升级
 
-DorisDB可以通过滚动升级的方式，平滑进行升级。**升级顺序是先升级BE，再升级FE**。DorisDB保证BE后向兼容FE。升级的过程可以分为：测试升级的正确性，滚动升级，观察服务。
+StarRocks可以通过滚动升级的方式，平滑进行升级。**升级顺序是先升级BE，再升级FE**。StarRocks保证BE后向兼容FE。升级的过程可以分为：测试升级的正确性，滚动升级，观察服务。
 
 ### 升级准备
 
 * 在完成数据正确性验证后，将 BE 和 FE 新版本的二进制文件分发到各自目录下。
 
-* 小版本升级，BE 只需升级 doris_be；FE 只需升级 doris-fe.jar。
+* 小版本升级，BE 只需升级 starrocks_be；FE 只需升级 starrocks-fe.jar。
 * 大版本升级，则可能需要升级其他文件（包括但不限于 bin/ lib/ 等）；如果不确定是否需要替换其他文件，全部替换即可。
 
 ### 升级
@@ -87,10 +87,10 @@ DorisDB可以通过滚动升级的方式，平滑进行升级。**升级顺序�
 ```shell
 cd be_work_dir 
 mv lib lib.bak 
-cp -r /tmp/DorisDB-SE-x.x.x/be/lib  .   
+cp -r /tmp/StarRocks-SE-x.x.x/be/lib  .   
 sh bin/stop_be.sh
 sh bin/start_be.sh --daemon
-ps aux | grep dorisdb_be
+ps aux | grep starrocksdb_be
 ```
 
 #### FE 升级
@@ -98,10 +98,10 @@ ps aux | grep dorisdb_be
 ```shell
 cd fe_work_dir 
 mv lib lib.bak 
-cp -r /tmp/DorisDB-SE-x.x.x/fe/lib  .   
+cp -r /tmp/StarRocks-SE-x.x.x/fe/lib  .   
 sh bin/stop_fe.sh
 sh bin/start_fe.sh --daemon
-ps aux | grep DorisDbFe
+ps aux | grep StarRocksDbFe
 ```
 
 特别注意：
@@ -110,11 +110,11 @@ BE、FE启动顺序不能颠倒。因为如果升级导致新旧 FE、BE 不兼�
 
 ### 测试BE升级的正确性
 
-* 任意选择一个BE节点，部署最新的doris_be二进制文件。
+* 任意选择一个BE节点，部署最新的starrocks_be二进制文件。
 
 * 重启该BE节点，通过BE日志be.INFO查看是否启动成功。
   
-* 如果启动失败，可以先排查原因。如果错误不可恢复，可以直接通过 `DROP BACKEND` 删除该 BE、清理数据后，使用上一个版本的 doris_be 重新启动 BE。然后重新 `ADD BACKEND`。（**该方法会导致丢失一个数据副本，请务必确保3副本完整的情况下，执行这个操作！！！**）
+* 如果启动失败，可以先排查原因。如果错误不可恢复，可以直接通过 `DROP BACKEND` 删除该 BE、清理数据后，使用上一个版本的 starrocks_be 重新启动 BE。然后重新 `ADD BACKEND`。（**该方法会导致丢失一个数据副本，请务必确保3副本完整的情况下，执行这个操作！！！**）
   
 ### 测试FE升级的正确性
 
@@ -126,9 +126,9 @@ BE、FE启动顺序不能颠倒。因为如果升级导致新旧 FE、BE 不兼�
   
 * 在fe.conf添加配置：metadata_failure_recovery=true
   
-* 拷贝线上环境Master FE的元数据目录doris-meta到测试环境
+* 拷贝线上环境Master FE的元数据目录starrocks-meta到测试环境
   
-* 将拷贝到测试环境中的 doris-meta/image/VERSION 文件中的 cluster_id 修改为 123456（即与第3步中相同）
+* 将拷贝到测试环境中的 starrocks-meta/image/VERSION 文件中的 cluster_id 修改为 123456（即与第3步中相同）
 * 在测试环境中，运行 `sh bin/start_fe.sh` 启动 FE
   
 * 通过FE日志fe.log观察是否启动成功。

@@ -31,7 +31,7 @@ date_trunc("minute", datetime):
 
 2. PostgreSQL/redshift等使用的是`date_trunc(text,time)`的函数格式。
 
-3. DorisDB采用`date_trunc([fmt], datetime)`的函数格式。
+3. StarRocks采用`date_trunc([fmt], datetime)`的函数格式。
 
 ## 函数实现
 

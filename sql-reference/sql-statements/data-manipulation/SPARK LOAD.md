@@ -2,7 +2,7 @@
 
 ## description
 
-Spark load 通过外部的 Spark 资源实现对导入数据的预处理，提高 Doris 大数据量的导入性能并且节省 Doris 集群的计算资源。主要用于初次迁移，大数据量导入 Doris 的场景。
+Spark load 通过外部的 Spark 资源实现对导入数据的预处理，提高 StarRocks 大数据量的导入性能并且节省 StarRocks 集群的计算资源。主要用于初次迁移，大数据量导入 StarRocks 的场景。
 
 Spark load 是一种异步导入方式，用户需要通过 MySQL 协议创建 Spark 类型导入任务，并通过 `SHOW LOAD` 查看导入结果。
 
@@ -67,7 +67,7 @@ file_path:
 hive_external_tbl:
 
 hive 外部表名。
-要求导入的 doris 表中的列必须在 hive 外部表中存在。
+要求导入的 starrocks 表中的列必须在 hive 外部表中存在。
 每个导入任务只支持从一个 hive 外部表导入。
 不能与 file_path 方式同时使用。
 
@@ -119,7 +119,7 @@ WHERE:
 
 4.resource_properties
 
-当用户有临时性的需求，比如增加任务使用的资源而修改 Spark configs，可以在这里设置，设置仅对本次任务生效，并不影响 Doris 集群中已有的配置。
+当用户有临时性的需求，比如增加任务使用的资源而修改 Spark configs，可以在这里设置，设置仅对本次任务生效，并不影响 StarRocks 集群中已有的配置。
 另外不同的 broker，以及不同的访问方式，需要提供的信息不同。可以查看 broker 使用文档。
 
 5.opt_properties

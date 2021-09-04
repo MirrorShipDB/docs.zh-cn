@@ -1,10 +1,10 @@
-# Spark Doris Connector
+# Spark StarRocks Connector
 
-Spark DorisDB Connector 可以支持通过 Spark 读取 DorisDB 中存储的数据。
+Spark StarRocks Connector 可以支持通过 Spark 读取 StarRocks 中存储的数据。
 
-- 当前版本只支持从`DorisDB`中读取数据。
-- 可以将`DorisDB`表映射为`DataFrame`或者`RDD`，推荐使用`DataFrame`。
-- 支持在`DorisDB`端完成数据过滤，减少数据传输量。
+- 当前版本只支持从`StarRocks`中读取数据。
+- 可以将`StarRocks`表映射为`DataFrame`或者`RDD`，推荐使用`DataFrame`。
+- 支持在`StarRocks`端完成数据过滤，减少数据传输量。
 
 ## 版本要求
 
@@ -14,50 +14,50 @@ Spark DorisDB Connector 可以支持通过 Spark 读取 DorisDB 中存储的数�
 
 ### 使用示例
 
-代码参考 "https://github.com/DorisDB/demo/tree/master/SparkDemo"
+代码参考 "https://github.com/StarRocks/demo/tree/master/SparkDemo"
 
 #### SQL
 
 ```sql
-CREATE TEMPORARY VIEW spark_dorisdb
-USING doris
+CREATE TEMPORARY VIEW spark_starrocksdb
+USING starrocks
 OPTIONS(
-  "table.identifier"="$YOUR_DORIS_DATABASE_NAME.$YOUR_DORIS_TABLE_NAME",
-  "fenodes"="$YOUR_DORIS_FE_HOSTNAME:$YOUR_DORIS_FE_RESFUL_PORT",
-  "user"="$YOUR_DORIS_USERNAME",
-  "password"="$YOUR_DORIS_PASSWORD"
+  "table.identifier"="$YOUR_STARROCKS_DATABASE_NAME.$YOUR_STARROCKS_TABLE_NAME",
+  "fenodes"="$YOUR_STARROCKS_FE_HOSTNAME:$YOUR_STARROCKS_FE_RESFUL_PORT",
+  "user"="$YOUR_STARROCKS_USERNAME",
+  "password"="$YOUR_STARROCKS_PASSWORD"
 );
 
-SELECT * FROM spark_dorisdb;
+SELECT * FROM spark_starrocksdb;
 ```
 
 #### DataFrame
 
 ```scala
-val dorisSparkDF = spark.read.format("doris")
-  .option("doris.table.identifier", "$YOUR_DORIS_DATABASE_NAME.$YOUR_DORIS_TABLE_NAME")
- .option("doris.fenodes", "$YOUR_DORIS_FE_HOSTNAME:$YOUR_DORIS_FE_RESFUL_PORT")
-  .option("user", "$YOUR_DORIS_USERNAME")
-  .option("password", "$YOUR_DORIS_PASSWORD")
+val starrocksSparkDF = spark.read.format("starrocks")
+  .option("starrocks.table.identifier", "$YOUR_STARROCKS_DATABASE_NAME.$YOUR_STARROCKS_TABLE_NAME")
+ .option("starrocks.fenodes", "$YOUR_STARROCKS_FE_HOSTNAME:$YOUR_STARROCKS_FE_RESFUL_PORT")
+  .option("user", "$YOUR_STARROCKS_USERNAME")
+  .option("password", "$YOUR_STARROCKS_PASSWORD")
   .load()
 
-dorisSparkDF.show(5)
+starrocksSparkDF.show(5)
 ```
 
 #### RDD
 
 ```scala
-import org.apache.doris.spark._
-val dorisSparkRDD = sc.dorisRDD(
-  tableIdentifier = Some("$YOUR_DORIS_DATABASE_NAME.$YOUR_DORIS_TABLE_NAME"),
+import org.apache.starrocks.spark._
+val starrocksSparkRDD = sc.starrocksRDD(
+  tableIdentifier = Some("$YOUR_STARROCKS_DATABASE_NAME.$YOUR_STARROCKS_TABLE_NAME"),
   cfg = Some(Map(
-    "doris.fenodes" -> "$YOUR_DORIS_FE_HOSTNAME:$YOUR_DORIS_FE_RESFUL_PORT",
-    "doris.request.auth.user" -> "$YOUR_DORIS_USERNAME",
-    "doris.request.auth.password" -> "$YOUR_DORIS_PASSWORD"
+    "starrocks.fenodes" -> "$YOUR_STARROCKS_FE_HOSTNAME:$YOUR_STARROCKS_FE_RESFUL_PORT",
+    "starrocks.request.auth.user" -> "$YOUR_STARROCKS_USERNAME",
+    "starrocks.request.auth.password" -> "$YOUR_STARROCKS_PASSWORD"
   ))
 )
 
-dorisSparkRDD.collect()
+starrocksSparkRDD.collect()
 ```
 
 ### 配置
@@ -66,38 +66,38 @@ dorisSparkRDD.collect()
 
 | Key                              | Default Value     | Comment                                                      |
 | -------------------------------- | ----------------- | ------------------------------------------------------------ |
-| doris.fenodes                    | --                | DorisDB FE http 地址，支持多个地址，使用逗号分隔            |
-| doris.table.identifier           | --                | DorisDB 表名，如：db1.tbl1                                 |
-| doris.request.retries            | 3                 | 向DorisDB发送请求的重试次数                                    |
-| doris.request.connect.timeout.ms | 30000             | 向DorisDB发送请求的连接超时时间                                |
-| doris.request.read.timeout.ms    | 30000             | 向DorisDB发送请求的读取超时时间                                |
-| doris.request.query.timeout.s    | 3600              | 查询dorisDB的超时时间，默认值为1小时，-1表示无超时限制             |
-| doris.request.tablet.size        | Integer.MAX_VALUE | 一个RDD Partition对应的DorisDB Tablet个数。此数值设置越小，则会生成越多的Partition。从而提升Spark侧的并行度，但同时会对DorisDB造成更大的压力。 |
-| doris.batch.size                 | 1024              | 一次从BE读取数据的最大行数。增大此数值可减少Spark与Doris之间建立连接的次数。从而减轻网络延迟所带来的的额外时间开销。 |
-| doris.exec.mem.limit             | 2147483648        | 单个查询的内存限制。默认为 2GB，单位为字节                      |
-| doris.deserialize.arrow.async    | false             | 是否支持异步转换Arrow格式到spark-dorisdb-connector迭代所需的RowBatch                 |
-| doris.deserialize.queue.size     | 64                | 异步转换Arrow格式的内部处理队列，当doris.deserialize.arrow.async为true时生效        |
+| starrocks.fenodes                    | --                | StarRocks FE http 地址，支持多个地址，使用逗号分隔            |
+| starrocks.table.identifier           | --                | StarRocks 表名，如：db1.tbl1                                 |
+| starrocks.request.retries            | 3                 | 向StarRocks发送请求的重试次数                                    |
+| starrocks.request.connect.timeout.ms | 30000             | 向StarRocks发送请求的连接超时时间                                |
+| starrocks.request.read.timeout.ms    | 30000             | 向StarRocks发送请求的读取超时时间                                |
+| starrocks.request.query.timeout.s    | 3600              | 查询starrocksDB的超时时间，默认值为1小时，-1表示无超时限制             |
+| starrocks.request.tablet.size        | Integer.MAX_VALUE | 一个RDD Partition对应的StarRocks Tablet个数。此数值设置越小，则会生成越多的Partition。从而提升Spark侧的并行度，但同时会对StarRocks造成更大的压力。 |
+| starrocks.batch.size                 | 1024              | 一次从BE读取数据的最大行数。增大此数值可减少Spark与StarRocks之间建立连接的次数。从而减轻网络延迟所带来的的额外时间开销。 |
+| starrocks.exec.mem.limit             | 2147483648        | 单个查询的内存限制。默认为 2GB，单位为字节                      |
+| starrocks.deserialize.arrow.async    | false             | 是否支持异步转换Arrow格式到spark-starrocksdb-connector迭代所需的RowBatch                 |
+| starrocks.deserialize.queue.size     | 64                | 异步转换Arrow格式的内部处理队列，当starrocks.deserialize.arrow.async为true时生效        |
 
 #### SQL 和 Dataframe 专有配置
 
 | Key                             | Default Value | Comment                                                      |
 | ------------------------------- | ------------- | ------------------------------------------------------------ |
-| user                            | --            | 访问DorisDB的用户名                                            |
-| password                        | --            | 访问DorisDB的密码                                              |
-| doris.filter.query.in.max.count | 100           | 谓词下推中，in表达式value列表元素最大数量。超过此数量，则in表达式条件过滤在Spark侧处理。 |
+| user                            | --            | 访问StarRocks的用户名                                            |
+| password                        | --            | 访问StarRocks的密码                                              |
+| starrocks.filter.query.in.max.count | 100           | 谓词下推中，in表达式value列表元素最大数量。超过此数量，则in表达式条件过滤在Spark侧处理。 |
 
 #### RDD 专有配置
 
 | Key                         | Default Value | Comment                                                      |
 | --------------------------- | ------------- | ------------------------------------------------------------ |
-| doris.request.auth.user     | --            | 访问DorisDB的用户名                                            |
-| doris.request.auth.password | --            | 访问DorisDB的密码                                              |
-| doris.read.field            | --            | 读取DorisDB表的列名列表，多列之间使用逗号分隔                  |
-| doris.filter.query          | --            | 过滤读取数据的表达式，此表达式透传给DorisDB。DorisDB使用此表达式完成源端数据过滤。 |
+| starrocks.request.auth.user     | --            | 访问StarRocks的用户名                                            |
+| starrocks.request.auth.password | --            | 访问StarRocks的密码                                              |
+| starrocks.read.field            | --            | 读取StarRocks表的列名列表，多列之间使用逗号分隔                  |
+| starrocks.filter.query          | --            | 过滤读取数据的表达式，此表达式透传给StarRocks。StarRocks使用此表达式完成源端数据过滤。 |
 
-### DorisDB 和 Spark 列类型映射关系
+### StarRocks 和 Spark 列类型映射关系
 
-| DorisDB Type | Spark Type                       |
+| StarRocks Type | Spark Type                       |
 | ---------- | -------------------------------- |
 | NULL_TYPE  | DataTypes.NullType               |
 | BOOLEAN    | DataTypes.BooleanType            |
@@ -118,4 +118,4 @@ dorisSparkRDD.collect()
 | TIME       | DataTypes.DoubleType             |
 | HLL        | Unsupported datatype             |
 
-- 注：Connector中，将`DATE`和`DATETIME`映射为`String`。由于`DorisDB`底层存储引擎处理逻辑，直接使用时间类型时，覆盖的时间范围无法满足需求。所以使用 `String` 类型直接返回对应的时间可读文本。
+- 注：Connector中，将`DATE`和`DATETIME`映射为`String`。由于`StarRocks`底层存储引擎处理逻辑，直接使用时间类型时，覆盖的时间范围无法满足需求。所以使用 `String` 类型直接返回对应的时间可读文本。

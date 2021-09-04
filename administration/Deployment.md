@@ -1,37 +1,37 @@
 # 集群部署
 
-DorisDB的集群部署分为两种模式，第一种是使用命令部署，第二种是使用 DorisDBManager 自动化部署。自动部署的版本只需要在页面上简单进行配置、选择、输入后批量完成，并且包含Supervisor进程管理、滚动升级、备份、回滚等功能。命令部署的方式适用于希望和自有运维系统打通的用户，有助于管理员理解DorisDB的内部运行机制，直接定位处理一些更复杂的问题。
+StarRocks的集群部署分为两种模式，第一种是使用命令部署，第二种是使用 StarRocksManager 自动化部署。自动部署的版本只需要在页面上简单进行配置、选择、输入后批量完成，并且包含Supervisor进程管理、滚动升级、备份、回滚等功能。命令部署的方式适用于希望和自有运维系统打通的用户，有助于管理员理解StarRocks的内部运行机制，直接定位处理一些更复杂的问题。
 
-## DorisDBManager部署
+## StarRocksManager部署
 
 ### 安装依赖
 
-在所有需要部署DorisDB的节点上安装以下依赖:
+在所有需要部署StarRocks的节点上安装以下依赖:
 
 * JDK (1.8 以上)  并且配置好JAVA_HOME (比如 `~/.bashrc` 中增加 `export` ).
 * python (2.7 以上)
 * python-setuptools (`yum install setuptools or apt-get install setuptools`)
 
-另外DorisDBManager本身需要连接一个MySQL来存储Manager管理平台的数据。
+另外StarRocksManager本身需要连接一个MySQL来存储Manager管理平台的数据。
 
-### 安装DorisDBManager部署工具
+### 安装StarRocksManager部署工具
 
 解压以后
 
 ~~~shell
 $ bin/install.sh -h
--[d install_path] install_path(default: /home/disk1/doris/dorisdb-manager-20200101)
+-[d install_path] install_path(default: /home/disk1/starrocks/starrocksdb-manager-20200101)
 -[y python_bin_path] python_bin_path(default: /usr/bin/python)
 -[p admin_console_port] admin_console_port(default: 19321)
 -[s supervisor_http_port] supervisor_http_port(default: 19320)
 $ bin/install.sh
 ~~~
 
-该步骤会安装一个简单的web页面来帮助安装DorisDB数据库
+该步骤会安装一个简单的web页面来帮助安装StarRocks数据库
 
-### 安装部署DorisDB
+### 安装部署StarRocks
 
-* 首先需要配置一个安装好的MySQL数据库，此MySQL用于存储DorisDBManager的管理、查询、报警等信息
+* 首先需要配置一个安装好的MySQL数据库，此MySQL用于存储StarRocksManager的管理、查询、报警等信息
 
 ![配置 MySQL](../assets/8.1.1.3-1.png)
 
@@ -39,7 +39,7 @@ $ bin/install.sh
 
 ![配置节点](../assets/8.1.1.3-2.png)
 
-* **安装FE**： `meta dir`是DorisDB的元数据目录，和命令安装类似，建议配置一个独立的doris-meta和fe的log 目录，FE follower建议配置1或者3个，在请求压力比较大的情况可以酌情增加observer
+* **安装FE**： `meta dir`是StarRocks的元数据目录，和命令安装类似，建议配置一个独立的starrocks-meta和fe的log 目录，FE follower建议配置1或者3个，在请求压力比较大的情况可以酌情增加observer
 
 ![配置 FE 实例](../assets/8.1.1.3-3.png)
 
@@ -73,4 +73,4 @@ $ bin/install.sh
 
 ## 手动部署
 
-手动部署参考 [DorisDB手动部署](../quick_start/Deploy.md)。
+手动部署参考 [StarRocks手动部署](../quick_start/Deploy.md)。

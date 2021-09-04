@@ -4,13 +4,13 @@
 
 Select语句由select，from，where，group by，having，order by，union等部分组成。
 
-DorisDB的查询语句基本符合SQL92标准，下面简要介绍支持的select用法。
+StarRocks的查询语句基本符合SQL92标准，下面简要介绍支持的select用法。
 
 ### 连接(Join)
 
 连接操作是合并2个或多个表的数据，然后返回其中某些表中的某些列的结果集。
 
-目前DorisDB支持inner join，outer join，semi join，anti join，cross join。
+目前StarRocks支持inner join，outer join，semi join，anti join，cross join。
 
 在inner join条件里除了支持等值join，还支持不等值join，为了性能考虑，推荐使用等值join。
 
@@ -45,7 +45,7 @@ table_or_subquery1 CROSS JOIN table_or_subquery2
 
 #### Self-Join
 
-DorisDB支持self-joins，即自己和自己join。例如同一张表的不同列进行join。
+StarRocks支持self-joins，即自己和自己join。例如同一张表的不同列进行join。
 
 实际上没有特殊的语法标识self-join。self-join中join两边的条件都来自同一张表，
 
@@ -222,7 +222,7 @@ having tiny_column > 1;
 
 ### Limit
 
-Limit从句用于限制返回结果的最大行数。设置返回结果的最大行数可以帮助DorisDB优化内存的使用。
+Limit从句用于限制返回结果的最大行数。设置返回结果的最大行数可以帮助StarRocks优化内存的使用。
 
 该从句主要应用如下场景：
 
@@ -425,7 +425,7 @@ select count(distinct tiny_column) from small_table;
  select count(distinct tiny_column, int_column) from big_table limit 2;
 ```
 
-DorisDB支持多个聚合函数同时使用distinct。
+StarRocks支持多个聚合函数同时使用distinct。
 
 ```SQL
 -- Count the unique value from multiple aggregation function separately.
@@ -580,7 +580,7 @@ In操作符
 
 In操作符会和VALUE集合进行比较，如果可以匹配该集合中任何一元素，则返回TRUE。
 
-参数和VALUE集合必须是可比较的。所有使用IN操作符的表达式都可以写成用OR连接的等值比较，但是IN的语法更简单，更精准，更容易让DorisDB进行优化。
+参数和VALUE集合必须是可比较的。所有使用IN操作符的表达式都可以写成用OR连接的等值比较，但是IN的语法更简单，更精准，更容易让StarRocks进行优化。
 
 举例：
 

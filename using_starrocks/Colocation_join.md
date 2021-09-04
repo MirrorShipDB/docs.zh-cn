@@ -56,7 +56,7 @@ PROPERTIES(
 );
 ~~~
 
-如果指定的 Group 不存在，则 DorisDB 会自动创建一个只包含当前这张表的 Group。如果 Group 已存在，则 DorisDB 会检查当前表是否满足 Colocation Group Schema。如果满足，则会创建该表，并将该表加入 Group。同时，表会根据已存在的 Group 中的数据分布规则创建分片和副本。
+如果指定的 Group 不存在，则 StarRocks 会自动创建一个只包含当前这张表的 Group。如果 Group 已存在，则 StarRocks 会检查当前表是否满足 Colocation Group Schema。如果满足，则会创建该表，并将该表加入 Group。同时，表会根据已存在的 Group 中的数据分布规则创建分片和副本。
 
 Group 归属于一个 Database，Group 的名字在一个 Database 内唯一。在内部存储是 Group 的全名为 dbId_groupName，但用户只感知 groupName。
 
@@ -138,7 +138,7 @@ ALTER TABLE tbl SET ("colocate_with" = "");
 
 ### 其他相关操作
 
-当对一个具有 Colocation 属性的表进行增加分区（ADD PARTITION）、修改副本数时，DorisDB 会检查修改是否会违反 Colocation Group Schema，如果违反则会拒绝。
+当对一个具有 Colocation 属性的表进行增加分区（ADD PARTITION）、修改副本数时，StarRocks 会检查修改是否会违反 Colocation Group Schema，如果违反则会拒绝。
 
 <br>
 
@@ -152,15 +152,15 @@ Group 自身有一个 **Stable** 属性，当 Stable 为 true 时，表示当前
 
 ### 副本修复
 
-副本只能存储在指定的 BE 节点上。所以当某个 BE 不可用时（宕机、Decommission 等），需要寻找一个新的 BE 进行替换。DorisDB 会优先寻找负载最低的 BE 进行替换。替换后，该 Bucket 内的所有在旧 BE 上的数据分片都要做修复。迁移过程中，Group 被标记为 **Unstable**。
+副本只能存储在指定的 BE 节点上。所以当某个 BE 不可用时（宕机、Decommission 等），需要寻找一个新的 BE 进行替换。StarRocks 会优先寻找负载最低的 BE 进行替换。替换后，该 Bucket 内的所有在旧 BE 上的数据分片都要做修复。迁移过程中，Group 被标记为 **Unstable**。
 
 <br>
 
 ### 副本均衡
 
-DorisDB 会尽力将 Colocation 表的分片均匀分布在所有 BE 节点上。对于普通表的副本均衡，是以单副本为粒度的，即单独为每一个副本寻找负载较低的 BE 节点即可。而 Colocation 表的均衡是 Bucket 级别的，即一个 Bucket 内的所有副本都会一起迁移。我们采用一个简单的均衡算法，即在不考虑副本实际大小，而只根据副本数量，将 BucketsSequnce 均匀的分布在所有 BE 上。具体算法可以参阅 ColocateTableBalancer.java 中的代码注释。
+StarRocks 会尽力将 Colocation 表的分片均匀分布在所有 BE 节点上。对于普通表的副本均衡，是以单副本为粒度的，即单独为每一个副本寻找负载较低的 BE 节点即可。而 Colocation 表的均衡是 Bucket 级别的，即一个 Bucket 内的所有副本都会一起迁移。我们采用一个简单的均衡算法，即在不考虑副本实际大小，而只根据副本数量，将 BucketsSequnce 均匀的分布在所有 BE 上。具体算法可以参阅 ColocateTableBalancer.java 中的代码注释。
 
-> 注1：当前的 Colocation 副本均衡和修复算法，对于异构部署的 DorisDB 集群效果可能不佳。所谓异构部署，即 BE 节点的磁盘容量、数量、磁盘类型（SSD 和 HDD）不一致。在异构部署情况下，可能出现小容量的 BE 节点和大容量的 BE 节点存储了相同的副本数量。
+> 注1：当前的 Colocation 副本均衡和修复算法，对于异构部署的 StarRocks 集群效果可能不佳。所谓异构部署，即 BE 节点的磁盘容量、数量、磁盘类型（SSD 和 HDD）不一致。在异构部署情况下，可能出现小容量的 BE 节点和大容量的 BE 节点存储了相同的副本数量。
 >
 > 注2：当一个 Group 处于 Unstable 状态时，其中的表的 Join 将退化为普通 Join。此时可能会极大降低集群的查询性能。如果不希望系统自动均衡，可以设置 FE 的配置项 disable_colocate_balance 来禁止自动均衡。然后在合适的时间打开即可。（具体参阅 [高级操作](#高级操作) 一节）
 
@@ -316,11 +316,11 @@ HASH JOIN 节点会显示对应原因：`colocate: false, reason: group is not s
 
 * **disable_colocate_relocate**
 
-    是否关闭 DorisDB 的自动 Colocation 副本修复。默认为 false，即不关闭。该参数只影响 Colocation 表的副本修复，不影响普通表。
+    是否关闭 StarRocks 的自动 Colocation 副本修复。默认为 false，即不关闭。该参数只影响 Colocation 表的副本修复，不影响普通表。
 
 * **disable_colocate_balance**
 
-    是否关闭 DorisDB 的自动 Colocation 副本均衡。默认为 false，即不关闭。该参数只影响 Colocation 表的副本均衡，不影响普通表。
+    是否关闭 StarRocks 的自动 Colocation 副本均衡。默认为 false，即不关闭。该参数只影响 Colocation 表的副本均衡，不影响普通表。
 
 * **disable_colocate_join**
 
@@ -332,7 +332,7 @@ HASH JOIN 节点会显示对应原因：`colocate: false, reason: group is not s
 
 ### HTTP Restful API
 
-DorisDB 提供了几个和 Colocation Join 有关的 HTTP Restful API，用于查看和修改 Colocation Group。
+StarRocks 提供了几个和 Colocation Join 有关的 HTTP Restful API，用于查看和修改 Colocation Group。
 
 该 API 实现在 FE 端，使用 fe_host:fe_http_port 进行访问，需要 ADMIN 权限。
 

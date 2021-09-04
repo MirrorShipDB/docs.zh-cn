@@ -92,7 +92,7 @@ CREATE [EXTERNAL] TABLE [IF NOT EXISTS] [database.]table_name
 
     * BITMAP_UNION(仅用于 BITMAP 列，为 BITMAP 独有的聚合方式)、
 
-    * REPLACE_IF_NOT_NULL：这个聚合类型的含义是当且仅当新导入数据是非NULL值时会发生替换行为，如果新导入的数据是NULL，那么Doris仍然会保留原值。注意：如果用在建表时REPLACE_IF_NOT_NULL列指定了NOT NULL，那么Doris仍然会将其转化NULL，不会向用户报错。用户可以借助这个类型完成部分列导入的功能。
+    * REPLACE_IF_NOT_NULL：这个聚合类型的含义是当且仅当新导入数据是非NULL值时会发生替换行为，如果新导入的数据是NULL，那么StarRocks仍然会保留原值。注意：如果用在建表时REPLACE_IF_NOT_NULL列指定了NOT NULL，那么StarRocks仍然会将其转化NULL，不会向用户报错。用户可以借助这个类型完成部分列导入的功能。
     * 该类型只对聚合模型(key_desc的type为AGGREGATE KEY)有用，其它模型不需要指这个。
 
     是否允许为NULL: 默认不允许为 NULL。NULL 值在导入数据中用 \N 来表示
@@ -136,10 +136,10 @@ CREATE [EXTERNAL] TABLE [IF NOT EXISTS] [database.]table_name
 
     注意：
     "table" 条目中的 "table_name" 是 mysql 中的真实表名。
-    而 CREATE TABLE 语句中的 table_name 是该 mysql 表在 Doris 中的名字，可以不同。
+    而 CREATE TABLE 语句中的 table_name 是该 mysql 表在 StarRocks 中的名字，可以不同。
 
-    在 Doris 创建 mysql 表的目的是可以通过 Doris 访问 mysql 数据库。
-    而 Doris 本身并不维护、存储任何 mysql 数据。
+    在 StarRocks 创建 mysql 表的目的是可以通过 StarRocks 访问 mysql 数据库。
+    而 StarRocks 本身并不维护、存储任何 mysql 数据。
 
 2. 如果是 broker，表示表的访问需要通过指定的broker, 需要在 properties 提供以下信息：
 
@@ -198,7 +198,7 @@ CREATE [EXTERNAL] TABLE [IF NOT EXISTS] [database.]table_name
     适合报表、多维分析等业务场景。
     UNIQUE KEY:key列相同的记录，value列按导入顺序进行覆盖，
     适合按key列进行增删改查的点查询业务。
-    DUPLICATE KEY:key列相同的记录，同时存在于Doris中，
+    DUPLICATE KEY:key列相同的记录，同时存在于StarRocks中，
     适合存储明细数据或者数据无聚合特性的业务场景。
     默认为DUPLICATE KEY，key列为列定义中前36个字节, 如果前36个字节的列数小于3，将使用前三列。
 
@@ -350,7 +350,7 @@ CREATE [EXTERNAL] TABLE [IF NOT EXISTS] [database.]table_name
     )
     ```
 
-    当 in_memory 属性为 true 时，Doris会尽可能将该表的数据和索引Cache到BE 内存中
+    当 in_memory 属性为 true 时，StarRocks会尽可能将该表的数据和索引Cache到BE 内存中
 
 ## example
 
@@ -366,7 +366,7 @@ CREATE [EXTERNAL] TABLE [IF NOT EXISTS] [database.]table_name
     )
     ENGINE=olap
     AGGREGATE KEY(k1, k2)
-    COMMENT "my first doris table"
+    COMMENT "my first starrocks table"
     DISTRIBUTED BY HASH(k1) BUCKETS 32
     PROPERTIES ("storage_type"="column");
     ```
@@ -588,7 +588,7 @@ CREATE [EXTERNAL] TABLE [IF NOT EXISTS] [database.]table_name
     )
     ENGINE=olap
     AGGREGATE KEY(k1, k2)
-    COMMENT "my first doris table"
+    COMMENT "my first starrocks table"
     DISTRIBUTED BY HASH(k1) BUCKETS 32
     PROPERTIES ("storage_type"="column");
     ```
@@ -663,7 +663,7 @@ CREATE [EXTERNAL] TABLE [IF NOT EXISTS] [database.]table_name
     )
     ENGINE=olap
     AGGREGATE KEY(k1, k2)
-    COMMENT "my first doris table"
+    COMMENT "my first starrocks table"
     DISTRIBUTED BY HASH(k1) BUCKETS 32
     PROPERTIES ("in_memory"="true");
     ```

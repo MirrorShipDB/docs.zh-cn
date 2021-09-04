@@ -25,13 +25,13 @@ PROPERTIES 支持设置插件的一些配置,如设置zip文件的md5sum的值�
 1. 安装一个本地 zip 文件插件：
 
     ```sql
-    INSTALL PLUGIN FROM "/home/users/doris/auditdemo.zip";
+    INSTALL PLUGIN FROM "/home/users/starrocks/auditdemo.zip";
     ```
 
 2. 安装一个本地目录中的插件：
 
     ```sql
-    INSTALL PLUGIN FROM "/home/users/doris/auditdemo/";
+    INSTALL PLUGIN FROM "/home/users/starrocks/auditdemo/";
     ```
 
 3. 下载并安装一个插件：

@@ -134,7 +134,7 @@
     "port" = "3306",
     "user" = "my_name",
     "password" = "my_passwd",
-    "database" = "doris_load",
+    "database" = "starrocks_load",
     "table" = "load_errors"
     );
     ```

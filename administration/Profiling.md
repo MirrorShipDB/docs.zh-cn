@@ -4,7 +4,7 @@
 
 ### 数据模型选择
 
-DorisDB数据模型目前分为三类: AGGREGATE KEY, UNIQUE KEY, DUPLICATE KEY。三种模型中数据都是按KEY进行排序。
+StarRocks数据模型目前分为三类: AGGREGATE KEY, UNIQUE KEY, DUPLICATE KEY。三种模型中数据都是按KEY进行排序。
 
 * AGGREGATE KEY: AGGREGATE KEY相同时，新旧记录进行聚合，目前支持的聚合函数有SUM, MIN, MAX, REPLACE。 AGGREGATE KEY模型可以提前聚合数据, 适合报表和多维分析业务。
 
@@ -54,7 +54,7 @@ DISTRIBUTED BY HASH(sessionid, visitorid) BUCKETS 10;
 
 ### 内存表
 
-DorisDB支持把表数据全部缓存在内存中，用于加速查询，内存表适合数据行数不多维度表的存储。
+StarRocks支持把表数据全部缓存在内存中，用于加速查询，内存表适合数据行数不多维度表的存储。
 
 ~~~sql
 CREATE TABLE memory_table
@@ -98,25 +98,25 @@ PROPERTIES(
 );
 ~~~
 
-更多关于colocate join的使用和副本管理机制参考[Colocate join](../using_dorisdb/Colocation_join.md)
+更多关于colocate join的使用和副本管理机制参考[Colocate join](../using_starrocksdb/Colocation_join.md)
 
 ### 大宽表与star schema
 
-业务方建表时, 为了和前端业务适配, 往往不对维度信息和指标信息加以区分, 而将schema定义成大宽表。对于DorisDB而言, 这类大宽表往往性能不尽如人意:
+业务方建表时, 为了和前端业务适配, 往往不对维度信息和指标信息加以区分, 而将schema定义成大宽表。对于StarRocks而言, 这类大宽表往往性能不尽如人意:
 
 * schema中字段数比较多, 聚合模型中可能key列比较多, 导入过程中需要排序的列会增加。
 * 维度信息更新会反应到整张表中，而更新的频率直接影响查询的效率。
 
-使用过程中，建议用户尽量使用star schema区分维度表和指标表。频繁更新的维度表可以放在mysql中, 而如果只有少量更新, 可以直接放在DorisDB中。在DorisDB中存储维度表时，可对维度表设置更多的副本，提升join的的性能。
+使用过程中，建议用户尽量使用star schema区分维度表和指标表。频繁更新的维度表可以放在mysql中, 而如果只有少量更新, 可以直接放在StarRocks中。在StarRocks中存储维度表时，可对维度表设置更多的副本，提升join的的性能。
 
 ### 分区(parition)和分桶(bucket)
 
-DorisDB支持两级分区存储, 第一层为RANGE分区(partition), 第二层为HASH分桶(bucket)。
+StarRocks支持两级分区存储, 第一层为RANGE分区(partition), 第二层为HASH分桶(bucket)。
 
 * RANGE分区(partition) : RANGE分区用于将数据划分成不同区间, 逻辑上可以理解为将原始表划分成了多个子表。 业务上，多数用户会选择采用按时间进行partition, 让时间进行partition有以下好处：
 
 * 可区分冷热数据
-* 可用上DorisDB分级存储(SSD + SATA)的功能
+* 可用上StarRocks分级存储(SSD + SATA)的功能
 * 按分区删除数据时，更加迅速
 
 * HASH分桶(bucket) : 根据hash值将数据划分成不同的bucket。
@@ -127,9 +127,9 @@ DorisDB支持两级分区存储, 第一层为RANGE分区(partition), 第二层�
 
 ### 稀疏索引和bloomfilter
 
-DorisDB对数据进行有序存储, 在数据有序的基础上为其建立稀疏索引,索引粒度为block(1024行)。
+StarRocks对数据进行有序存储, 在数据有序的基础上为其建立稀疏索引,索引粒度为block(1024行)。
 
-* 稀疏索引选取schema中固定长度的前缀作为索引内容, 目前DorisDB选取36个字节的前缀作为索引。
+* 稀疏索引选取schema中固定长度的前缀作为索引内容, 目前StarRocks选取36个字节的前缀作为索引。
 
 * 建表时建议将查询中常见的过滤字段放在schema的前面, 区分度越大，频次越高的查询字段越往前放。
 * 这其中有一个特殊的地方,就是varchar类型的字段,varchar类型字段只能作为稀疏索引的最后一个字段，索引会在varchar处截断, 因此varchar如果出现在前面，可能索引的长度不足36个字节。
@@ -139,11 +139,11 @@ DorisDB对数据进行有序存储, 在数据有序的基础上为其建立稀�
     `site_visit(siteid, city, username, pv)`
 
 * 排序列有siteid, city, username三列, siteid所占字节数为4, city所占字节数为2，username占据32个字节, 所以前缀索引的内容为siteid + city + username的前30个字节
-* 除稀疏索引之外, DorisDB还提供bloomfilter索引, bloomfilter索引对区分度比较大的列过滤效果明显。 如果考虑到varchar不能放在稀疏索引中, 可以建立bloomfilter索引。
+* 除稀疏索引之外, StarRocks还提供bloomfilter索引, bloomfilter索引对区分度比较大的列过滤效果明显。 如果考虑到varchar不能放在稀疏索引中, 可以建立bloomfilter索引。
 
 ### 倒排索引
 
-DorisDB支持倒排索引，采用位图技术构建索引(Bitmap Index)。索引能够应用在 Duplicate 数据模型的所有列和 Aggregate, Uniqkey 模型的Key列上，位图索引适合取值空间不大的列，例如性别、城市、省份等信息列上。随着取值空间的增加，位图索引会同步膨胀。
+StarRocks支持倒排索引，采用位图技术构建索引(Bitmap Index)。索引能够应用在 Duplicate 数据模型的所有列和 Aggregate, Uniqkey 模型的Key列上，位图索引适合取值空间不大的列，例如性别、城市、省份等信息列上。随着取值空间的增加，位图索引会同步膨胀。
 
 ### 物化视图(rollup)
 
@@ -167,14 +167,14 @@ Rollup本质上可以理解为原始表(base table)的一个物化索引。建�
 
 ## 导入
 
-DorisDB目前提供broker loads和stream load两种导入方式, 通过指定导入label标识一批次的导入。DorisDB对单批次的导入会保证原子生效, 即使单次导入多张表也同样保证其原子性。
+StarRocks目前提供broker loads和stream load两种导入方式, 通过指定导入label标识一批次的导入。StarRocks对单批次的导入会保证原子生效, 即使单次导入多张表也同样保证其原子性。
 
 * stream load : 通过http推的方式进行导入，微批导入。1MB数据导入延迟维持在秒级别，适合高频导入。
 * broker load : 通过拉的方式导入, 适合天级别的批量数据的导入。
 
 ## schema change
 
-DorisDB中目前进行schema change的方式有三种，sorted schema change，direct schema change, linked schema change。
+StarRocks中目前进行schema change的方式有三种，sorted schema change，direct schema change, linked schema change。
 
 * sorted schema change: 改变了列的排序方式，需对数据进行重新排序。例如删除排序列中的一列, 字段重排序。
 

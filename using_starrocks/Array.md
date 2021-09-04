@@ -2,7 +2,7 @@
 
 ## 背景
 
-数组，作为数据库的一种扩展类型，在 PG、ClickHouse、Snowflake 等系统中都有相关特性支持，可以广泛的应用于A/B Test对比、用户标签分析、人群画像等场景。DorisDB 当前支持了 多维数组嵌套、数组切片、比较、过滤等特性。
+数组，作为数据库的一种扩展类型，在 PG、ClickHouse、Snowflake 等系统中都有相关特性支持，可以广泛的应用于A/B Test对比、用户标签分析、人群画像等场景。StarRocks 当前支持了 多维数组嵌套、数组切片、比较、过滤等特性。
 
 下面简要介绍一些是使用方式，更详细的函数语法请查看 `参考手册 > 函数参考 > 数组函数`。
 
@@ -12,7 +12,7 @@
 
 ### 数组定义
 
-下面是在DorisDB中定义数组列的例子
+下面是在StarRocks中定义数组列的例子
 
 ~~~SQL
 -- 一维数组
@@ -59,7 +59,7 @@ select ["apple", "orange", "pear"] as fruit;
 select [true, false] as booleans;
 ~~~
 
-当数组元素具有不同类型时，DorisDB会自动推导出合适的类型(supertype)
+当数组元素具有不同类型时，StarRocks会自动推导出合适的类型(supertype)
 
 ~~~SQL
 select [1, 1.2] as floats;
@@ -79,7 +79,7 @@ select ARRAY<INT>["12", "100"]; -- 结果是 [12, 100]
 select [1, NULL];
 ~~~
 
-对于空数组，可以使用尖括号显示声明其类型，也可以直接写\[\]，此时DorisDB会根据上下文推断其类型，如果无法推断则会报错。
+对于空数组，可以使用尖括号显示声明其类型，也可以直接写\[\]，此时StarRocks会根据上下文推断其类型，如果无法推断则会报错。
 
 ~~~SQL
 select [];
@@ -91,7 +91,7 @@ select array_append([], 10);
 
 ### 数组导入
 
-目前有三种方式向DorisDB中写入数组值，insert into 适合小规模数据测试。后面两种适合大规模数据导入。
+目前有三种方式向StarRocks中写入数组值，insert into 适合小规模数据测试。后面两种适合大规模数据导入。
 
 * **INSERT INTO**
 
@@ -102,7 +102,7 @@ select array_append([], 10);
 
 * **从ORC Parquet文件导入**
 
-  DorisDB 中的数组类型，与ORC/Parquet格式中的list结构相对应，不需要额外指定，具体请参考DorisDB 企业文档中 `broker load` 导入相关章节。当前ORC的list结构可以直接导入，Parquet格式正在开发中。
+  StarRocks 中的数组类型，与ORC/Parquet格式中的list结构相对应，不需要额外指定，具体请参考StarRocks 企业文档中 `broker load` 导入相关章节。当前ORC的list结构可以直接导入，Parquet格式正在开发中。
 
 * **从CSV文件导入**
 

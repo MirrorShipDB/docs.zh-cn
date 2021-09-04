@@ -8,7 +8,7 @@
 BITMAP BITMAP_HASH(expr)
 ```
 
-对任意类型的输入计算32位的哈希值，返回包含该哈希值的bitmap。主要用于stream load任务将非整型字段导入Doris表的bitmap字段。例如
+对任意类型的输入计算32位的哈希值，返回包含该哈希值的bitmap。主要用于stream load任务将非整型字段导入StarRocks表的bitmap字段。例如
 
 ```bash
 cat data | curl --location-trusted -u user:passwd -T - \

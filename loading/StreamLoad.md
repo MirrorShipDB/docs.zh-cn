@@ -1,8 +1,8 @@
 # Stream load
 
-DorisDB支持从本地直接导入数据，支持CSV文件格式。数据量在10GB以下。
+StarRocks支持从本地直接导入数据，支持CSV文件格式。数据量在10GB以下。
 
-Stream Load 是一种同步的导入方式，用户通过发送 HTTP 请求将本地文件或数据流导入到 DorisDB 中。Stream Load 同步执行导入并返回导入结果。用户可直接通过请求的返回值判断导入是否成功。
+Stream Load 是一种同步的导入方式，用户通过发送 HTTP 请求将本地文件或数据流导入到 StarRocks 中。Stream Load 同步执行导入并返回导入结果。用户可直接通过请求的返回值判断导入是否成功。
 
 ---
 
@@ -53,13 +53,13 @@ curl --location-trusted -u root -T date -H "label:123" \
 
 **签名参数：**
 
-* user/passwd，Stream Load创建导入任务使用的是HTTP协议，可通过 Basic access authentication 进行签名。DorisDB 系统会根据签名来验证用户身份和导入权限。
+* user/passwd，Stream Load创建导入任务使用的是HTTP协议，可通过 Basic access authentication 进行签名。StarRocks 系统会根据签名来验证用户身份和导入权限。
 
 **导入任务参数：**
 
 Stream Load 中所有与导入任务相关的参数均设置在 Header 中。下面介绍其中部分参数的意义：
 
-* **label** :导入任务的标签，相同标签的数据无法多次导入。用户可以通过指定Label的方式来避免一份数据重复导入的问题。当前DorisDB系统会保留最近30分钟内成功完成的任务的Label。
+* **label** :导入任务的标签，相同标签的数据无法多次导入。用户可以通过指定Label的方式来避免一份数据重复导入的问题。当前StarRocks系统会保留最近30分钟内成功完成的任务的Label。
 * **column-separator** ：用于指定导入文件中的列分隔符，默认为\\t。如果是不可见字符，则需要加\\x作为前缀，使用十六进制来表示分隔符。如Hive文件的分隔符\\x01，需要指定为\-H "column-separator:\\x01"
 * **row-delimiter**: 用户指定导入文件中的行分隔符，默认为\\n。
 * **columns** ：用于指定导入文件中的列和 table 中的列的对应关系。如果源文件中的列正好对应表中的内容，那么无需指定该参数。如果源文件与表schema不对应，那么需要这个参数来配置数据转换规则。这里有两种形式的列，一种是直接对应于导入文件中的字段，可直接使用字段名表示；一种需要通过计算得出。举几个例子帮助理解：
@@ -151,7 +151,7 @@ Stream Load 的最佳使用场景是原始文件在内存中或者存储在本�
 
 由于Stream Load是由BE发起的导入并分发数据，建议的导入数据量在 1GB 到 10GB 之间。系统默认的最大Stream Load导入数据量为10GB，所以如果要导入超过10GB的文件需要修改BE的配置项streaming-load-max-mb。比如，待导入文件大小为15G，则修改BE配置 streaming-load-max-mb 为 16000 即可。
 
-Stream Load的默认超时为300秒，按照DorisDB目前最大的导入限速来看，导入超过3GB大小的文件就需要修改导入任务默认的超时时间了。
+Stream Load的默认超时为300秒，按照StarRocks目前最大的导入限速来看，导入超过3GB大小的文件就需要修改导入任务默认的超时时间了。
 
 导入任务超时时间 = 导入数据量 / 10M/s （具体的平均导入速度需要用户根据自己的集群情况计算）
 
@@ -180,8 +180,8 @@ curl --location-trusted -u user:password -T /home/store_sales \
 
 ### 代码集成示例
 
-* JAVA开发stream load，参考：[https://github.com/DorisDB/demo/MiscDemo/stream_load](https://github.com/DorisDB/demo/tree/master/MiscDemo/stream_load)
-* Spark 集成stream load，参考： [01_sparkStreaming2DorisDB](https://github.com/DorisDB/demo/blob/master/docs/cn/01_sparkStreaming2DorisDB.md)
+* JAVA开发stream load，参考：[https://github.com/StarRocks/demo/MiscDemo/stream_load](https://github.com/StarRocks/demo/tree/master/MiscDemo/stream_load)
+* Spark 集成stream load，参考： [01_sparkStreaming2StarRocks](https://github.com/StarRocks/demo/blob/master/docs/cn/01_sparkStreaming2StarRocks.md)
 
 ---
 
@@ -193,6 +193,6 @@ curl --location-trusted -u user:password -T /home/store_sales \
 
 * Label Already Exists
 
-可参考章节导入总览/常见问题。由于 Stream Load 是采用 HTTP 协议提交创建导入任务，一般各个语言的 HTTP Client 均会自带请求重试逻辑。DorisDB 系统在接受到第一个请求后，已经开始操作 Stream Load，但是由于没有及时向 Client 端返回结果，Client 端会发生再次重试创建请求的情况。这时候 DorisDB 系统由于已经在操作第一个请求，所以第二个请求会遇到 Label Already Exists 的情况。排查上述可能的方法：使用 Label 搜索 FE Master 的日志，看是否存在同一个 Label 出现了两次的情况。如果有就说明Client端重复提交了该请求。
+可参考章节导入总览/常见问题。由于 Stream Load 是采用 HTTP 协议提交创建导入任务，一般各个语言的 HTTP Client 均会自带请求重试逻辑。StarRocks 系统在接受到第一个请求后，已经开始操作 Stream Load，但是由于没有及时向 Client 端返回结果，Client 端会发生再次重试创建请求的情况。这时候 StarRocks 系统由于已经在操作第一个请求，所以第二个请求会遇到 Label Already Exists 的情况。排查上述可能的方法：使用 Label 搜索 FE Master 的日志，看是否存在同一个 Label 出现了两次的情况。如果有就说明Client端重复提交了该请求。
 
 建议用户根据当前请求的数据量，计算出大致的导入耗时，并根据导入超时时间改大 Client 端的请求超时时间，避免请求被 Client 端多次提交。

@@ -117,7 +117,7 @@ from stock_ticker;
 
 ## 函数举例
 
-本节介绍DorisDB中可以用作窗口函数的方法。
+本节介绍StarRocks中可以用作窗口函数的方法。
 
 <br>
 

@@ -2,7 +2,7 @@
 
 ## 测试方法
 
-为了方便用户快速的了解DorisDB的性能指标，这里我们提供了一个标准的Star schema benchmark的测试方法和工具仅供参考。
+为了方便用户快速的了解StarRocks的性能指标，这里我们提供了一个标准的Star schema benchmark的测试方法和工具仅供参考。
 
 Star schema benchmark（以下简称SSB）是学术界和工业界广泛使用的一个星型模型测试集，通过这个测试集合也可以容易的和其他OLAP产品进行性能对比。
 
@@ -10,7 +10,7 @@ Star schema benchmark（以下简称SSB）是学术界和工业界广泛使用�
 
 ### 环境准备
 
-* 硬件环境准备，DorisDB对机器没有严格要求，建议大于8C 32G，磁盘是SSD/SATA均可，网络建议万兆网卡。
+* 硬件环境准备，StarRocks对机器没有严格要求，建议大于8C 32G，磁盘是SSD/SATA均可，网络建议万兆网卡。
 * 集群部署参考 [集群部署](../administration/Deployment.md)
 * 系统参数参考 [配置参数](../administration/Configuration.md)
 * 下载ssb-poc工具集
@@ -176,7 +176,7 @@ bin/gen-ssb.sh 100 data_dir
 
 3. 字段是否可以为空
 
-    DorisDB的建表这里都采取的NOT NULL关键字，因为在SSB生成的标准数据集合中并没有空字段，但是对于实际的业务
+    StarRocks的建表这里都采取的NOT NULL关键字，因为在SSB生成的标准数据集合中并没有空字段，但是对于实际的业务
 
 针对我们三台BE的环境我们采取的建表方式如下：
 
@@ -360,7 +360,7 @@ mysql_host: test1
 mysql_port: 9030
 mysql_user: root
 mysql_password:
-doris_db: ssb
+starrocks_db: ssb
 
 # cluster ports
 http_port: 8030

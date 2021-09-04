@@ -13,16 +13,16 @@ BOOLEAN ENDS_WITH (VARCHAR str, VARCHAR suffix)
 ## example
 
 ```Plain Text
-MySQL > select ends_with("Hello doris", "doris");
+MySQL > select ends_with("Hello starrocks", "starrocks");
 +-----------------------------------+
-| ends_with('Hello doris', 'doris') |
+| ends_with('Hello starrocks', 'starrocks') |
 +-----------------------------------+
 |                                 1 |
 +-----------------------------------+
 
-MySQL > select ends_with("Hello doris", "Hello");
+MySQL > select ends_with("Hello starrocks", "Hello");
 +-----------------------------------+
-| ends_with('Hello doris', 'Hello') |
+| ends_with('Hello starrocks', 'Hello') |
 +-----------------------------------+
 |                                 0 |
 +-----------------------------------+

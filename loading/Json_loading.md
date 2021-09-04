@@ -35,7 +35,7 @@ curl -v --location-trusted -u root: \
 * strip\_outer\_array ： 裁剪最外面的 array 字段
 * strict\_mode：导入过程中的列类型转换进行严格过滤
 
-对于Json数据和DorisDB数据schema不完全一致的情况，我们可以通过修改Jsonpath等方式来进行导入
+对于Json数据和StarRocks数据schema不完全一致的情况，我们可以通过修改Jsonpath等方式来进行导入
 
 样例数据：
 
@@ -130,9 +130,9 @@ curl -v --location-trusted -u root: \
 对于 Kafka 数据源，和Stream Load的原理类似，每个 Massage 中的内容被视作一个完整的 Json 数据。
 
 1. 如果一个 Massage 中是以 Array 格式的表示的多行数据，则会导入多行，而 Kafka 的 offset 只会增加 1。
-2. 如果一个 Array 格式的 Json 表示多行数据，但是因为 Json 格式错误导致解析 Json 失败，则错误行只会增加 1（因为解析失败，实际上 DorisDB 无法判断其中包含多少行数据，只能按一行错误数据记录）。
+2. 如果一个 Array 格式的 Json 表示多行数据，但是因为 Json 格式错误导致解析 Json 失败，则错误行只会增加 1（因为解析失败，实际上 StarRocks 无法判断其中包含多少行数据，只能按一行错误数据记录）。
   
-### 使用Canal从mysql中增量同步binlog导入DorisDB
+### 使用Canal从mysql中增量同步binlog导入StarRocks
   
 [Canal](https://github.com/alibaba/canal) 是阿里巴巴开源的一个Mysql binlog同步工具，通过他我们可以把Mysql的数据同步到Kafka，在Kafka中数据是用Json的格式生成的，我们这里演示一下如何使用Routine load同步kafka中的数据来实现和Mysql进行增量数据同步的工作：
 
@@ -354,6 +354,6 @@ FROM KAFKA (
 );
 ~~~
 
-这样就可以完成数据从mysql到DorisDB的近实时同步。
+这样就可以完成数据从mysql到StarRocks的近实时同步。
 
 通过`show routine load` 可以看到导入任务的进度和错误信息。

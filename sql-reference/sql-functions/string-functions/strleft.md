@@ -13,9 +13,9 @@ VARCHAR strleft(VARCHAR str,INT len)
 ## example
 
 ```Plain Text
-MySQL > select strleft("Hello doris",5);
+MySQL > select strleft("Hello starrocks",5);
 +-------------------------+
-|strleft('Hello doris', 5)|
+|strleft('Hello starrocks', 5)|
 +-------------------------+
 | Hello                   |
 +-------------------------+
