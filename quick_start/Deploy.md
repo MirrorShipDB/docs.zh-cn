@@ -6,7 +6,7 @@
 
 请您联系StarRocks的技术支持或者销售人员获取最新稳定版的StarRocks二进制产品包.
 
-比如您获得的产品包为starrocksdb-1.0.0.tar.gz, 解压(tar -xzvf starrocksdb-1.0.0.tar.gz)后内容如下:
+比如您获得的产品包为starrocks-1.0.0.tar.gz, 解压(tar -xzvf starrocks-1.0.0.tar.gz)后内容如下:
 
 ```Plain Text
 StarRocks-XX-1.0.0
@@ -25,7 +25,7 @@ StarRocks-XX-1.0.0
 
 │   ├── lib
 
-│   │   ├── starrocksdb_be  # BE可执行文件
+│   │   ├── starrocks_be  # BE可执行文件
 
 │   │   └── meta_tool
 
@@ -45,7 +45,7 @@ StarRocks-XX-1.0.0
 
 │   ├── lib
 
-│   │   ├── starrocksdb-fe.jar  # FE jar包
+│   │   ├── starrocks-fe.jar  # FE jar包
 
 │   │   └── *.jar           # FE 依赖的jar包
 
@@ -117,7 +117,7 @@ bin/start_fe.sh --daemon
 ```
 
 * 如果FE启动失败，可能是由于端口号被占用，修改配置文件conf/fe.conf中的端口号http_port。
-* 使用jps命令查看java进程确认"StarRocksDbFe"存在.
+* 使用jps命令查看java进程确认"StarRocksFe"存在.
 * 使用浏览器访问8030端口, 打开StarRocks的WebUI, 用户名为root, 密码为空.
 
 ### 使用MySQL客户端访问FE

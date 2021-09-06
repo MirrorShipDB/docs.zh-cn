@@ -26,21 +26,21 @@
   + [Insert Into导入](/loading/InsertInto.md)
   + [导入过程中完成数据转换](/loading/Etl_in_loading.md)
   + [Json数据导入](/loading/Json_loading.md)
-  + [flink-connector-starrocksdb](/loading/Flink-starrocksdb-connector.md)
-  + [DataX-starrocksdb-writer](/loading/DataX-starrocksdb-writer.md)
+  + [flink-connector-starrocks](/loading/Flink-starrocks-connector.md)
+  + [DataX-starrocks-writer](/loading/DataX-starrocks-writer.md)
 + 数据提取
   + [Export数据导出](/unloading/Export.md)
   + [Spark-connector](/unloading/Spark_connector.md)
 + 使用StarRocks
-  + [用Bitmap实现精确去重](/using_starrocksdb/Using_bitmap.md)
-  + [用HLL实现近似去重](/using_starrocksdb/Using_HLL.md)
-  + [物化视图](/using_starrocksdb/Materialized_view.md)
-  + [Colocation Join](/using_starrocksdb/Colocation_join.md)
-  + [外部表](/using_starrocksdb/External_table.md)
-  + [数组](/using_starrocksdb/Array.md)
-  + [窗口函数](/using_starrocksdb/Window_function.md)
-  + [CBO优化器](/using_starrocksdb/Cost_based_optimizer.md)
-  + [Lateral Join](/using_starrocksdb/Lateral_join.md)
+  + [用Bitmap实现精确去重](/using_starrocks/Using_bitmap.md)
+  + [用HLL实现近似去重](/using_starrocks/Using_HLL.md)
+  + [物化视图](/using_starrocks/Materialized_view.md)
+  + [Colocation Join](/using_starrocks/Colocation_join.md)
+  + [外部表](/using_starrocks/External_table.md)
+  + [数组](/using_starrocks/Array.md)
+  + [窗口函数](/using_starrocks/Window_function.md)
+  + [CBO优化器](/using_starrocks/Cost_based_optimizer.md)
+  + [Lateral Join](/using_starrocks/Lateral_join.md)
 + 参考手册
   + SQL参考
     + 用户账户管理

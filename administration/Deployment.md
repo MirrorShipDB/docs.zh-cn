@@ -20,7 +20,7 @@ StarRocks的集群部署分为两种模式，第一种是使用命令部署，�
 
 ~~~shell
 $ bin/install.sh -h
--[d install_path] install_path(default: /home/disk1/starrocks/starrocksdb-manager-20200101)
+-[d install_path] install_path(default: /home/disk1/starrocks/starrocks-manager-20200101)
 -[y python_bin_path] python_bin_path(default: /usr/bin/python)
 -[p admin_console_port] admin_console_port(default: 19321)
 -[s supervisor_http_port] supervisor_http_port(default: 19320)

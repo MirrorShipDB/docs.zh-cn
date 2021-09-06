@@ -1,29 +1,29 @@
 # 设计背景
 
-flink的用户想要将数据sink到StarRocks当中，但是flink官方只提供了flink-connector-jdbc, 不足以满足导入性能要求，为此我们新增了一个flink-connector-starrocksdb，内部实现是通过缓存并批量由stream load导入。
+flink的用户想要将数据sink到StarRocks当中，但是flink官方只提供了flink-connector-jdbc, 不足以满足导入性能要求，为此我们新增了一个flink-connector-starrocks，内部实现是通过缓存并批量由stream load导入。
 
 ## 使用方式
 
-将`com.starrocksdb.table.connector.flink.StarRocksDynamicTableSinkFactory`加入到：`src/main/resources/META-INF/services/org.apache.flink.table.factories.Factory`。
+将`com.starrocks.table.connector.flink.StarRocksDynamicTableSinkFactory`加入到：`src/main/resources/META-INF/services/org.apache.flink.table.factories.Factory`。
 
 将以下两部分内容加入`pom.xml`:
 
 ```plain text
 <repositories>
     <repository>
-        <id>starrocksdb-maven-releases</id>
-        <url>http://starrocksdbvisitor:starrocksdbvisitor134@nexus.starrocksdb.com/repository/maven-releases/</url>
+        <id>starrocks-maven-releases</id>
+        <url>http://starrocksvisitor:starrocksvisitor134@nexus.starrocks.com/repository/maven-releases/</url>
     </repository>
     <repository>
-        <id>starrocksdb-maven-snapshots</id>
-        <url>http://starrocksdbvisitor:starrocksdbvisitor134@nexus.starrocksdb.com/repository/maven-snapshots/</url>
+        <id>starrocks-maven-snapshots</id>
+        <url>http://starrocksvisitor:starrocksvisitor134@nexus.starrocks.com/repository/maven-snapshots/</url>
     </repository>
 </repositories>
 ```
 
 ```plain text
 <dependency>
-    <groupId>com.starrocksdb.connector</groupId>
+    <groupId>com.starrocks.connector</groupId>
     <artifactId>flink-connector-starrocks</artifactId>
     <version>1.0.32-SNAPSHOT</version>  <!-- for flink-1.11 ~ flink-1.12 -->
     <version>1.0.32_1.13-SNAPSHOT</version>  <!-- for flink-1.13 -->
@@ -98,7 +98,7 @@ fromElements(
 
 ```scala
 // create a table with `structure` and `properties`
-// Needed: Add `com.starrocksdb.connector.flink.table.StarRocksDynamicTableSinkFactory` to: `src/main/resources/META-INF/services/org.apache.flink.table.factories.Factory`
+// Needed: Add `com.starrocks.connector.flink.table.StarRocksDynamicTableSinkFactory` to: `src/main/resources/META-INF/services/org.apache.flink.table.factories.Factory`
 tEnv.executeSql(
     "CREATE TABLE USER_RESULT(" +
         "name VARCHAR," +

@@ -251,7 +251,7 @@ HASH_JOIN_NODE (id=2):(Active: 3s85ms, % non-child: 34.59%)
 - RowsReturnedRate: 142.323K /sec
 ~~~
 
-从这里信息可以看到 hash join的执行主要分成两部分时间，也就是BuildTime和ProbeTime，BuildTime是扫描右表并构建hash表的过程，ProbeTime是获取左表并搜索hashtable进行匹配并输出的过程。可以明显的看出这个节点的时间大部分花在了BuildTime的 FetchRightTableTime和BuildHashTableTime，对比刚才的数据Scan行数数据，我们意识到这个查询的左表和右表的顺序其实不理想，应该把左表设置为大表，右表Build hash table会效果更好，而且对于这两个表都是事实表，数据都比较多，我们也可以考虑采用 colocate Join来避免 最下面的数据shuffle，同时减少Join的数据量，于是我们参考[“Colocate join”](../using_starrocksdb/Colocation_join.md)建立了colocation关系后，并且改写SQL如下：
+从这里信息可以看到 hash join的执行主要分成两部分时间，也就是BuildTime和ProbeTime，BuildTime是扫描右表并构建hash表的过程，ProbeTime是获取左表并搜索hashtable进行匹配并输出的过程。可以明显的看出这个节点的时间大部分花在了BuildTime的 FetchRightTableTime和BuildHashTableTime，对比刚才的数据Scan行数数据，我们意识到这个查询的左表和右表的顺序其实不理想，应该把左表设置为大表，右表Build hash table会效果更好，而且对于这两个表都是事实表，数据都比较多，我们也可以考虑采用 colocate Join来避免 最下面的数据shuffle，同时减少Join的数据量，于是我们参考[“Colocate join”](../using_starrocks/Colocation_join.md)建立了colocation关系后，并且改写SQL如下：
 
 ~~~sql
 with t1 as (

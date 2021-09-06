@@ -19,7 +19,7 @@ Spark StarRocks Connector 可以支持通过 Spark 读取 StarRocks 中存储的
 #### SQL
 
 ```sql
-CREATE TEMPORARY VIEW spark_starrocksdb
+CREATE TEMPORARY VIEW spark_starrocks
 USING starrocks
 OPTIONS(
   "table.identifier"="$YOUR_STARROCKS_DATABASE_NAME.$YOUR_STARROCKS_TABLE_NAME",
@@ -28,7 +28,7 @@ OPTIONS(
   "password"="$YOUR_STARROCKS_PASSWORD"
 );
 
-SELECT * FROM spark_starrocksdb;
+SELECT * FROM spark_starrocks;
 ```
 
 #### DataFrame
@@ -71,11 +71,11 @@ starrocksSparkRDD.collect()
 | starrocks.request.retries            | 3                 | 向StarRocks发送请求的重试次数                                    |
 | starrocks.request.connect.timeout.ms | 30000             | 向StarRocks发送请求的连接超时时间                                |
 | starrocks.request.read.timeout.ms    | 30000             | 向StarRocks发送请求的读取超时时间                                |
-| starrocks.request.query.timeout.s    | 3600              | 查询starrocksDB的超时时间，默认值为1小时，-1表示无超时限制             |
+| starrocks.request.query.timeout.s    | 3600              | 查询StarRocks的超时时间，默认值为1小时，-1表示无超时限制             |
 | starrocks.request.tablet.size        | Integer.MAX_VALUE | 一个RDD Partition对应的StarRocks Tablet个数。此数值设置越小，则会生成越多的Partition。从而提升Spark侧的并行度，但同时会对StarRocks造成更大的压力。 |
 | starrocks.batch.size                 | 1024              | 一次从BE读取数据的最大行数。增大此数值可减少Spark与StarRocks之间建立连接的次数。从而减轻网络延迟所带来的的额外时间开销。 |
 | starrocks.exec.mem.limit             | 2147483648        | 单个查询的内存限制。默认为 2GB，单位为字节                      |
-| starrocks.deserialize.arrow.async    | false             | 是否支持异步转换Arrow格式到spark-starrocksdb-connector迭代所需的RowBatch                 |
+| starrocks.deserialize.arrow.async    | false             | 是否支持异步转换Arrow格式到spark-starrocks-connector迭代所需的RowBatch                 |
 | starrocks.deserialize.queue.size     | 64                | 异步转换Arrow格式的内部处理队列，当starrocks.deserialize.arrow.async为true时生效        |
 
 #### SQL 和 Dataframe 专有配置

@@ -90,7 +90,7 @@ mv lib lib.bak
 cp -r /tmp/StarRocks-SE-x.x.x/be/lib  .   
 sh bin/stop_be.sh
 sh bin/start_be.sh --daemon
-ps aux | grep starrocksdb_be
+ps aux | grep starrocks_be
 ```
 
 #### FE 升级
@@ -101,7 +101,7 @@ mv lib lib.bak
 cp -r /tmp/StarRocks-SE-x.x.x/fe/lib  .   
 sh bin/stop_fe.sh
 sh bin/start_fe.sh --daemon
-ps aux | grep StarRocksDbFe
+ps aux | grep StarRocksFe
 ```
 
 特别注意：

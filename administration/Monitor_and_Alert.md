@@ -329,7 +329,7 @@ Data Source配置简介
 
 ![8.10.2-2](../assets/8.10.2-2.png)
 
-* Name: 数据源的名称，自定义，比如 starrocksdb_monitor
+* Name: 数据源的名称，自定义，比如 starrocks_monitor
 * URL: Prometheus 的 web 地址，如 <http://prometheus_host:9090>
 * Access: 选择 Server 方式，即通过 Grafana 进程所在服务器，访问 Prometheus。
 其余选项默认即可。
@@ -338,10 +338,10 @@ Data Source配置简介
 
 **2.** 添加Dashboard
 
-[Dashboard模版下载](http://starrocksdb-thirdparty.oss-cn-zhangjiakou.aliyuncs.com/StarRocks-Overview.json?Expires=4783479921&OSSAccessKeyId=LTAI4GFYjbX9e7QmFnAAvkt8&Signature=w4YeV2FrzopmPuVF7axMOxtxZik%3D)，Dashboard模版会不定期更新。欢迎提供更优的Dashboard。
+[Dashboard模版下载](http://starrocks-thirdparty.oss-cn-zhangjiakou.aliyuncs.com/StarRocks-Overview.json?Expires=4783479921&OSSAccessKeyId=LTAI4GFYjbX9e7QmFnAAvkt8&Signature=w4YeV2FrzopmPuVF7axMOxtxZik%3D)，Dashboard模版会不定期更新。欢迎提供更优的Dashboard。
 
 确认数据源可用后，点击左边导航栏的 + 号，开始添加 Dashboard。这里我们使用上文下载的 StarRocks 的 Dashboard 模板。点击 `左边的导航栏 + 号 -> Import -> Upload Json File`，将下载的 json 文件导入。
-导入后，可以命名 Dashboard，默认是 StarRocks Overview。同时，需要选择数据源，这里选择之前创建的 starrocksdb_monitor。
+导入后，可以命名 Dashboard，默认是 StarRocks Overview。同时，需要选择数据源，这里选择之前创建的 starrocks_monitor。
 点击 Import，即完成导入。之后，可以看到 StarRocks 的 Dashboard 展示。
 
 #### Dashboard说明

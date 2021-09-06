@@ -34,7 +34,7 @@ Routine Load（例行导入）提供了一种自动从指定数据源进行数�
 
 StarRocks数据导入整体生态图如下。
 
-![starrocksdb_ecology](../assets/screenshot_1615530614737.png)
+![starrocks_ecology](../assets/screenshot_1615530614737.png)
 <br>
 
 具体导入方式详情请参考[数据导入](../loading/Loading_intro.md)。这里为了尽快导入测试数据，我们只介绍利用HTTP协议的Stream load方式导入。
