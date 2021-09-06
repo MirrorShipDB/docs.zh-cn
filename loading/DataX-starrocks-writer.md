@@ -168,7 +168,7 @@ StarRocksWriter 插件实现了写入数据到 StarRocks 的目的表的功能�
 ```json
 "loadProps": {
     "column_separator": "\\x01",
-    "row_delimiter": "\\x02" // 此参数自 StarRocks-1.15.0 开始支持
+    "row_delimiter": "\\x02" 
 }
 ```
 
