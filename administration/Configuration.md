@@ -24,7 +24,7 @@
 |history_job_keep_max_second|604800|历史任务最大的保留时长，例如schema change任务，默认7天|
 |label_clean_interval_second|14400|label清理的间隔|
 |transaction_clean_interval_second|30|transaction清理的间隔|
-|meta_dir|StarRocksFe.STARROCKS_HOME_DIR/starrocks-meta|元数据保留目录|
+|meta_dir|StarRocksFe.STARROCKS_HOME_DIR/meta|元数据保留目录|
 |tmp_dir|starrocksFe.STARROCKS_HOME_DIR/temp_ddir|临时文件保存目录，例如backup/restore等进程保留的目录|
 |edit_log_port|9010|FE Group(Master, Follower, Observer)之间通信用的端口|
 |edit_log_roll_num|50000|Image日志拆分大小|
@@ -125,8 +125,8 @@
 |report_disk_state_interval_seconds|60|汇报磁盘状态的间隔。汇报各个磁盘的状态，以及上面的数据量等等|
 |report_tablet_interval_seconds|60|汇报tablet的间隔。汇报所有的tablet的最新版本|
 |alter_tablet_timeout_seconds|86400|Schema change超时时间|
-|sys_log_dir|${DORIS_HOME}/log|存放日志的地方，包括INFO, WARNING, ERROR, FATAL等日志|
-|user_function_dir|${DORIS_HOME}/lib/udf|UDF程序存放的地方|
+|sys_log_dir|${STARROCKS_HOME}/log|存放日志的地方，包括INFO, WARNING, ERROR, FATAL等日志|
+|user_function_dir|${STARROKCS_HOME}/lib/udf|UDF程序存放的地方|
 |sys_log_level|INFO|日志级别，INFO < WARNING < ERROR < FATAL|
 |sys_log_roll_mode|SIZE-MB-1024|日志拆分的大小，每1G拆分一个日志|
 |sys_log_roll_num|10|日志保留的数目|
@@ -137,12 +137,12 @@
 |compress_rowbatches|true|BE之间rpc通信是否压缩RowBatch，用于查询层之间的数据传输|
 |serialize_batch|false|BE之间rpc通信是否序列化RowBatch，用于查询层之间的数据传输|
 |status_report_interval|5|查询汇报profile的间隔，用于FE收集查询统计信息|
-|starrocks_scanner_thread_pool_thread_num|48|存储引擎并发扫描磁盘的线程数，统一管理在线程池中|
-|starrocks_scanner_thread_pool_queue_size|102400|存储引擎最多接收的任务数|
-|starrocks_scan_range_row_count|524288|存储引擎拆分查询任务的粒度，512K|
-|starrocks_scanner_queue_size|1024|存储引擎支持的扫描任务数|
-|starrocks_scanner_row_num|16384|每个扫描线程单次执行最多返回的数据行数|
-|starrocks_max_scan_key_num|1024|查询最多拆分的scan key数目|
+|doris_scanner_thread_pool_thread_num|48|存储引擎并发扫描磁盘的线程数，统一管理在线程池中|
+|doris_scanner_thread_pool_queue_size|102400|存储引擎最多接收的任务数|
+|doris_scan_range_row_count|524288|存储引擎拆分查询任务的粒度，512K|
+|doris_scanner_queue_size|1024|存储引擎支持的扫描任务数|
+|doris_scanner_row_num|16384|每个扫描线程单次执行最多返回的数据行数|
+|doris_max_scan_key_num|1024|查询最多拆分的scan key数目|
 |column_dictionary_key_ratio_threshold|0|字符串类型的取值比例，小于这个比例采用字典压缩算法|
 |column_dictionary_key_size_threshold|0|字典压缩列大小，小于这个值采用字典压缩算法|
 |memory_limitation_per_thread_for_schema_change|2|单个schema change任务允许占用的最大内存|
